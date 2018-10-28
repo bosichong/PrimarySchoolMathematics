@@ -33,18 +33,24 @@ import random
 
 class Generator(object):
     '''
-    - @sigunm   int     
+    - @sigunm   int
         运算符 (1: 加, 2: 减, 3: 乘, 4: 除)
     - @range    tuple
         随机范围, 默认: (0, 10)
     - @need_carry    int
         进位, 退位运算(1: 随机, 2: 进位, 3: 退位), 默认: 1
+        进位: 加法和乘法运算时, 才会产生进位
+        退位: 减法和出发运算时, 才会产生退位
     - @step int
         生成几步运算, 默认: 1
     - @filter tuple
         需要过滤的值
     - @same boolean
         是否相同
+    - @intFlag boolean
+        减法运算时表示是否允许产生负数运算题
+        除法运算时表示是否允许产生小数运算
+        默认: False
     '''
 
     signum = None
@@ -53,39 +59,83 @@ class Generator(object):
     step = None
     filter = None
     same = None
+    intFlag = None
 
-    def __init__(self, signum=None, range=(0, 10), need_carry=1, step=1, filter=(0, 10), same=True):
-        self.__init(signum, range, need_carry, step, filter)
-    
-    def __init(self, signum=None, range=(0, 10), need_carry=1, step=1, filter=None):
-        '''初始化参数配置'''
+    def __init__(self, signum=None, range=(0, 10), need_carry=1, step=1, filter=(0, 10), same=True, intFlag=False):
         if signum is None:
             raise Exception("required param signum is missing or signum is None")
         if signum not in (1,2,3,4):
             raise Exception("param signum must be 1 or 2 or 3 or 4")
         if range is None:
             raise Exception("required param range is missing or range is None")
+        if need_carry not in (1, 2, 3):
+            need_carry = 1
+        # step 参数暂时默认为 1
+        step = 1
+        if (signum == 1 or signum == 3) and need_carry == 3:
+            raise Exception("非法配置参数, 加法和乘法运算不会产生退位")
+        if (signum == 2 or signum == 4) and need_carry == 2:
+            raise Exception("非法配置参数, 减法和除法运算不会产生进位")
 
+        self.__init(signum, range, need_carry, step, filter, same, intFlag)
+    
+    def __init(self, signum=None, range=(0, 10), need_carry=1, step=1, filter=(0, 10), same=True, intFlag=2):
+        '''初始化参数配置'''
         if signum == 1:
             self.signum = "+"
         elif signum == 2:
             self.signum = "-"
         elif signum == 3:
-            self.signum = "×"
+            self.signum = "*"
         elif signum == 4:
-            self.signum = "÷"
+            self.signum = "/"
 
         self.range = range
         self.need_carry = need_carry
         self.step = step
         self.filter = filter
+        self.intFlag = intFlag
         
         self.min = min(range)
         self.max = max(range)
         self.__data_list = []
-    
-    def __is_valid(self, data):
-        pass
+        
+    def __is_valid(self, a, b):
+        '''校验生成数值是否符合配置要求'''
+        if self.need_carry == 1:
+            r = eval("{}{}{}".format(a, self.signum, b))
+            if self.intFlag:
+                is_int = isinstance(r, int)
+                if self.signum == "-" and r > 0:
+                    return True
+                elif self.signum == "/" and is_int:
+                    return True
+                else:
+                    return False
+            else:
+                return True
+        if self.need_carry == 2 and (self.signum == "+" or self.signum == "*") and ( len(str(eval("{}{}{}".format(a, self.signum, b)))) > max(len(str(a)), len(str(b))) ):
+            return True
+        elif self.need_carry == 3 and (self.signum == "-" or self.signum == "/"):
+            r = eval("{}{}{}".format(a, self.signum, b))
+            if self.intFlag:
+                is_int = isinstance(r, int)
+                if self.signum == "-" and r > 0 and len(str(r)) < min(len(str(a)), len(str(b))):
+                    return True
+                elif self.signum == "/" and is_int and len(str(r)) < min(len(str(a)), len(str(b))) :
+                    return True
+                else:
+                    return False
+            else:
+                # 此处还需判断是否退位
+                is_int = isinstance(r, int)
+                if is_int and len(str(r)) < min(len(str(a)), len(str(b))):
+                    return True
+                elif is_int == False and len(str(int(r))) < min(len(str(a)), len(str(b))):
+                    return True
+                return False
+        else:
+            return False
         
     def __get_num(self, number):
         '''反回一个整数的个位数'''
@@ -99,20 +149,12 @@ class Generator(object):
             return False
         else:
             return True
-
+    
     def __get_topic(self, a, b):
         '''根据两个数字返回一道单步口算加法题'''
-        # 判断两个随机生成的数字不能相同， 不能为过滤列表中的数字，如果条件符合，即可生成算式
-
         if a != b and not (a in self.filter) and not (b in self.filter):
-            if (self.need_carry == 1):  # 随机的不论是否进位
+            if self.__is_valid(a, b):
                 return "{}{}{}=".format(a, self.signum, b)
-            elif (self.need_carry == 2):  # 如果需要进位
-                if (self.__is_carry(a, b)):  # 判断是必须为进位
-                    return "{}{}{}=".format(a, self.signum, b)
-            elif (self.need_carry == 3):  # 如果需要不进位subtractlist['abdication']
-                if (not self.__is_carry(a, b)):  # 判断是必须为不进位
-                    return "{}{}{}=".format(a, self.signum, b)
         else:
             return False
 
@@ -143,7 +185,7 @@ class Generator(object):
 
 
 def main():
-    g = Generator(signum=2, range=(0, 20), need_carry=2, step=1, filter=(0, 10), same=True)
+    g = Generator(signum=4, range=(0, 20), need_carry=3, step=1, filter=(0, 10), same=True)
     g.produce(20)
 
 
