@@ -185,7 +185,8 @@ class Generator(object):
 
 
 def main():
-    g = Generator(signum=4, range=(0, 20), need_carry=3, step=1, filter=(0, 10), same=True)
+    # 生成加法口算题
+    g = Generator(signum=1, range=(0, 20), need_carry=1, step=1, filter=(0, 10), same=True)
     g.produce(20)
 
 
