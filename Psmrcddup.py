@@ -168,7 +168,11 @@ class Generator(object):
         else:
             return False
 
-    def __generate_data(self):
+# <<<<<<< HEAD:Psmrcddup.py
+#     def __generate_data(self):
+# =======
+    def generate_data(self):
+# >>>>>>> 1ce8585c602f7d4523a1273d5e0293769b9bf0b0:Psm-rcddup.py
         '''根据条件生成所需数据列表'''
         # 循环生成所有加法口算题
         for i in range(self.min, self.max):
@@ -188,19 +192,27 @@ class Generator(object):
                     self.__data_list.append(self.__data_list[k])
             else:
                 raise Exception('此数字范围内生成的加法口算题未能达到您要求的数目，请检查配置以适合程序的生成，比如设置可以生成相同的题')
+        return self.__data_list
 
     def produce(self):
-        self.__generate_data()
+        self.generate_data()
         # print(self.__data_list)
         return self.__data_list
+        '''打印预览预留接口'''
 
 
 def main():
-    # 生成加法口算题
-    g = Generator(signum=2, range=(0, 20), need_carry=1, step=1, filter=(0, 10), same=True,num=100)
-    g.produce()
-
-
+    data_list = []
+    g_add = Generator(signum=1, range=(0, 20), need_carry=1, step=1, filter=(0, 10), same=True)
+    g_add_data = g_add.generate_data(20)
+    data_list.extend(g_add_data)
+    # 生成减法口算题
+    g_sub = Generator(signum=2, range=(0, 20), need_carry=1, step=1, filter=(0, 10), same=True)
+    g_sub_data = g_sub.generate_data(20)
+    data_list.extend(g_sub_data)
+    # 打印数据
+    print(data_list)
+    
 
 if __name__ == '__main__':
     main()  # 程序入口
