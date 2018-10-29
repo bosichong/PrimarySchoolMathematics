@@ -51,6 +51,9 @@ class Generator(object):
         减法运算时表示是否允许产生负数运算题
         除法运算时表示是否允许产生小数运算
         默认: False
+    - @intFlag int
+        需要生成的题数量
+        默认：80
     '''
 
     signum = None
@@ -60,8 +63,9 @@ class Generator(object):
     filter = None
     same = None
     intFlag = None
+    number =None
 
-    def __init__(self, signum=None, range=(0, 10), need_carry=1, step=1, filter=(0, 10), same=True, intFlag=False):
+    def __init__(self, signum=None, range=(0, 10), need_carry=1, step=1, filter=(0, 10), same=True, intFlag=False,num=80):
         if signum is None:
             raise Exception("required param signum is missing or signum is None")
         if signum not in (1,2,3,4):
@@ -77,9 +81,9 @@ class Generator(object):
         if (signum == 2 or signum == 4) and need_carry == 2:
             raise Exception("非法配置参数, 减法和除法运算不会产生进位")
 
-        self.__init(signum, range, need_carry, step, filter, same, intFlag)
-    
-    def __init(self, signum=None, range=(0, 10), need_carry=1, step=1, filter=(0, 10), same=True, intFlag=2):
+        self.__init(signum, range, need_carry, step, filter, same, intFlag,num)
+
+    def __init(self, signum=None, range=(0, 10), need_carry=1, step=1, filter=(0, 10), same=True, intFlag=2, num=80):
         '''初始化参数配置'''
         if signum == 1:
             self.signum = "+"
@@ -95,11 +99,12 @@ class Generator(object):
         self.step = step
         self.filter = filter
         self.intFlag = intFlag
-        
+
         self.min = min(range)
         self.max = max(range)
-        self.__data_list = []
-        
+        self.number = num
+        self.__data_list = []#生成的口算题
+
     def __is_valid(self, a, b):
         '''校验生成数值是否符合配置要求'''
         if self.need_carry == 1:
@@ -136,7 +141,7 @@ class Generator(object):
                 return False
         else:
             return False
-        
+
     def __get_num(self, number):
         '''反回一个整数的个位数'''
         value0 = number / 10
@@ -149,16 +154,21 @@ class Generator(object):
             return False
         else:
             return True
-    
+
     def __get_topic(self, a, b):
         '''根据两个数字返回一道单步口算加法题'''
         if a != b and not (a in self.filter) and not (b in self.filter):
             if self.__is_valid(a, b):
-                return "{}{}{}=".format(a, self.signum, b)
+                if(self.signum == '*'):
+                    return "{}{}{}=".format(a, '×', b)
+                if (self.signum == '/'):
+                    return "{}{}{}=".format(a, '÷', b)
+                else:
+                    return "{}{}{}=".format(a, self.signum, b)
         else:
             return False
 
-    def __generate_data(self, number):
+    def __generate_data(self):
         '''根据条件生成所需数据列表'''
         # 循环生成所有加法口算题
         for i in range(self.min, self.max):
@@ -166,28 +176,30 @@ class Generator(object):
                 addt = self.__get_topic(i, j)
                 if addt:
                     self.__data_list.append(addt)
-        if (len(self.__data_list) >= number):
+        if (len(self.__data_list) >= self.number):
             random.shuffle(self.__data_list)  # 洗牌，先打乱list中的排序
-            self.__data_list = random.sample(self.__data_list, number)  # 随机取需要的口算题量。
+            self.__data_list = random.sample(self.__data_list, self.number)  # 随机取需要的口算题量。
         elif(len(self.__data_list) == 0):
             raise Exception('此数字范围内生成的加法口算题未能达到您要求的数目，请检查配置以适合程序的生成，请修改数值符合加法进位')
         else:
             if self.same:
-                for i in range(number - len(self.__data_list)):
+                for i in range(self.number - len(self.__data_list)):
                     k = random.randint(0, len(self.__data_list) - 1)
                     self.__data_list.append(self.__data_list[k])
             else:
                 raise Exception('此数字范围内生成的加法口算题未能达到您要求的数目，请检查配置以适合程序的生成，比如设置可以生成相同的题')
 
-    def produce(self, number):
-        self.__generate_data(number)
-        print(self.__data_list)
+    def produce(self):
+        self.__generate_data()
+        # print(self.__data_list)
+        return self.__data_list
 
 
 def main():
     # 生成加法口算题
-    g = Generator(signum=1, range=(0, 20), need_carry=1, step=1, filter=(0, 10), same=True)
-    g.produce(20)
+    g = Generator(signum=2, range=(0, 20), need_carry=1, step=1, filter=(0, 10), same=True,num=100)
+    g.produce()
+
 
 
 if __name__ == '__main__':
