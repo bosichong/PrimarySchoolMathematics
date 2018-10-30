@@ -51,7 +51,7 @@ class Generator(object):
         减法运算时表示是否允许产生负数运算题
         除法运算时表示是否允许产生小数运算
         默认: False
-    - @intFlag int
+    - @num int
         需要生成的题数量
         默认：80
     '''
@@ -81,7 +81,7 @@ class Generator(object):
         if (signum == 2 or signum == 4) and need_carry == 2:
             raise Exception("非法配置参数, 减法和除法运算不会产生进位")
 
-        self.__init(signum, range, need_carry, step, filter, same, intFlag,num)
+        self.__init(signum, range, need_carry, step, filter, same, intFlag, num)
 
     def __init(self, signum=None, range=(0, 10), need_carry=1, step=1, filter=(0, 10), same=True, intFlag=2, num=80):
         '''初始化参数配置'''
@@ -104,26 +104,37 @@ class Generator(object):
         self.max = max(range)
         self.number = num
         self.__data_list = []#生成的口算题
+    
+    def __is_int(self, num):
+        num_str = str(num)
+        num_strs = num_str.split(".")
+        if len(num_strs) == 1:
+            return True
+        elif len(num_strs) == 2 and num_strs[1] == "0":
+            return True
+        return False
 
     def __is_valid(self, a, b):
         '''校验生成数值是否符合配置要求'''
         if self.need_carry == 1:
-            r = eval("{}{}{}".format(a, self.signum, b))
-            if self.intFlag:
-                is_int = isinstance(r, int)
-                if self.signum == "-" and r > 0:
-                    return True
-                elif self.signum == "/" and is_int:
-                    return True
+            if self.signum == "/":
+                r = eval("{}{}{}".format(a, self.signum, b))
+                if self.intFlag == False:
+                    is_int = self.__is_int(r)
+                    if self.signum == "-" and r > 0:
+                        return True
+                    elif self.signum == "/" and is_int:
+                        return True
+                    else:
+                        return False
                 else:
-                    return False
-            else:
-                return True
+                    return True
+            return True
         if self.need_carry == 2 and (self.signum == "+" or self.signum == "*") and ( len(str(eval("{}{}{}".format(a, self.signum, b)))) > max(len(str(a)), len(str(b))) ):
             return True
         elif self.need_carry == 3 and (self.signum == "-" or self.signum == "/"):
             r = eval("{}{}{}".format(a, self.signum, b))
-            if self.intFlag:
+            if self.intFlag == False:
                 is_int = isinstance(r, int)
                 if self.signum == "-" and r > 0 and len(str(r)) < min(len(str(a)), len(str(b))):
                     return True
@@ -156,23 +167,22 @@ class Generator(object):
             return True
 
     def __get_topic(self, a, b):
-        '''根据两个数字返回一道单步口算加法题'''
-        if a != b and not (a in self.filter) and not (b in self.filter):
-            if self.__is_valid(a, b):
-                if(self.signum == '*'):
-                    return "{}{}{}=".format(a, '×', b)
-                if (self.signum == '/'):
-                    return "{}{}{}=".format(a, '÷', b)
-                else:
-                    return "{}{}{}=".format(a, self.signum, b)
-        else:
-            return False
+        '''根据两个数字返回一道单步口算题'''
+        if self.__is_valid(a, b):
+            if(self.signum == '*'):
+                return "{}{}{}=".format(a, '×', b)
+            if (self.signum == '/'):
+                return "{}{}{}=".format(a, '÷', b)
+            else:
+                return "{}{}{}=".format(a, self.signum, b)
 
     def generate_data(self):
         '''根据条件生成所需数据列表'''
         # 循环生成所有加法口算题
         for i in range(self.min, self.max):
             for j in range(self.min, self.max):
+                if (i in self.filter) or (j in self.filter):
+                    continue
                 addt = self.__get_topic(i, j)
                 if addt:
                     self.__data_list.append(addt)
@@ -197,13 +207,22 @@ class Generator(object):
 
 def main():
     data_list = []
-    g_add = Generator(signum=1, range=(0, 20), need_carry=1, step=1, filter=(0, 10), same=True)
-    g_add_data = g_add.generate_data(20)
+    # 生成加法进位口算题
+    g_add = Generator(signum=1, range=(0, 20), need_carry=2, step=1, filter=(0, 1), same=True, num=20)
+    g_add_data = g_add.generate_data()
     data_list.extend(g_add_data)
-    # 生成减法口算题
-    g_sub = Generator(signum=2, range=(0, 20), need_carry=1, step=1, filter=(0, 10), same=True)
-    g_sub_data = g_sub.generate_data(20)
+    # 生成减法退位口算题
+    g_sub = Generator(signum=2, range=(0, 20), need_carry=3, step=1, filter=(0, 1), same=True, num=20)
+    g_sub_data = g_sub.generate_data()
     data_list.extend(g_sub_data)
+    # # 生成乘法口算题
+    g_multi = Generator(signum=3, range=(0, 8), need_carry=1, step=1, filter=(0,), same=True, num=20)
+    g_multi_data = g_multi.generate_data()
+    data_list.extend(g_multi_data)
+    # # 生成除法口算题
+    g_div = Generator(signum=4, range=(0, 81), need_carry=1, step=1, filter=(0, 1), same=True, num=20)
+    g_div_data = g_div.generate_data()
+    data_list.extend(g_div_data)
     # 打印数据
     print(data_list)
     
