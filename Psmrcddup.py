@@ -121,7 +121,7 @@ class Generator(object):
                 r = eval("{}{}{}".format(a, self.signum, b))
                 if self.intFlag == False:
                     is_int = self.__is_int(r)
-                    if self.signum == "-" and r > 0:
+                    if self.signum == "-" and r > 1:#修改成大于1 避免出现10/10 20/20 这种题型。
                         return True
                     elif self.signum == "/" and is_int:
                         return True
