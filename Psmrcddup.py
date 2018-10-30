@@ -168,11 +168,7 @@ class Generator(object):
         else:
             return False
 
-# <<<<<<< HEAD:Psmrcddup.py
-#     def __generate_data(self):
-# =======
     def generate_data(self):
-# >>>>>>> 1ce8585c602f7d4523a1273d5e0293769b9bf0b0:Psm-rcddup.py
         '''根据条件生成所需数据列表'''
         # 循环生成所有加法口算题
         for i in range(self.min, self.max):
@@ -195,10 +191,8 @@ class Generator(object):
         return self.__data_list
 
     def produce(self):
-        self.generate_data()
-        # print(self.__data_list)
-        return self.__data_list
         '''打印预览预留接口'''
+        pass
 
 
 def main():

@@ -55,7 +55,7 @@ def main():
         templist = []
         for l in psm_type:
             g = Generator(signum=l[0], range=l[1], need_carry=l[2], step=l[3], filter=l[4], same=l[5],num=l[7])
-            templist = templist+g.produce()
+            templist = templist + g.generate_data()
         random.shuffle(templist)
         print(templist)
         psm_list.append(templist)
