@@ -104,7 +104,7 @@ class PrintPreview:
         for l,t in zip(self.p_list,self.p_title):
             self.create_psmdocx(l,t,t+str(k))
             k = k+1
-
+        k =1
 
 
 

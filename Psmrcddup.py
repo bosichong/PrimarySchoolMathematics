@@ -129,7 +129,7 @@ class Generator(object):
             if self.signum == "-" and a > b:  # 避免减法出现结果为0或负数的题型
                 return True
 
-            if self.signum == "/" and a > b:  # 修改判断除法结果大于1 避免出现10/10 20/20 这种题型。
+            if self.signum == "/" and a > b and b!=0:  # 修改判断除法结果大于1 除数不能为0 避免出现10/10 20/20 这种题型。
                 r = eval("{}{}{}".format(a, self.signum, b))
                 is_int = self.__is_int(r)
                 if self.signum == "/" and is_int:  # 必须是整数
