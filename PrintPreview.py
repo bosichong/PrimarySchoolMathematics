@@ -1,21 +1,40 @@
 #!/usr/bin/env python3
 # -*- coding=utf-8 -*-
 
-# @Time    : 2018-10-18
+# @Time    : 2018-11-02
 # @Author  : J.sky
 # @Mail    : bosichong@qq.com
 # @Site    : www.17python.com
-# @Title   : Python实现小学生加减乘除速算考试题卷。
+# @Title   : 基于Python开发的小学生口算题生成器
 # @Url     : http://www.17python.com/blog/29
 # @Details : Python实现小学生加减乘除速算考试题卷。
 # @Other   : OS X 10.11.6
 #            Python 3.6.1
 #            PyCharm
-###################################
 
-###################################
 
-import os
+'''
+孩子上小学一年级了，加减乘除的口算就要开始练习了，估计老题肯定会让家长出题，所以提前准备一下.
+
+利用Python开发了一套自动生成小学生口算题的小应用。而且今天是程序员节，撸200行代码庆祝一下。：）
+
+程序核心功能：
+
+    1.根据条件生成相关的口算题.
+
+    2.保存为.docx用来打印.
+
+
+开心Python Django 学习交流q群：217840699
+
+
+Author  : J.sky
+Mail    : bosichong@qq.com
+
+Author  : rcddup
+Mail    : 410093793@qq.com
+
+'''
 
 from docx import Document  # 引入docx类生成docx文档
 from docx.shared import RGBColor
@@ -42,8 +61,10 @@ class PrintPreview:
     p_title = None
     p_column = None
     p_title_size = None
+    p_content_siae = None
 
-    def __init__(self, l, tit, col=3, size=26):
+
+    def __init__(self, l, tit, col=3, tsize=26,csize = 16):
         '''
         :param l: list 需要打印的口算题列表
         :param tit: list 口算页标题列表
@@ -53,7 +74,8 @@ class PrintPreview:
         self.p_list = l
         self.p_title = tit
         self.p_column = col
-        self.p_title_size = size
+        self.p_title_size = tsize
+        self.p_content_siae = csize
 
     def create_psmdocx(self, l,title, docxname):
         '''
@@ -96,7 +118,7 @@ class PrintPreview:
                     k = k + 1
         # table.style.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.RIGHT
         table.style.font.color.rgb = RGBColor(54, 0, 0)  # 颜色设置，这里是用RGB颜色
-        table.style.font.size = Pt(16)  # 字体大小设置，和word里面的字号相对应
+        table.style.font.size = Pt(self.p_content_siae)  # 字体大小设置，和word里面的字号相对应
         p_docx.save('{}.docx'.format(docxname))  # 输出docx
 
     def produce(self):

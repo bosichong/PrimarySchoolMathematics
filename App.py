@@ -1,10 +1,39 @@
 #!/usr/bin/env python3
 # -*- coding=utf-8 -*-
 
-'''
+# @Time    : 2018-11-02
+# @Author  : J.sky
+# @Mail    : bosichong@qq.com
+# @Site    : www.17python.com
+# @Title   : 基于Python开发的小学生口算题生成器
+# @Url     : http://www.17python.com/blog/29
+# @Details : Python实现小学生加减乘除速算考试题卷。
+# @Other   : OS X 10.11.6
+#            Python 3.6.1
+#            PyCharm
 
-临时程序入口
-后续会写一个类，用来配置口算题生成前的配置，然后配以GUI实现可视化配置。
+
+'''
+孩子上小学一年级了，加减乘除的口算就要开始练习了，估计老题肯定会让家长出题，所以提前准备一下.
+
+利用Python开发了一套自动生成小学生口算题的小应用。而且今天是程序员节，撸200行代码庆祝一下。：）
+
+程序核心功能：
+
+    1.根据条件生成相关的口算题.
+
+    2.保存为.docx用来打印.
+
+
+开心Python Django 学习交流q群：217840699
+
+
+Author  : J.sky
+Mail    : bosichong@qq.com
+
+Author  : rcddup
+Mail    : 410093793@qq.com
+
 
 '''
 import random,os,shutil
@@ -21,6 +50,7 @@ psm_type = []  #口算题详细配置参数
 psm_title = []#口算卷子标题
 psm_info = [] #卷内容提示语
 
+app_title ="基于Python开发的小学生口算题生成器"
 info_tit ="还没添加任何口算题到卷子中，请点击添加口算题按钮开始添加口算题！"#当前口算题卷子包含内容
 
 
@@ -136,7 +166,7 @@ def producePSM():
             psm_title.append(psmtitVar.get())
         print(psm_title)
 
-        pp = PrintPreview(psm_list, psm_title, 4)
+        pp = PrintPreview(psm_list, psm_title, col=int(psmcol_entry.get()))
         pp.produce()#生成docx
         psm_list.clear()#清空打印列表。
         movdocx()
@@ -150,7 +180,7 @@ def producePSM():
 
 
 root = tk.Tk()#创建一个root窗口
-root.title('基于Python开发的小学生口算题生成器')#设置窗口标题
+root.title(app_title)#设置窗口标题
 top_frame = tk.Frame(root)
 top_frame.pack(fill=tk.X,)
 
@@ -277,6 +307,11 @@ psm_entry = tk.Entry(b1_frame,width=6)
 psm_entry.pack(fill=tk.X, side= tk.LEFT)
 psm_entry.insert(0,'3')
 
+psmcol_label = tk.Label(b1_frame, text="口算题列数:",font=("Symbol", 14))
+psmcol_label.pack(side=tk.LEFT,fill=tk.X)
+psmcol_entry = tk.Entry(b1_frame,width=6)
+psmcol_entry.pack(fill=tk.X, side= tk.LEFT)
+psmcol_entry.insert(0,'3')
 
 psmtitVar = tk.StringVar()
 psmtitVar.set("小学生口算题")
