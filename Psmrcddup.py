@@ -37,7 +37,7 @@ Mail    : 410093793@qq.com
 '''
 
 import random
-
+import re
 
 class Generator(object):
     '''
@@ -114,7 +114,7 @@ class Generator(object):
         self.min = min(range)
         self.max = max(range)
         self.number = num
-        self.__data_list = []  # 生成的口算题
+        self.__data_list = []   # 生成的口算题
 
     def __is_int(self, num):
         '''判断一个数是否为整数'''
@@ -245,14 +245,25 @@ class Generator(object):
 
                 raise Exception('此数字范围内生成的加法口算题未能达到您要求的数目，请检查配置以适合程序的生成，比如设置可以生成相同的题')
 
-
-
     def produce(self):
         '''打印预览预留接口'''
         pass
 
     def test(self):
         print(self.__is_nocarry(9,9))
+
+    def get_answer(self):
+        answer_list = []
+        for item in self.__data_list:
+            answer = item.replace("x", "*").replace("÷", "/").replace("=", "")
+            r = eval(answer)
+            if re.match("\d+\.0$", str(r)):
+                answer += "=" + str(int(r))
+            else:
+                answer += "=" + str(r)
+            answer_list.append(answer.replace("*", "x").replace("/", "÷"))
+        return answer_list
+
 def main():
     data_list = []
     # 生成加法进位口算题
@@ -274,6 +285,9 @@ def main():
     g_div = Generator(signum=4, range=(0, 81), need_carry=1, step=1, filter=(0, 1), same=True, num=20)
     g_div_data = g_div.generate_data()
     print(g_div_data)
+    # 生成口算题答案
+    g_div_answer_list = g_div.get_answer()
+    print(g_div_answer_list)
     # data_list.extend(g_div_data)
     # 打印数据
     # print(data_list)
