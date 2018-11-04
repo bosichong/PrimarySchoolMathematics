@@ -220,8 +220,8 @@ class Generator(object):
         slist = []
 
         # 循环生成所有加法口算题
-        for i in range(self.min, self.max):
-            for j in range(self.min, self.max):
+        for i in range(self.min, self.max + 1):
+            for j in range(self.min, self.max + 1):
                 if (i in self.filter) or (j in self.filter):
                     continue
                 addt = self.__get_topic(i, j)
@@ -267,7 +267,7 @@ class Generator(object):
 def main():
     data_list = []
     # 生成加法进位口算题
-    g_add = Generator(signum=1, range=(0, 20), need_carry=1, step=1, filter=(0, 1), same=True, num=20)
+    g_add = Generator(signum=1, range=(0, 9), need_carry=1, step=1, filter=(0, 1), same=True, num=20)
     g_add_data = g_add.generate_data()
     print(g_add_data)
     # data_list.extend(g_add_data)
