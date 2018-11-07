@@ -240,7 +240,8 @@ class Generator(object):
                 for i in range(self.number - len(slist)):
                     k = random.randint(0, len(slist)-1)
                     slist.append(slist[k])
-                return slist
+                self.__data_list = slist
+                return self.__data_list
             else:
 
                 raise Exception('此数字范围内生成的加法口算题未能达到您要求的数目，请检查配置以适合程序的生成，比如设置可以生成相同的题')
