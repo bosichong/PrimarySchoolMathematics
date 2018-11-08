@@ -57,22 +57,22 @@ class Generator(object):
     divattrs = None
 
     signum = None
-    range = None
     step = None
-    same = None
     number = None
 
     is_bracket =None
+    is_result =None
     symbols = None
 
 
 
     def __init__(self, addattrs=None, subattrs=None, multattrs=None, divattrs=None,
-                 signum=None,step=1, same=True, num=80,
-                 is_bracket = False, _symbols=None):
+                 signum=None,step=1, num=80,
+                 is_bracket = False, symbols=None):
         '''
         :param addattrs: list 加法设置属性，
         包括 四项运算项及结果数值范围设置，进位随机选择项单选，随机1，进位2，不进位3
+        [[],[],[],[],[],1]
 
         :param subattrs: list 减法设置属性，
         包括 四项运算项及结果数值范围设置，退位随机选择项单选，随机1，退位2，不退位3
@@ -86,7 +86,8 @@ class Generator(object):
 
         :param is_bracket: boolean 是否需要括号
         :param symbols: list 默认包括三组list,分别代表123步算式需要题型种类+-*/
-        :param num:
+        :param num: int 需要生成的题数
+        :param is_result :int 1求结果，2求运算项
         '''
 
         # step 参数暂时默认为 1
@@ -96,7 +97,7 @@ class Generator(object):
         if step not in (1, 2, 3):
             raise Exception("param signum must be 1 or 2 or 3")
 
-        self.__init(signum, range, step, filter, same, num)
+        self.__init(signum, range, step, num)
 
     def __init(self, signum=None, range=(0, 10), need_carry=1, step=1, filter=(0, 10), same=True, num=80):
         '''初始化参数配置'''
@@ -154,60 +155,46 @@ class Generator(object):
     def __isCarry(self, a, b):
         '''判断加法和乘法存在进位'''
         if self.signum == '+':
-            return is_addcarry(a, b, self.signum)
+            return is_addcarry(a, b)
         if self.signum == '*':
-            return is_multcarry(a, b, self.signum)
+            return is_multcarry(a, b)
 
     def __isNocarry(self, a, b):
         '''判断加法无进位，减法无退位'''
         if self.signum == '+':
-            return is_addnocarry(a, b, self.signum)
+            return is_addnocarry(a, b)
         if self.signum == '-':
-            return is_subnocarry(a, b, self.signum)
+            return is_subnocarry(a, b)
 
-    def __getFormula(self, a, b):
+    def __getFormula(self):
         '''根据给出的属性返回一道合法的口算题'''
 
-
-        # if self.__is_valid(a, b):
-        #     if (self.signum == '*'):
-        #         return "{}{}{}=".format(a, '×', b)
-        #     if (self.signum == '/'):
-        #         return "{}{}{}=".format(a, '÷', b)
-        #     else:
-        #         return "{}{}{}=".format(a, self.signum, b)
+        #根据函数返回的随机数
+        formulas = []
+        if self.step == 1:
+            if self.signum == 1
+                #返回一步加法运算题
+                return getOneAdd()
 
 
     def generate_data(self):
         '''根据条件生成所需口算题'''
 
         slist = []
-
+        k = 0
         # 循环生成所有加法口算题
-        for i in range(self.number):
-            formula = self.__getFormula(i, j)
+        while True:
+            formula = self.__getFormula()
             if formula:
                 slist.append(formula)
+                k+=1#成功添加一道
+            if k == self.number:
+                break
 
+        random.shuffle(slist)  # 洗牌，先打乱list中的排序
+        self.__data_list = random.sample(slist, self.number)  # 随机取需要的口算题量。
+        return self.__data_list
 
-
-        if (len(slist) >= self.number):
-            random.shuffle(slist)  # 洗牌，先打乱list中的排序
-            self.__data_list = random.sample(slist, self.number)  # 随机取需要的口算题量。
-
-            return self.__data_list
-        if (len(slist) == 0):
-            raise Exception('此数字范围内生成的加法口算题未能达到您要求的数目，请检查配置以适合程序的生成，请修改数值符合加法进位')
-        else:
-            if self.same:
-                for i in range(self.number - len(slist)):
-                    k = random.randint(0, len(slist) - 1)
-                    slist.append(slist[k])
-                self.__data_list = slist
-                return self.__data_list
-            else:
-
-                raise Exception('此数字范围内生成的加法口算题未能达到您要求的数目，请检查配置以适合程序的生成，比如设置可以生成相同的题')
 
     def produce(self):
         '''打印预览预留接口'''
