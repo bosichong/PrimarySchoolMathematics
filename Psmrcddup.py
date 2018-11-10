@@ -70,24 +70,31 @@ class Generator(object):
                  signum=None,step=1, num=80,
                  is_bracket = False, symbols=None):
         '''
-        :param addattrs: list 加法设置属性，
+        :param addattrs: dict 加法设置属性，
         包括 四项运算项及结果数值范围设置，进位随机选择项单选，随机1，进位2，不进位3
-        [[],[],[],[],[],1]
+        {"n1":[1-9],"n2":[1-9],"n3":[1-9],"n4":[1-9],"result":[10-20],"carry":1,}
 
-        :param subattrs: list 减法设置属性，
+        :param subattrs: dict 减法设置属性，
         包括 四项运算项及结果数值范围设置，退位随机选择项单选，随机1，退位2，不退位3
+        {"n1":[1-9],"n2":[1-9],"n3":[1-9],"n4":[1-9],"result":[10-20],"abdication":1,}
 
-        乘除法暂略
+        :param:multattrs dict 乘法
+        包括 四项运算项及结果数值范围设置
+        {"n1":[1-9],"n2":[1-9],"n3":[1-9],"n4":[1-9],"result":[21-81],}
+
+        :param:divattrs dict 除法
+        包括 四项运算项及结果数值范围设置
+        {"n1":[1-9],"n2":[1-9],"n3":[1-9],"n4":[1-9],"result":[1-9],}
+
 
         :param signum: list 包含题型需要的 1+ 2- 3* 4/
-        :param range: boolean
         :param step: int 生成几步运算, 默认: 1 取值范围 1-3
+        :param num: int 需要生成的题数
 
 
         :param is_bracket: boolean 是否需要括号
-        :param symbols: list 默认包括三组list,分别代表123步算式需要题型种类+-*/
-        :param num: int 需要生成的题数
         :param is_result :int 1求结果，2求运算项
+        :param symbols: list 默认包括三组list,分别代表123步算式需要题型种类+-*/
         '''
 
         # step 参数暂时默认为 1
@@ -146,7 +153,7 @@ class Generator(object):
         if self.need_carry == 2 and (self.signum == "+" or self.signum == "*") and self.__isCarry(a, b):
             return True
         # 减法必须为退位的判断
-        if self.need_carry == 3 and self.signum == "-" and a > b and is_subnocarry(a, b, self.signum):
+        if self.need_carry == 3 and self.signum == "-" and a > b and is_abdication(a, b, self.signum):
             return True
 
         else:
@@ -164,7 +171,7 @@ class Generator(object):
         if self.signum == '+':
             return is_addnocarry(a, b)
         if self.signum == '-':
-            return is_subnocarry(a, b)
+            return is_abdication(a, b)
 
     def __getFormula(self):
         '''根据给出的属性返回一道合法的口算题'''
@@ -172,9 +179,15 @@ class Generator(object):
         #根据函数返回的随机数
         formulas = []
         if self.step == 1:
-            if self.signum == 1
+            if self.signum == 1:
                 #返回一步加法运算题
-                return getOneAdd()
+                return getOneAdd(formulas,self.addattrs.result,self.addattrs.carry,self.is_result)
+            if self.signum == 2:
+                #返回一道减法运算
+                return getOneSub(formulas, self.subattrs.result, self.subattrs.abdication, self.is_result)
+            if self.signum == 3:
+                return getOneMult(formulas, self.subattrs.result, self.is_result)
+
 
 
     def generate_data(self):
@@ -220,9 +233,9 @@ class Generator(object):
 def main():
     data_list = []
     # 生成加法进位口算题
-    g_add = Generator(signum=1, range=(0, 9), need_carry=1, step=1, filter=(0, 1), same=True, num=20)
-    g_add_data = g_add.generate_data()
-    print(g_add_data)
+    # g_add = Generator(signum=1, range=(0, 9), need_carry=1, step=1, filter=(0, 1), same=True, num=20)
+    # g_add_data = g_add.generate_data()
+    # print(g_add_data)
 
 
 if __name__ == '__main__':
