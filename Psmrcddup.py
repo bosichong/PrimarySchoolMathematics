@@ -36,6 +36,9 @@ Mail    : bosichong@qq.com
 Author  : rcddup
 Mail    : 410093793@qq.com
 
+Author  : andywu1998
+Mail    : 1078539713@qq.com
+
 '''
 
 import random

@@ -6,7 +6,7 @@ __version__ = "1.0.0"
 
 __all__ = [
 
-            'is_int','get_num','is_abdication','is_multcarry',
+            'is_int','get_num','is_abdication','is_multcarry','getRandomNum',
            'is_addcarry','is_addnocarry',
            'getOneAdd','getOneSub','getOneMult',
 
@@ -221,7 +221,26 @@ def getOneStr(a,b,is_result,signum):
 
 
 
+def getRandomNum(list, step):
+    '''
+
+    Author  : andywu1998
+    Mail    : 1078539713@qq.com
+    返回一组算式项
+
+    '''
+    newList = []
+    for i in range(0, step):
+        newList.append(random.randint(list[i][0], list[i][1]))
+    return newList
+
 def main():
+    lr = [[1, 9], [1, 9], [1, 9], [1, 9]]
+    step = 3
+
+    print(getRandomNum(lr,step))
+
+
     print(getOneAdd([3, 9], [1, 20],1, 2))
     print(getOneSub([9, 3], [1, 20],1, 1))
     print(getOneMult([3,9],[21,81],2))
