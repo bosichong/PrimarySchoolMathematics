@@ -8,7 +8,7 @@ __all__ = [
 
             'is_int','get_num','is_abdication','is_multcarry','getRandomNum',
            'is_addcarry','is_addnocarry',
-           'getOneAdd','getOneSub','getOneMult',
+           'getOneAdd','getOneSub','getOneMult','getOneDiv'
 
            ]
 
@@ -27,6 +27,7 @@ def getOneAdd(formulas,result,carry,is_result):
     :return: bool or str 成功返回一个符合条件的加法算数题str，失败返回False
     '''
     a,b = formulas[0],formulas[1]
+
     if result[0] < a+b < result[1]:
         if carry == 1:#随机
             return getOneStr(a,b,is_result,"+")
@@ -169,7 +170,7 @@ def getOneDiv(formulas,result,is_result):
     :return: bool or str 成功返回一个符合条件的减法算数题str，失败返回False
     '''
     a,b = formulas[0],formulas[1]
-    if (result[0] < a/b < result[1]) and (a%b == 0) : #并且整除
+    if (result[0] < a/b < result[1]) and b > 0 and (a%b == 0) : #并且整除
         return getOneStr(a,b,is_result,"/")
     else:
         return False
@@ -230,21 +231,21 @@ def getRandomNum(list, step):
 
     '''
     newList = []
-    for i in range(0, step):
+    for i in range(0, step+1):
         newList.append(random.randint(list[i][0], list[i][1]))
     return newList
 
 def main():
     lr = [[1, 9], [1, 9], [1, 9], [1, 9]]
-    step = 3
+    step = 1
 
     print(getRandomNum(lr,step))
 
 
-    print(getOneAdd([3, 9], [1, 20],1, 2))
-    print(getOneSub([9, 3], [1, 20],1, 1))
-    print(getOneMult([3,9],[21,81],2))
-    print(getOneDiv([9, 3], [1, 9], 1))
+    # print(getOneAdd([3, 9], [1, 20],1, 2))
+    # print(getOneSub([9, 3], [1, 20],1, 1))
+    # print(getOneMult([3,9],[21,81],2))
+    # print(getOneDiv([9, 3], [1, 9], 1))
 
 
 
