@@ -89,7 +89,7 @@ class Generator(object):
 
         :param signum: list 包含题型需要的 1+ 2- 3* 4/
         :param step: int 生成几步运算, 默认: 1 取值范围 1-3
-        :param is_result :int 1求结果，2求运算项
+        :param is_result :int 0求结果，1求运算项
         :param num: int 需要生成的题数
 
 
@@ -151,7 +151,7 @@ class Generator(object):
                 [self.multistep["n1"], self.multistep["n2"], self.multistep["n3"], self.multistep["n4"]],
                 self.step)
             return getTwoStep(formulas, self.multistep["result"], self.multistep['symbols'], self.addattrs["carry"], self.subattrs["abdication"],
-                              self.multistep["is_bracket"], self.multistep['is_result']
+                              self.multistep["is_bracket"], self.is_result
                               )
 
     def generate_data(self):
@@ -195,19 +195,19 @@ class Generator(object):
 
 @get_time
 def main():
-    addlist = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [10, 20], "carry": 1, }  # 加法设置
-    sublist = {"n1": [1, 20], "n2": [1, 20], "n3": [1, 20], "n4": [1, 20], "result": [1, 10], "abdication": 2, }  # 减法设置
-    multlist = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [21, 81], }  # 乘法设置
-    divlist = {"n1": [1, 81], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [1, 9], }  # 除法设置
+    addlist = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [0, 30], "carry": 1, }  # 加法设置
+    sublist = {"n1": [1, 20], "n2": [1, 20], "n3": [1, 20], "n4": [1, 20], "result": [1, 20], "abdication": 1, }  # 减法设置
+    multlist = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [21, 81],}  # 乘法设置
+    divlist = {"n1": [1, 81], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [1, 9],}  # 除法设置
 
-    signum = 1
-    step = 1
-    is_result = 2
+    signum = 2
+    step = 2
+    is_result = 1
     number = 20
 
 
-    multistep = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [10, 20], "is_bracket": False,
-                 "symbols": [[1, 2], [1, ], [2, ]], }
+    multistep = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [0, 999],
+                 "symbols": [[1, 2], [1, 2], [2, ]], "is_bracket": 1, }
 
     g = Generator(addlist, sublist, multlist, divlist, signum, step, is_result, number, multistep)
 

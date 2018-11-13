@@ -15,6 +15,7 @@ __all__ = [
 
 import random
 import time
+import re
 
 
 ########2步算式相关判断设置##########
@@ -38,25 +39,79 @@ def getTwoStep(formulas, result, symbols, carry, abdication, is_bracket, is_resu
     :return: str 一道符合规则的口算运算题
     '''
 
-    a, b, c = formulas[0], formulas[1], formulas[2]#获取运算项的数值
-    syms = getRandomSymbols(symbols,2)
-    s1,s2 = syms[0],syms[1] #获取运算符号
-
+    a, b, c = formulas[0], formulas[1], formulas[2]  # 获取运算项的数值
+    syms = getRandomSymbols(symbols, 2)
+    s1, s2 = syms[0], syms[1]  # 获取运算符号
 
     if is_bracket == 0:  # 无括号
 
-        if(isItem(s1,a,b,result,carry,abdication)):#判断a与b的运算结果
+        if (isItem(s1, a, b, result, carry, abdication)):  # 判断a与b的运算结果
 
-            tp = eval(str(a)+getSymbol(s1)+str(b))#a与b的运算结果
+            tp = eval(str(a) + getSymbol(s1) + str(b))  # a与b的运算结果
 
-            if (isItem(s1,tp,c,result,carry,abdication)):#判断第二步运算结果
-
-
-                return "{}{}{}{}{}=".format(a,repSymbol(s1),b,repSymbol(s2),c,)
+            if (isItem(s2, tp, c, result, carry, abdication)):  # 判断第二步运算结果
+                rs = eval("{}{}{}{}{}".format(a, getSymbol(s1), b, getSymbol(s2), c, ))
+                if is_result == 0:
+                    return "{}{}{}{}{}=".format(a, repSymbol(s1), b, repSymbol(s2), c, )
+                elif is_result == 1:
+                    st = "{}{}{}{}{}={}".format(a, repSymbol(s1), b, repSymbol(s2), c, rs)
+                    return getRandomItem(st)
             else:
                 return False
         else:
             return False
+    elif is_bracket == 1:  # 有括号
+        k = random.randint(0, len(formulas) - 2)  # 获得一个括号起始指针
+        if k == 0:
+            if isItem(syms[k], formulas[k], formulas[k + 1], result, carry, abdication):  # 判断括号内的运算是否符合条件
+                tp = eval(str(formulas[k]) + getSymbol(syms[k]) + str(formulas[k + 1]))  # 括号内的运算结果
+                if (isItem(syms[k + 1], tp, formulas[k + 2], result, carry, abdication)):  # 判断第二步运算结果
+                    rs = eval("{}{}{}{}{}{}{}".format("(", a, getSymbol(s1), b, ")", getSymbol(s2), c, ))
+                    if is_result == 0:
+                        return "{}{}{}{}{}{}{}=".format("(", a, repSymbol(s1), b, ")", repSymbol(s2), c, )
+                    elif is_result == 1:
+                        st = "{}{}{}{}{}{}{}={}".format("(", a, repSymbol(s1), b, ")", repSymbol(s2), c, rs)
+                        return getRandomItem(st)
+                else:
+                    return False
+            else:
+                return False
+        elif k == 1:
+            if isItem(syms[k], formulas[k], formulas[k + 1], result, carry, abdication):  # 判断括号内的运算是否符合条件
+                tp = eval(str(formulas[k]) + getSymbol(syms[k]) + str(formulas[k + 1]))  # 括号内的运算结果
+                if (isItem(syms[k - 1], formulas[k - 1], tp, result, carry, abdication)):  # 判断第二步运算结果
+                    rs = eval("{}{}{}{}{}{}{}".format(a, getSymbol(s1), "(", b, getSymbol(s2), c, ")"))
+                    if is_result == 0:
+                        return "{}{}{}{}{}{}{}=".format(a, repSymbol(s1), "(", b, repSymbol(s2), c, ")")
+                    elif is_result == 1:
+                        st = "{}{}{}{}{}{}{}={}".format(a, repSymbol(s1), "(", b, repSymbol(s2), c, ")", rs)
+                        return getRandomItem(st)
+                else:
+                    return False
+            else:
+                return False
+
+
+
+    else:
+        return False
+
+
+def getRandomItem(sr):
+    '''
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    把得到的算式转变成求算数项口算题
+    :param str: 一道算数题
+    :return: str
+    '''
+    # print(sr)
+    p = re.compile('\d+')
+    sc = p.findall(sr)
+    i = random.randint(0, len(sc) - 2)  # -2防止替换结果
+    sr = sr.replace(sc[i], "__",1)
+    # print(sr)
+    return sr
 
 
 def repSymbol(signum):
@@ -68,7 +123,7 @@ def repSymbol(signum):
     :param signum:
     :return:
     '''
-    if signum  == 1:
+    if signum == 1:
         return "+"
     elif signum == 2:
         return "-"
@@ -76,6 +131,7 @@ def repSymbol(signum):
         return "x"
     elif signum == 4:
         return "÷"
+
 
 def getSymbol(sym):
     '''
@@ -85,7 +141,7 @@ def getSymbol(sym):
     :param sym: int
     :return: str
     '''
-    if sym  == 1:
+    if sym == 1:
         return "+"
     elif sym == 2:
         return "-"
@@ -94,7 +150,8 @@ def getSymbol(sym):
     elif sym == 4:
         return "/"
 
-def isItem(signum,a,b,result,carry,abdication):
+
+def isItem(signum, a, b, result, carry, abdication):
     '''
     Author  : J.sky
     Mail    : bosichong@qq.com
@@ -108,17 +165,16 @@ def isItem(signum,a,b,result,carry,abdication):
     :return: bool
     '''
     if signum == 1:
-        return isTwoAdd(a,b,result,carry)
+        return isTwoAdd(a, b, result, carry)
     elif signum == 2:
-        return isTwoSub(a,b,result,abdication)
+        return isTwoSub(a, b, result, abdication)
     elif signum == 3:
-        return isTwoMult(a,b,result)
+        return isTwoMult(a, b, result)
     elif signum == 4:
-        return isTwoDiv(a,b,result)
+        return isTwoDiv(a, b, result)
 
 
-
-def isTwoAdd(a,b,result,carry):
+def isTwoAdd(a, b, result, carry):
     '''
     Author  : J.sky
     Mail    : bosichong@qq.com
@@ -131,7 +187,7 @@ def isTwoAdd(a,b,result,carry):
     :param carry:
     :return: bool
     '''
-    return getOneAdd((a,b),result,carry,1)
+    return getOneAdd((a, b), result, carry, 1)
 
 
 def isTwoSub(a, b, result, abdication):
@@ -165,6 +221,7 @@ def isTwoMult(a, b, result, ):
     '''
     return getOneMult((a, b), result, 1)
 
+
 def isTwoDiv(a, b, result, ):
     '''
     Author  : J.sky
@@ -181,7 +238,6 @@ def isTwoDiv(a, b, result, ):
     return getOneDiv((a, b), result, 1)
 
 
-
 def getRandomSymbols(symbols, step):
     '''
 
@@ -196,7 +252,7 @@ def getRandomSymbols(symbols, step):
     '''
     newList = []
     for i in range(0, step):
-        index = random.randint(0, len(symbols[i])-1)
+        index = random.randint(0, len(symbols[i]) - 1)
         newList.append(symbols[i][index])
     return newList
 
@@ -214,17 +270,17 @@ def getOneAdd(formulas, result, carry, is_result):
     '''
     a, b = formulas[0], formulas[1]
 
-    if result[0] < a + b < result[1]:
+    if result[0] <= a + b <= result[1]:
         if carry == 1:  # 随机
-            return getOneStr(a, b, is_result, "+")
+            return getOneStr(a, b, is_result, 1)
         elif carry == 2:  # 进位
             if is_addcarry(a, b):
-                return getOneStr(a, b, is_result, "+")
+                return getOneStr(a, b, is_result, 1)
             else:
                 return False
         elif carry == 3:  # 不进位
             if is_addnocarry(a, b):
-                return getOneStr(a, b, is_result, "+")
+                return getOneStr(a, b, is_result, 1)
             else:
                 return False
     else:
@@ -269,17 +325,18 @@ def getOneSub(formulas, result, abdication, is_result):
     :return: bool or str 成功返回一个符合条件的减法算数题str，失败返回False
     '''
     a, b = formulas[0], formulas[1]
-    if result[0] < a - b < result[1]:
+
+    if result[0] <= a - b <= result[1]:
         if abdication == 1:  # 随机
-            return getOneStr(a, b, is_result, "-")
+            return getOneStr(a, b, is_result, 2)
         elif abdication == 2:  # 退位
             if is_abdication(a, b):
-                return getOneStr(a, b, is_result, "-")
+                return getOneStr(a, b, is_result, 2)
             else:
                 return False
         elif abdication == 3:  # 不退位
             if is_noabdication(a, b):
-                return getOneStr(a, b, is_result, "-")
+                return getOneStr(a, b, is_result, 2)
             else:
                 return False
     else:
@@ -323,8 +380,8 @@ def getOneMult(formulas, result, is_result):
     :return: bool or str 成功返回一个符合条件的减法算数题str，失败返回False
     '''
     a, b = formulas[0], formulas[1]
-    if result[0] < a * b < result[1]:
-        return getOneStr(a, b, is_result, "*")
+    if result[0] <= a * b <= result[1]:
+        return getOneStr(a, b, is_result, 3)
     else:
         return False
 
@@ -356,8 +413,8 @@ def getOneDiv(formulas, result, is_result):
     :return: bool or str 成功返回一个符合条件的减法算数题str，失败返回False
     '''
     a, b = formulas[0], formulas[1]
-    if (result[0] < a / b < result[1]) and b > 0 and (a % b == 0):  # 并且整除
-        return getOneStr(a, b, is_result, "/")
+    if (result[0] <= a / b <= result[1]) and b > 0 and (a % b == 0):  # 并且整除
+        return getOneStr(a, b, is_result, 4)
     else:
         return False
 
@@ -393,25 +450,15 @@ def getOneStr(a, b, is_result, signum):
     :return: str
     '''
 
-    if is_result == 1:  # 求结果
-        if signum == "*":
-            signum = "x"
-        elif signum == "/":
-            signum = "÷"
-        return "{}{}{}=".format(a, signum, b)
-    elif is_result == 2:  # 求运算项
+    if is_result == 0:  # 求结果
+        return "{}{}{}=".format(a, repSymbol(signum), b)
+    elif is_result == 1:  # 求运算项
         # 随机分配求运算项
-        rst = int(eval(str(a) + str(signum) + str(b)))
-        if signum == "*":
-            signum = "x"
-        elif signum == "/":
-            signum = "÷"
-        if random.randint(0, 1) > 0:
-            a = "_"
-            return "{}{}{}={}".format(a, signum, b, rst)
-        else:
-            b = "_"
-            return "{}{}{}={}".format(a, signum, b, rst)
+        rst = int(eval(str(a) + getSymbol(signum) + str(b)))
+
+        return getRandomItem("{}{}{}={}".format(a, repSymbol(signum), b, rst))
+    else:
+        raise Exception("求结果求运算项参数设置错误。")
 
 
 def getRandomNum(list, step):
@@ -425,6 +472,7 @@ def getRandomNum(list, step):
     newList = []
     for i in range(0, step + 1):
         newList.append(random.randint(list[i][0], list[i][1]))
+
     return newList
 
 
@@ -452,13 +500,10 @@ def get_time(func):
 
 
 def main():
-
-
-
-    print(getTwoStep([8,2,3],[1,50],[[1,2,3],[1,2]],1,1,0,1))
-    print(getOneAdd([3, 9], [1, 20],1, 2))
-    print(getOneSub([9, 3], [1, 20],1, 1))
-    print(getOneMult([3,9],[21,81],2))
+    print(getTwoStep([8, 5, 3], [0, 500], [[1, 2, ], [1, 2, ]], 1, 1, 1, 1))
+    print(getOneAdd([3, 9], [1, 20], 1, 1))
+    print(getOneSub([9, 3], [1, 20], 1, 0))
+    print(getOneMult([3, 9], [21, 81], 0))
     print(getOneDiv([9, 3], [1, 9], 1))
 
 
