@@ -62,43 +62,47 @@ class Generator(object):
     signum = None
     step = None
     is_result = None
+    is_bracket =None
     number = None
     ########多步算式题选项设置######
     multistep = None
-
+    symbols = None
     data_list = None  # 生成的口算题
 
-    def __init__(self, addattrs, subattrs, multattrs, divattrs, signum, step, is_result,number, multistep):
+    def __init__(self, addattrs, subattrs, multattrs, divattrs, signum, step,number, is_result,is_bracket, multistep,symbols):
         '''
         :param addattrs: dict 加法设置属性，
-        包括 四项运算项及结果数值范围设置，进位随机选择项单选，随机1，进位2，不进位3
-        {"n1":[1,9],"n2":[1,9],"n3":[1,9],"n4":[1,9],"result":[10,20],"carry":1,}
+        包括 结果数值范围设置，进位随机选择项单选，随机1，进位2，不进位3
+        {"result":[10,20],"carry":1,}
 
         :param subattrs: dict 减法设置属性，
-        包括 四项运算项及结果数值范围设置，退位随机选择项单选，随机1，退位2，不退位3
-        {"n1":[1,9],"n2":[1,9],"n3":[1,9],"n4":[1,9],"result":[10,20],"abdication":1,}
+        包括 结果数值范围设置，退位随机选择项单选，随机1，退位2，不退位3
+        {"result":[10,20],"abdication":1,}
 
         :param:multattrs dict 乘法
-        包括 四项运算项及结果数值范围设置
-        {"n1":[1,9],"n2":[1,9],"n3":[1,9],"n4":[1,9],"result":[21,81],}
+        包括 及结果数值范围设置
+        {"result":[21,81],}
 
         :param:divattrs dict 除法
-        包括 四项运算项及结果数值范围设置
-        {"n1":[1,9],"n2":[1,9],"n3":[1,9],"n4":[1,9],"result":[1,9],}
+        包括 结果数值范围设置
+        {"result":[1,9],}
 
 
         :param signum: list 包含题型需要的 1+ 2- 3* 4/
         :param step: int 生成几步运算, 默认: 1 取值范围 1-3
         :param is_result :int 0求结果，1求运算项
+        is_bracket: int 是否需要括号 0不需要 1需要
         :param num: int 需要生成的题数
 
 
         :param multistep =None: dict 多步算式设置属性，
-        包括 四项运算项及结果数值范围设置，
-        is_bracket: int 是否需要括号 0不需要 1需要
+        包括 四个运算项及结果数值范围设置，
+        {"n1":[1,9],"n2":[1,9],"n3":[1,9],"n4":[1,9],"result":[10,20],"is_bracket":False,}
+
+        :param symbols list
         symbols: list 默认包括三组list,分别代表2或3步算式需要题型种类+-*/
         2+3-5  symbols = [[1,2],[1,]]  第一个运算符可以为+或-，第二个运算符只能为+
-        {"n1":[1,9],"n2":[1,9],"n3":[1,9],"n4":[1,9],"result":[10,20],"is_bracket":False,"symbols":[[1,2],[1,],[2,]],}
+
 
         '''
 
@@ -115,9 +119,11 @@ class Generator(object):
         self.signum = signum
         self.step = step
         self.is_result = is_result
+        self.is_bracket = is_bracket
         self.number = number
 
         self.multistep = multistep
+        self.symbols = symbols
 
         self.__data_list = []  # 生成的口算题
 
@@ -127,31 +133,31 @@ class Generator(object):
         if self.step == 1:
             if self.signum == 1:
                 formulas = getRandomNum(
-                    [self.addattrs["n1"], self.addattrs["n2"], self.addattrs["n3"], self.addattrs["n4"]], self.step)
+                    [self.multistep["n1"], self.multistep["n2"], ], self.step)
                 # 返回一步加法运算题
                 return getOneAdd(formulas, self.addattrs["result"], self.addattrs["carry"], self.is_result)
             if self.signum == 2:
                 formulas = getRandomNum(
-                    [self.subattrs["n1"], self.subattrs["n2"], self.subattrs["n3"], self.subattrs["n4"]],
+                    [self.multistep["n1"], self.multistep["n2"], ],
                     self.step)
                 # 返回一道减法运算
                 return getOneSub(formulas, self.subattrs["result"], self.subattrs["abdication"], self.is_result)
             if self.signum == 3:
                 formulas = getRandomNum(
-                    [self.multattrs["n1"], self.multattrs["n2"], self.multattrs["n3"], self.multattrs["n4"]],
+                    [self.multistep["n1"], self.multistep["n2"], ],
                     self.step)
                 return getOneMult(formulas, self.multattrs["result"], self.is_result)
             if self.signum == 4:
                 formulas = getRandomNum(
-                    [self.divattrs["n1"], self.divattrs["n2"], self.divattrs["n3"], self.divattrs["n4"]],
+                    [self.multistep["n1"], self.multistep["n2"], ],
                     self.step)
                 return getOneDiv(formulas, self.divattrs["result"], self.is_result)
         elif self.step == 2:  # 2步口算题
             formulas = getRandomNum(
                 [self.multistep["n1"], self.multistep["n2"], self.multistep["n3"], self.multistep["n4"]],
                 self.step)
-            return getTwoStep(formulas, self.multistep["result"], self.multistep['symbols'], self.addattrs["carry"], self.subattrs["abdication"],
-                              self.multistep["is_bracket"], self.is_result
+            return getTwoStep(formulas, self.multistep["result"], self.symbols, self.addattrs["carry"], self.subattrs["abdication"],
+                              self.is_bracket, self.is_result
                               )
 
     def generate_data(self):
@@ -195,21 +201,23 @@ class Generator(object):
 
 @get_time
 def main():
-    addlist = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [0, 30], "carry": 1, }  # 加法设置
-    sublist = {"n1": [1, 20], "n2": [1, 20], "n3": [1, 20], "n4": [1, 20], "result": [1, 20], "abdication": 1, }  # 减法设置
-    multlist = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [21, 81],}  # 乘法设置
-    divlist = {"n1": [1, 81], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [1, 9],}  # 除法设置
+    add = {"result": [0, 20], "carry": 1, }  # 加法设置
+    sub = {"result": [1, 19], "abdication": 1, }  # 减法设置
+    mult = {"result": [21, 81],}  # 乘法设置
+    div = {"result": [1, 9],}  # 除法设置
 
     signum = 1
-    step = 1
+    step = 2
     is_result = 0
     number = 20
+    is_bracket = 0
 
 
-    multistep = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [0, 999],
-                 "symbols": [[1, 2], [1, 2], [2, ]], "is_bracket": 1, }
+    multistep = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [0, 999],}
 
-    g = Generator(addlist, sublist, multlist, divlist, signum, step, is_result, number, multistep)
+    symbols= [[1, 2], [1, 2], [2, ]]
+
+    g = Generator(add, sub, mult, div, signum, step, number, is_result,is_bracket, multistep,symbols)
 
     datalist = g.generate_data()
     print(datalist)

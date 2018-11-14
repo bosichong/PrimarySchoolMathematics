@@ -31,8 +31,6 @@
 Author  : J.sky
 Mail    : bosichong@qq.com
 
-Author  : rcddup
-Mail    : 410093793@qq.com
 
 '''
 
@@ -41,6 +39,7 @@ from docx.shared import RGBColor
 from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
+__version__ = "1.0.0"
 
 class PrintPreview:
     '''本类负责生成完整的口算题文档使之适合打印机打印。可以生成多套题，生成数可以控。
