@@ -200,9 +200,9 @@ def main():
     multlist = {"n1": [1, 9], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [21, 81],}  # 乘法设置
     divlist = {"n1": [1, 81], "n2": [1, 9], "n3": [1, 9], "n4": [1, 9], "result": [1, 9],}  # 除法设置
 
-    signum = 2
-    step = 2
-    is_result = 1
+    signum = 1
+    step = 1
+    is_result = 0
     number = 20
 
 

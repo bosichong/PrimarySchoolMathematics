@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="34e32fa1-0595-45b0-acb0-186f150c9334" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/Psmrcddup.py" afterPath="$PROJECT_DIR$/Psmrcddup.py" />
       <change beforePath="$PROJECT_DIR$/utils/PSM_help.py" afterPath="$PROJECT_DIR$/utils/PSM_help.py" />
     </list>
@@ -18,11 +19,34 @@
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$PrintPreview.coverage" NAME="PrintPreview Coverage Results" MODIFIED="1540812288196" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$text.coverage" NAME="text Coverage Results" MODIFIED="1541337268307" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$App.coverage" NAME="App Coverage Results" MODIFIED="1541818052166" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PrimarySchoolMath$PSM_help.coverage" NAME="PSM_help Coverage Results" MODIFIED="1542077071350" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
-    <SUITE FILE_PATH="coverage/PrimarySchoolMath$Psm_rcddup.coverage" NAME="Psm-rcddup Coverage Results" MODIFIED="1542078435089" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PrimarySchoolMath$PSM_help.coverage" NAME="PSM_help Coverage Results" MODIFIED="1542098949345" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
+    <SUITE FILE_PATH="coverage/PrimarySchoolMath$Psm_rcddup.coverage" NAME="Psm-rcddup Coverage Results" MODIFIED="1542108835377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375" />
+    <leaf>
+      <file leaf-file-name="PSM_help.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/utils/PSM_help.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="386">
+              <caret line="77" column="47" lean-forward="true" selection-start-line="77" selection-start-column="47" selection-end-line="77" selection-end-column="47" />
+              <folding>
+                <element signature="e#285#298#0" expanded="true" />
+                <element signature="e#4985#5200#0" expanded="false" />
+                <element signature="e#5505#5714#0" expanded="false" />
+                <element signature="e#5751#5959#0" expanded="false" />
+                <element signature="e#6003#6356#0" expanded="false" />
+                <element signature="e#7177#7370#0" expanded="false" />
+                <element signature="e#7402#7538#0" expanded="false" />
+                <element signature="e#8599#8737#0" expanded="false" />
+                <element signature="e#9182#9382#0" expanded="false" />
+                <element signature="e#9886#9985#0" expanded="false" />
+                <element signature="e#10013#10161#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -54,6 +78,7 @@
       <find>getRandomSymbols</find>
       <find>print(</find>
       <find>print</find>
+      <find>raise</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -107,8 +132,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -116,10 +139,17 @@
               <item name="PrimarySchoolMath" type="b2602c69:ProjectViewProjectNode" />
               <item name="PrimarySchoolMath" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="PrimarySchoolMath" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PrimarySchoolMath" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -286,7 +316,7 @@
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972583" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10825295" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21597" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39954337" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -334,16 +364,16 @@
           <caret line="54" column="24" lean-forward="true" selection-start-line="54" selection-start-column="24" selection-end-line="54" selection-end-column="24" />
           <folding>
             <element signature="e#285#298#0" expanded="true" />
-            <element signature="e#5074#5289#0" expanded="false" />
-            <element signature="e#5594#5803#0" expanded="false" />
-            <element signature="e#5840#6048#0" expanded="false" />
-            <element signature="e#6092#6445#0" expanded="false" />
-            <element signature="e#7266#7459#0" expanded="false" />
-            <element signature="e#7491#7627#0" expanded="false" />
-            <element signature="e#8688#8826#0" expanded="false" />
-            <element signature="e#9271#9471#0" expanded="false" />
-            <element signature="e#9975#10074#0" expanded="false" />
-            <element signature="e#10102#10250#0" expanded="false" />
+            <element signature="e#4985#5200#0" expanded="false" />
+            <element signature="e#5505#5714#0" expanded="false" />
+            <element signature="e#5751#5959#0" expanded="false" />
+            <element signature="e#6003#6356#0" expanded="false" />
+            <element signature="e#7177#7370#0" expanded="false" />
+            <element signature="e#7402#7538#0" expanded="false" />
+            <element signature="e#8599#8737#0" expanded="false" />
+            <element signature="e#9182#9382#0" expanded="false" />
+            <element signature="e#9886#9985#0" expanded="false" />
+            <element signature="e#10013#10161#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -627,7 +657,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="12" column="32" lean-forward="true" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -639,32 +668,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/PSM_help.py">
+    <entry file="file://$PROJECT_DIR$/Psmrcddup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="326" column="35" lean-forward="false" selection-start-line="326" selection-start-column="35" selection-end-line="326" selection-end-column="35" />
+        <state relative-caret-position="345">
+          <caret line="202" column="14" lean-forward="false" selection-start-line="202" selection-start-column="14" selection-end-line="202" selection-end-column="14" />
           <folding>
-            <element signature="e#285#298#0" expanded="true" />
-            <element signature="e#5074#5289#0" expanded="false" />
-            <element signature="e#5594#5803#0" expanded="false" />
-            <element signature="e#5840#6048#0" expanded="false" />
-            <element signature="e#6092#6445#0" expanded="false" />
-            <element signature="e#7266#7459#0" expanded="false" />
-            <element signature="e#7491#7627#0" expanded="false" />
-            <element signature="e#8688#8826#0" expanded="false" />
-            <element signature="e#9271#9471#0" expanded="false" />
-            <element signature="e#9975#10074#0" expanded="false" />
-            <element signature="e#10102#10250#0" expanded="false" />
+            <element signature="e#703#716#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Psmrcddup.py">
+    <entry file="file://$PROJECT_DIR$/utils/PSM_help.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="203" column="12" lean-forward="false" selection-start-line="203" selection-start-column="12" selection-end-line="203" selection-end-column="12" />
+        <state relative-caret-position="386">
+          <caret line="77" column="47" lean-forward="true" selection-start-line="77" selection-start-column="47" selection-end-line="77" selection-end-column="47" />
           <folding>
-            <element signature="e#703#716#0" expanded="true" />
+            <element signature="e#285#298#0" expanded="true" />
+            <element signature="e#4985#5200#0" expanded="false" />
+            <element signature="e#5505#5714#0" expanded="false" />
+            <element signature="e#5751#5959#0" expanded="false" />
+            <element signature="e#6003#6356#0" expanded="false" />
+            <element signature="e#7177#7370#0" expanded="false" />
+            <element signature="e#7402#7538#0" expanded="false" />
+            <element signature="e#8599#8737#0" expanded="false" />
+            <element signature="e#9182#9382#0" expanded="false" />
+            <element signature="e#9886#9985#0" expanded="false" />
+            <element signature="e#10013#10161#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -51,11 +51,7 @@ def getTwoStep(formulas, result, symbols, carry, abdication, is_bracket, is_resu
 
             if (isItem(s2, tp, c, result, carry, abdication)):  # 判断第二步运算结果
                 rs = eval("{}{}{}{}{}".format(a, getSymbol(s1), b, getSymbol(s2), c, ))
-                if is_result == 0:
-                    return "{}{}{}{}{}=".format(a, repSymbol(s1), b, repSymbol(s2), c, )
-                elif is_result == 1:
-                    st = "{}{}{}{}{}={}".format(a, repSymbol(s1), b, repSymbol(s2), c, rs)
-                    return getRandomItem(st)
+                return getXStepstr("{}{}{}{}{}=".format(a, repSymbol(s1), b, repSymbol(s2), c, ),str(rs),is_result)
             else:
                 return False
         else:
@@ -67,11 +63,8 @@ def getTwoStep(formulas, result, symbols, carry, abdication, is_bracket, is_resu
                 tp = eval(str(formulas[k]) + getSymbol(syms[k]) + str(formulas[k + 1]))  # 括号内的运算结果
                 if (isItem(syms[k + 1], tp, formulas[k + 2], result, carry, abdication)):  # 判断第二步运算结果
                     rs = eval("{}{}{}{}{}{}{}".format("(", a, getSymbol(s1), b, ")", getSymbol(s2), c, ))
-                    if is_result == 0:
-                        return "{}{}{}{}{}{}{}=".format("(", a, repSymbol(s1), b, ")", repSymbol(s2), c, )
-                    elif is_result == 1:
-                        st = "{}{}{}{}{}{}{}={}".format("(", a, repSymbol(s1), b, ")", repSymbol(s2), c, rs)
-                        return getRandomItem(st)
+                    return getXStepstr("{}{}{}{}{}{}{}=".format("(", a, repSymbol(s1), b, ")", repSymbol(s2), c, ), str(rs),
+                                       is_result)
                 else:
                     return False
             else:
@@ -81,11 +74,9 @@ def getTwoStep(formulas, result, symbols, carry, abdication, is_bracket, is_resu
                 tp = eval(str(formulas[k]) + getSymbol(syms[k]) + str(formulas[k + 1]))  # 括号内的运算结果
                 if (isItem(syms[k - 1], formulas[k - 1], tp, result, carry, abdication)):  # 判断第二步运算结果
                     rs = eval("{}{}{}{}{}{}{}".format(a, getSymbol(s1), "(", b, getSymbol(s2), c, ")"))
-                    if is_result == 0:
-                        return "{}{}{}{}{}{}{}=".format(a, repSymbol(s1), "(", b, repSymbol(s2), c, ")")
-                    elif is_result == 1:
-                        st = "{}{}{}{}{}{}{}={}".format(a, repSymbol(s1), "(", b, repSymbol(s2), c, ")", rs)
-                        return getRandomItem(st)
+                    return getXStepstr("{}{}{}{}{}{}{}=".format(a, repSymbol(s1), "(", b, repSymbol(s2), c, ")"),
+                                       str(rs),
+                                       is_result)
                 else:
                     return False
             else:
@@ -95,6 +86,23 @@ def getTwoStep(formulas, result, symbols, carry, abdication, is_bracket, is_resu
 
     else:
         return False
+def getXStepstr(src,rs,is_result):
+    '''
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    给定一组算式和其结果，根据条件生成求结果或是求算数项的题型
+    :param src: str 算式
+    :param rs : str 结果
+    :param is_result: 0or1
+    :return: str
+    '''
+    if is_result == 0:
+        return src
+    elif is_result ==1:
+        return getRandomItem(src+rs)
+    else:
+        raise Exception ("is_result求结果，求算数项参数设置错误！")
+
 
 
 def getRandomItem(sr):
@@ -450,15 +458,8 @@ def getOneStr(a, b, is_result, signum):
     :return: str
     '''
 
-    if is_result == 0:  # 求结果
-        return "{}{}{}=".format(a, repSymbol(signum), b)
-    elif is_result == 1:  # 求运算项
-        # 随机分配求运算项
-        rst = int(eval(str(a) + getSymbol(signum) + str(b)))
-
-        return getRandomItem("{}{}{}={}".format(a, repSymbol(signum), b, rst))
-    else:
-        raise Exception("求结果求运算项参数设置错误。")
+    rst = int(eval(str(a) + getSymbol(signum) + str(b)))
+    return getXStepstr("{}{}{}=".format(a, repSymbol(signum), b),str(rst),is_result)
 
 
 def getRandomNum(list, step):
