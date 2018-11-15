@@ -56,6 +56,7 @@ app_title ="基于Python开发的小学生口算题生成器"
 info_tit ="还没添加任何口算题到卷子中，请点击添加口算题按钮开始添加口算题！"#当前口算题卷子包含内容
 
 
+
 def movdocx():
     '''负责把生成的口算题文件移动到指定目录'''
     docs = []#当前目录生成的文件列表
@@ -75,21 +76,6 @@ def movdocx():
             shutil.move(f,p)
 
 
-def filterPSM():
-    '''当选择加减乘除法的时候，用来屏蔽掉不能使用的进退位选择'''
-    if ra1Var.get() == 1:
-        if rb1Var.get() == 3:
-            messagebox.showinfo("提示", "加法没有退位，请重新选择！")
-            rb1.select()
-    elif ra1Var.get() == 2:
-        if rb1Var.get() == 2:
-            messagebox.showinfo("提示", "减法没有进位，请重新选择！")
-            rb1.select()
-    elif ra1Var.get() == 3 or ra1Var.get() == 4:
-        if rb1Var.get() == 2 or rb1Var.get() == 3 or rb1Var.get() == 4 :
-            messagebox.showinfo("提示", "乘除法无法选择进退位，只能随机！")
-            rb1.select()
-
 
 
 
@@ -104,32 +90,52 @@ def rdoprt():
 def createPSM():
     '''创建口算题最终打印前的配置'''
 
-    tmp_signum = ra1Var.get()#获取题类型设置
-    tmp_step = rc1Var.get()#获取需要几步计算
-    tmp_range = (int(min_entry.get()),int(add2_entry.get()))#获取数值取值范围
-    tmp_same = sameVar.get()#获取题是否可以相同的设置
-    tmp_carry = rb1Var.get()#获取是否需要进退位
-    tmp_filter = eval('('+filter_entry.get()+')')#获取过滤数字
-    tmp_num = sumVar.get()#获取需要生成的题数
+    tmplist = eval(multistep1_entry.get())#获取运算项及运算结果范围设置
+
+    multistep = {"n1": tmplist[0], "n2": tmplist[1], "n3": tmplist[2], "n4": tmplist[3], "result": tmplist[4],}
+
+    signum = ra1Var.get()#获取题类型设置
+    step = rc1Var.get()#获取需要几步计算
+    is_result = rd1Var.get() #题型设置
+
+    is_bracket = multvar.get() #是否需要括号
+
+    symbols = eval(multistep2_entry.get())
+    number = sumVar.get()#获取需要生成的题数
+
+    add = {"result": multistep["result"], "carry": add1Var.get(), }  # 加法设置
+    sub = {"result": multistep["result"], "abdication": sub1Var.get(), }  # 减法设置
+    mult = {"result": multistep["result"],}  # 乘法设置
+    div = {"result": multistep["result"],}  # 除法设置
+
 
     # 组装
-    tmp_type = [tmp_signum,tmp_range,tmp_carry,tmp_step,tmp_filter,tmp_same,tmp_num]
+    tmp_type = [add, sub, mult, div, signum, step, number, is_result,is_bracket, multistep,symbols]
 
 
     #更新题库内容提示
     psm_type.append(tmp_type)
-    if tmp_signum == 1:
-        psm_info.append("加法口算题"+str(tmp_num)+"道")
+    if step == 1:
+
+        if signum == 1:
+            psm_info.append("加法口算题"+str(number)+"道")
+            inofstr.set(psm_info)
+        elif signum == 2:
+            psm_info.append("减法口算题" + str(number) + "道")
+            inofstr.set(psm_info)
+        elif signum == 3:
+            psm_info.append("乘法口算题" + str(number) + "道")
+            inofstr.set(psm_info)
+        elif signum == 4:
+            psm_info.append("除法口算题" + str(number) + "道")
+            inofstr.set(psm_info)
+        else:
+            raise Exception("没有这个题型哦")
+
+    elif step == 2:
+        psm_info.append("两步计算口算题" + str(number) + "道")
         inofstr.set(psm_info)
-    elif tmp_signum == 2:
-        psm_info.append("减法口算题" + str(tmp_num) + "道")
-        inofstr.set(psm_info)
-    elif tmp_signum == 3:
-        psm_info.append("乘法口算题" + str(tmp_num) + "道")
-        inofstr.set(psm_info)
-    elif tmp_signum == 4:
-        psm_info.append("除法口算题" + str(tmp_num) + "道")
-        inofstr.set(psm_info)
+
 
 
 
@@ -157,7 +163,7 @@ def producePSM():
         for i in range(int(psm_entry.get())):
             templist = []
             for l in psm_type:
-                g = Generator(signum=l[0], range=l[1], need_carry=l[2], step=l[3], filter=l[4], same=l[5],num=l[6])
+                g = Generator(l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7],l[8],l[9],l[10])
                 templist = templist + g.generate_data()
             random.shuffle(templist)
             print(templist)
@@ -167,8 +173,9 @@ def producePSM():
         for i in range(int(psm_entry.get())):
             psm_title.append(psmtitVar.get())
         print(psm_title)
+        subtit = psmtit1Var.get()
 
-        pp = PrintPreview(psm_list, psm_title, col=int(psmcol_entry.get()))
+        pp = PrintPreview(psm_list, psm_title,subtit, col=int(psmcol_entry.get()))
         pp.produce()#生成docx
         psm_list.clear()#清空打印列表。
         movdocx()
@@ -189,7 +196,7 @@ top_frame.pack(fill=tk.X,)
 t_frame = tk.LabelFrame(top_frame, text="口算题类型选择及详细设置", padx=5, pady=5)
 t_frame.pack(fill=tk.X, side=tk.TOP)
 
-t1_frame = tk.LabelFrame(t_frame, text="加减乘除选择", padx=5, pady=5)
+t1_frame = tk.LabelFrame(t_frame, text="运算项数值及结果范围设置及运算符号设置", padx=5, pady=5)
 t1_frame.pack(fill=tk.X, side=tk.LEFT)
 
 t2_frame = tk.LabelFrame(t_frame, text="选择几步口算", padx=5, pady=5)
@@ -198,10 +205,16 @@ t2_frame.pack(fill=tk.X, side=tk.LEFT)
 t3_frame = tk.LabelFrame(t_frame, text="其它设置", padx=5, pady=5)
 t3_frame.pack(fill=tk.X, side=tk.LEFT)
 
+t4_frame = tk.LabelFrame(t_frame, text="题型设置", padx=5, pady=5)
+t4_frame.pack(fill=tk.X, side=tk.LEFT)
+
 
 
 c_frame = tk.LabelFrame(top_frame, text="加减乘除法详细设置", padx=5, pady=5)
 c_frame.pack(fill=tk.X, side=tk.TOP)
+
+multistep_frame = tk.LabelFrame(c_frame, text="多步运算题", padx=5, pady=5)
+multistep_frame.pack(fill=tk.X, side=tk.TOP)
 
 addattrs_frame = tk.LabelFrame(c_frame, text="加法", padx=5, pady=5)
 addattrs_frame.pack(fill=tk.X, side=tk.TOP)
@@ -210,14 +223,11 @@ subattrs_frame = tk.LabelFrame(c_frame, text="减法", padx=5, pady=5)
 subattrs_frame.pack(fill=tk.X, side=tk.TOP)
 
 
-multattrs_frame = tk.LabelFrame(c_frame, text="乘法", padx=5, pady=5)
+multattrs_frame = tk.LabelFrame(c_frame, text="乘除法", padx=5, pady=5)
 multattrs_frame.pack(fill=tk.X, side=tk.TOP)
 
-divattrs_frame = tk.LabelFrame(c_frame, text="除法", padx=5, pady=5)
-divattrs_frame.pack(fill=tk.X, side=tk.TOP)
 
-multistep_frame = tk.LabelFrame(c_frame, text="多步运算题", padx=5, pady=5)
-multistep_frame.pack(fill=tk.X, side=tk.TOP)
+
 
 
 
@@ -242,13 +252,13 @@ c_btn.pack(fill = tk.X,side=tk.TOP)
 
 ###########口算题类型选择############
 ra1Var = tk.IntVar()
-ra1=tk.Radiobutton(t1_frame,text='加法',value='1',variable=ra1Var,command=filterPSM)
+ra1=tk.Radiobutton(t1_frame,text='加法',value='1',variable=ra1Var,)
 ra1.pack(anchor=tk.W,side=tk.LEFT)
-ra2=tk.Radiobutton(t1_frame,text='减法',value='2',variable=ra1Var,command=filterPSM)
+ra2=tk.Radiobutton(t1_frame,text='减法',value='2',variable=ra1Var,)
 ra2.pack(anchor=tk.W,side=tk.LEFT)
-ra3=tk.Radiobutton(t1_frame,text='乘法',value='3',variable=ra1Var,command=filterPSM)
+ra3=tk.Radiobutton(t1_frame,text='乘法',value='3',variable=ra1Var,)
 ra3.pack(anchor=tk.W,side=tk.LEFT)
-ra4=tk.Radiobutton(t1_frame,text='除法',value='4',variable=ra1Var,command=filterPSM)
+ra4=tk.Radiobutton(t1_frame,text='除法',value='4',variable=ra1Var,)
 ra4.pack(anchor=tk.W,side=tk.LEFT)
 ra1.select()
 
@@ -257,12 +267,19 @@ ra1.select()
 rc1Var = tk.IntVar()
 rc1=tk.Radiobutton(t2_frame,text='单步',value='1',variable=rc1Var)
 rc1.pack(anchor=tk.W,side=tk.LEFT)
-rc2=tk.Radiobutton(t2_frame,text='两步',value='2',variable=rc1Var,state=tk.DISABLED)
+rc2=tk.Radiobutton(t2_frame,text='两步',value='2',variable=rc1Var,)
 rc2.pack(anchor=tk.W,side=tk.LEFT)
 rc3=tk.Radiobutton(t2_frame,text='三步',value='3',variable=rc1Var,state=tk.DISABLED)
 rc3.pack(anchor=tk.W,side=tk.LEFT)
 rc1.select()
 
+
+rd1Var = tk.IntVar()
+rd1=tk.Radiobutton(t4_frame,text='求结果',value='0',variable=rd1Var)
+rd1.pack(anchor=tk.W,side=tk.LEFT)
+rc2=tk.Radiobutton(t4_frame,text='求算数项',value='1',variable=rd1Var,)
+rc2.pack(anchor=tk.W,side=tk.LEFT)
+rd1.select()
 
 
 sumVar = tk.IntVar()
@@ -277,20 +294,12 @@ sum_entry.pack(fill=tk.X, side= tk.LEFT)
 
 
 
-add2_label = tk.Label(addattrs_frame, text="运算结果范围:",font=("Symbol", 14))
-add2_label.pack(side=tk.LEFT,fill=tk.X)
-add2_entry = tk.Entry(addattrs_frame,width=8)
-add2_entry.pack(fill=tk.X, side= tk.LEFT)
-add2_entry.insert(0,'[1,20]')
-
-
-
 add1Var = tk.IntVar()
-add1=tk.Radiobutton(addattrs_frame,text='随机进位',value='1',variable=add1Var,command=filterPSM)
+add1=tk.Radiobutton(addattrs_frame,text='随机进位',value='1',variable=add1Var,)
 add1.pack(anchor=tk.W,side=tk.LEFT)
-add2=tk.Radiobutton(addattrs_frame,text='加法进位',value='2',variable=add1Var,command=filterPSM)
+add2=tk.Radiobutton(addattrs_frame,text='加法进位',value='2',variable=add1Var,)
 add2.pack(anchor=tk.W,side=tk.LEFT)
-add3=tk.Radiobutton(addattrs_frame,text='没有进位',value='3',variable=add1Var,command=filterPSM)
+add3=tk.Radiobutton(addattrs_frame,text='没有进位',value='3',variable=add1Var,)
 add3.pack(anchor=tk.W,side=tk.LEFT)
 add1.select()
 
@@ -302,34 +311,30 @@ add1.select()
 
 
 
-sub1_label = tk.Label(subattrs_frame, text="运算结果范围:",font=("Symbol", 14))
-sub1_label.pack(side=tk.LEFT,fill=tk.X)
-sub1_entry = tk.Entry(subattrs_frame,width=8)
-sub1_entry.pack(fill=tk.X, side= tk.LEFT)
-sub1_entry.insert(0,'[1,19]')
+
 
 sub1Var = tk.IntVar()
-sub1=tk.Radiobutton(subattrs_frame,text='随机退位',value='1',variable=sub1Var,command=filterPSM)
+sub1=tk.Radiobutton(subattrs_frame,text='随机退位',value='1',variable=sub1Var,)
 sub1.pack(anchor=tk.W,side=tk.LEFT)
-sub2=tk.Radiobutton(subattrs_frame,text='减法退位',value='2',variable=sub1Var,command=filterPSM)
+sub2=tk.Radiobutton(subattrs_frame,text='减法退位',value='2',variable=sub1Var,)
 sub2.pack(anchor=tk.W,side=tk.LEFT)
-sub3=tk.Radiobutton(subattrs_frame,text='没有退位',value='3',variable=sub1Var,command=filterPSM)
+sub3=tk.Radiobutton(subattrs_frame,text='没有退位',value='3',variable=sub1Var,)
 sub3.pack(anchor=tk.W,side=tk.LEFT)
 sub1.select()
 
 
 
 
-###########multattrs############
+###########multattrs divattrs############
 
 
 
 
-mult1_label = tk.Label(multattrs_frame, text="运算结果范围:",font=("Symbol", 14))
+mult1_label = tk.Label(multattrs_frame, text="乘除法暂无相关设置:",font=("Symbol", 14))
 mult1_label.pack(side=tk.LEFT,fill=tk.X)
-mult1_entry = tk.Entry(multattrs_frame,width=8)
-mult1_entry.pack(fill=tk.X, side= tk.LEFT)
-mult1_entry.insert(0,'[1,81]')
+# mult1_entry = tk.Entry(multattrs_frame,width=8)
+# mult1_entry.pack(fill=tk.X, side= tk.LEFT)
+# mult1_entry.insert(0,'[1,81]')
 
 
 
@@ -339,33 +344,27 @@ mult1_entry.insert(0,'[1,81]')
 
 
 
-div1_label = tk.Label(divattrs_frame, text="运算结果范围:",font=("Symbol", 14))
-div1_label.pack(side=tk.LEFT,fill=tk.X)
-div1_entry = tk.Entry(divattrs_frame,width=8)
-div1_entry.pack(fill=tk.X, side= tk.LEFT)
-div1_entry.insert(0,'[1,9]')
-
 
 
 
 ###########multistep############
 
 
-multistep1_label = tk.Label(multistep_frame, text="运算项数值范围:",font=("Symbol", 14))
+multistep1_label = tk.Label(multistep_frame, text="运算项数值及结果范围设置:",font=("Symbol", 14))
 multistep1_label.pack(side=tk.LEFT,fill=tk.X)
 multistep1_entry = tk.Entry(multistep_frame,width=34)
 multistep1_entry.pack(fill=tk.X, side= tk.LEFT)
-multistep1_entry.insert(0,'[[1,9],[1,9],[1,9],[1,9]]')
+multistep1_entry.insert(0,'[[1,9],[1,9],[1,9],[1,9],[1,20]]')
 
 multistep2_label = tk.Label(multistep_frame, text="运算符号设置:",font=("Symbol", 14))
 multistep2_label.pack(side=tk.LEFT,fill=tk.X)
 multistep2_entry = tk.Entry(multistep_frame,width=22)
 multistep2_entry.pack(fill=tk.X, side= tk.LEFT)
-multistep2_entry.insert(0,'[[1,2,3],[1,2,3],[1,2],[1,2]]')
+multistep2_entry.insert(0,'[[1,2],[1,2],[1,2,3,4]]')
 
 
-
-multistep1=tk.Checkbutton(multistep_frame,text='使用括号',command=filterPSM)
+multvar = tk.IntVar()
+multistep1=tk.Checkbutton(multistep_frame,text='使用括号', variable = multvar)
 multistep1.pack(anchor=tk.W,side=tk.LEFT)
 
 
@@ -398,10 +397,16 @@ psmcol_entry.insert(0,'3')
 
 psmtitVar = tk.StringVar()
 psmtitVar.set("小学生口算题")
+psmtit1Var = tk.StringVar()
+psmtit1Var.set("姓名：__________ 日期：____月____日 时间：________ 对题：____道")
 psmtit_label = tk.Label(b1_frame, text="口算题卷子标题:",font=("Symbol", 14))
 psmtit_label.pack(side=tk.LEFT,fill=tk.X)
 psmtit_entry = tk.Entry(b1_frame,width=30,textvariable=psmtitVar)
 psmtit_entry.pack(fill=tk.X, side= tk.LEFT)
+psmtit1_label = tk.Label(b1_frame, text="口算题卷子副标题:",font=("Symbol", 14))
+psmtit1_label.pack(side=tk.LEFT,fill=tk.X)
+psmtit1_entry = tk.Entry(b1_frame,width=30,textvariable=psmtit1Var)
+psmtit1_entry.pack(fill=tk.X, side= tk.LEFT)
 
 
 

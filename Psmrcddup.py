@@ -95,9 +95,9 @@ class Generator(object):
         :param num: int 需要生成的题数
 
 
-        :param multistep =None: dict 多步算式设置属性，
+        :param multistep =None: dict 运算项及多步算式设置属性，
         包括 四个运算项及结果数值范围设置，
-        {"n1":[1,9],"n2":[1,9],"n3":[1,9],"n4":[1,9],"result":[10,20],"is_bracket":False,}
+        {"n1":[1,9],"n2":[1,9],"n3":[1,9],"n4":[1,9],"result":[10,20],}
 
         :param symbols list
         symbols: list 默认包括三组list,分别代表2或3步算式需要题型种类+-*/

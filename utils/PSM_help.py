@@ -295,7 +295,7 @@ def getOneAdd(formulas, result, carry, is_result):
         return False
 
 
-def is_addcarry(a, b, signum):
+def is_addcarry(a, b,):
     '''
     判断加法进位
     :param a: int
