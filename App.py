@@ -244,8 +244,11 @@ cle_btn.pack(fill = tk.X,side=tk.TOP)
 b_frame = tk.LabelFrame(top_frame, text="当前口算题包含内容", padx=5, pady=5)
 b_frame.pack(fill=tk.X, side=tk.TOP)
 
-b1_frame = tk.LabelFrame(top_frame, text="请真写需要生成多少套需要打印的试卷", padx=5, pady=5)
+b1_frame = tk.LabelFrame(top_frame, text="打印试卷详细设置", padx=5, pady=5)
 b1_frame.pack(fill=tk.X, side=tk.TOP)
+
+b2_frame = tk.LabelFrame(top_frame, text="打印试卷详细设置", padx=5, pady=5)
+b2_frame.pack(fill=tk.X, side=tk.TOP)
 
 c_btn = tk.Button(top_frame, text="+++++++点此生成口算题打印文档+++++++",height=2,command=producePSM)
 c_btn.pack(fill = tk.X,side=tk.TOP)
@@ -350,7 +353,7 @@ mult1_label.pack(side=tk.LEFT,fill=tk.X)
 ###########multistep############
 
 
-multistep1_label = tk.Label(multistep_frame, text="运算项数值及结果范围设置:",font=("Symbol", 14))
+multistep1_label = tk.Label(multistep_frame, text="运算项及结果范围设置:",font=("Symbol", 14))
 multistep1_label.pack(side=tk.LEFT,fill=tk.X)
 multistep1_entry = tk.Entry(multistep_frame,width=34)
 multistep1_entry.pack(fill=tk.X, side= tk.LEFT)
@@ -377,7 +380,7 @@ multistep1.pack(anchor=tk.W,side=tk.LEFT)
 ###########当前口算题卷子包含内容############
 inofstr = tk.StringVar()
 inofstr.set(info_tit)
-inof_label = tk.Listbox(b_frame, listvariable=inofstr,)
+inof_label = tk.Listbox(b_frame, listvariable=inofstr, height=6)
 inof_label.pack(side=tk.TOP,fill=tk.X)
 
 
@@ -399,13 +402,13 @@ psmtitVar = tk.StringVar()
 psmtitVar.set("小学生口算题")
 psmtit1Var = tk.StringVar()
 psmtit1Var.set("姓名：__________ 日期：____月____日 时间：________ 对题：____道")
-psmtit_label = tk.Label(b1_frame, text="口算题卷子标题:",font=("Symbol", 14))
+psmtit_label = tk.Label(b2_frame, text="口算题卷子标题:",font=("Symbol", 14))
 psmtit_label.pack(side=tk.LEFT,fill=tk.X)
-psmtit_entry = tk.Entry(b1_frame,width=30,textvariable=psmtitVar)
+psmtit_entry = tk.Entry(b2_frame,width=30,textvariable=psmtitVar)
 psmtit_entry.pack(fill=tk.X, side= tk.LEFT)
-psmtit1_label = tk.Label(b1_frame, text="口算题卷子副标题:",font=("Symbol", 14))
+psmtit1_label = tk.Label(b2_frame, text="口算题卷子副标题:",font=("Symbol", 14))
 psmtit1_label.pack(side=tk.LEFT,fill=tk.X)
-psmtit1_entry = tk.Entry(b1_frame,width=30,textvariable=psmtit1Var)
+psmtit1_entry = tk.Entry(b2_frame,width=30,textvariable=psmtit1Var)
 psmtit1_entry.pack(fill=tk.X, side= tk.LEFT)
 
 
