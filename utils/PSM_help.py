@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding=utf-8 -*-
+'''
+开心Python Django 学习交流q群：217840699
 
+
+Author  : J.sky
+Mail    : bosichong@qq.com
+
+Author  : rcddup
+Mail    : 410093793@qq.com
+
+Author  : andywu1998
+Mail    : 1078539713@qq.com
+'''
 
 __version__ = "1.0.0"
 
 __all__ = [
 
-    'is_int', 'get_num', 'is_abdication', 'is_multcarry', 'getRandomNum', "get_time",
-    'is_addcarry', 'is_addnocarry',
-    'getOneAdd', 'getOneSub', 'getOneMult', 'getOneDiv',
-    'getTwoStep',
+    'getPSMstr', 'getMoreStep', 'getOne','get_time','getRandomNum'
 
 ]
 
@@ -18,91 +27,324 @@ import time
 import re
 
 
-########2步算式相关判断设置##########
+def f1(s):
+    '''
+    搜索题中括号算式
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    :param s: 算式
+    :return:搜索括号算式
+    '''
+    ss = re.search("\(\d+[\+\-\*/\d]+\)", s)
+    if ss:
+        return ss.group(0)
 
-def getTwoStep(formulas, result, symbols, carry, abdication, is_bracket, is_result, ):
+
+def f2(s):
+    '''
+    搜索题中乘除法算式
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    :param s: 算式
+    :return: 乘除法算式
+    '''
+    ss = re.search("\d+[\*/]\d+", s)
+    if ss:
+        return ss.group(0)
+
+
+def f3(s):
+    '''
+    搜索加减法算式
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    :param s: 算式
+    :return:加减法算式
+    '''
+    ss = re.search("\d+[\+\-]\d+", s)
+    if ss:
+        return ss.group(0)
+
+
+def f4(s):
+    '''
+    搜索加减法乘除算式
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    :param s: 算式
+    :return: str 加减乘除算式
+    '''
+    ss = re.search("\d+[\+\-\*/\d]+", s)
+    if ss:
+        return ss.group(0)
+
+
+def validator(s, result, carry, abdication):
+    '''
+    算式分解校验器
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    :param s: 算式
+    :return: bool
+    '''
+    if isResultOk(s, result):
+        if f1(s):
+
+            s = validator1(s, result, carry, abdication)
+
+            if s:
+                return validator2(s, result, carry, abdication)
+            else:
+                return False
+
+        else:#校验无括号算式
+            return validator2(s, result, carry, abdication)
+    else:
+        return False
+
+
+def validator1(s, result, carry, abdication):
+    '''
+    算式分解校验器提取括号内算式，然后递归给validator2进行算式验证
+    本方法可以递归提取括号嵌套算式
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    :param s: 算式
+    :return: bool
+    '''
+    while f1(s):
+        fa = f1(s)
+        fb = f4(f1(s))
+        r = validator2(fb, result, carry, abdication)
+        if r:
+            s = s.replace(fa, "{}".format(int(float(r))))
+        else:
+            return False
+    return s
+
+
+def validator2(s, result, carry, abdication):
+    '''
+    分解乘除加减法计算结果并校验
+        Author  : J.sky
+    Mail    : bosichong@qq.com
+    :param s:
+    :return:
+    '''
+
+    # 乘除法验证
+    while f2(s):
+        f = f2(s)
+        if isMultDivOk(f, result):
+            r = eval(f)
+            s = s.replace(f, str(int(float(r))))
+        else:
+            return False
+    # 加减法验证
+    while f3(s):
+        f = f3(s)
+        if isAddSub(f, result, carry, abdication):
+            r = eval(f)
+            s = s.replace(f, str(r))
+        else:
+            return False
+
+    return s
+
+
+def isResultOk(str, result):
+    '''
+
+
+    验证算式结果是否正确
+
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+
+
+
+    :param str: 一道算式题
+    :param list 结果范围
+    :return: bool
+    '''
+    # print('比较结果：',eval(str),result[0] <= eval(str) <= result[1])
+    return result[0] <= eval(str) <= result[1]
+
+
+def isMultDivOk(s, result):
+    '''
+    判断乘除法正确性
+    :param str: 算式
+    :param result list 结果范围
+    :return: bool
+    '''
+    if re.search("/", s):
+        divs = re.split("/", s)
+        if int(divs[1]) == 0:
+            return False
+        else:
+            if isResultOk(s, result) and ((int(divs[0]) % int(divs[1])) == 0) and eval(s) > 0 : # 除法，除数不能为0，并且结果在范围内,并且整除无余数
+                return True
+            else:
+                return False
+    if re.search("\*", s):
+        return isResultOk(s, result)  # 乘法结果在范围内
+
+
+def isAddSub(s, result, carry, abdication):
+    '''
+    判断加减法正确性
+    :param s: str 算式
+    :param result: list 结果范围
+    :param carry: int 1，2，3 随机 进位 不进位
+    :param abdication: int 1，2，3 随机，退位，不退位
+    :return: bool
+    '''
+    tmp = re.split("[\+\-]", s)
+    # print(tmp)
+    if isResultOk(s, result):
+
+        if re.search("\+", s):
+
+            if carry == 1:
+                return True
+            elif carry == 2:
+                return is_addcarry(int(tmp[0]), int(tmp[1]))
+            elif carry == 3:
+                # print("加法进位校验")
+                return is_addnocarry(int(tmp[0]), int(tmp[1]))
+
+        elif re.search("\-", s):
+            # print("减法校验开始")
+            if abdication == 1:
+                return True
+            elif abdication == 2:
+                return is_abdication(int(tmp[0]), int(tmp[1]))
+            elif abdication == 3:
+                return is_noabdication(int(tmp[0]), int(tmp[1]))
+        else:
+            return False
+
+
+def getOne(formulas, signum, result, carry, abdication, is_result):
+    '''
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    根据条件生成一道一步算式题
+    :param formulas: 给定的单步加法的两个值
+    :param signum int 加减乘除
+    :param result list 结果范围
+    :param carry: int 加法进位
+    :param is_result: 求结果或求运算项
+    :return: bool or str 成功返回一个符合条件的加法算数题str，失败返回False
+    '''
+    return getMoreStep(formulas, result, [[signum], ], 1, carry, abdication, 0, is_result)
+
+
+def getMoreStep(formulas, result, symbols, step, carry, abdication, is_bracket, is_result, ):
     '''
 
 
     Author  : J.sky
     Mail    : bosichong@qq.com
 
-
-    二步算式题生成
-    :param formulas: list 返回3个整数算数项
+    :param formulas: list 整数算数项
     :param result: list 最终结果范围
     :param symbols: list 每步题的算数符号（例 [[1,2],[1,]]  第一个运算符可以为+或-，第二个运算符只能为+）
+    :param step int 步数
     :param carry: int 加法是否进位
     :param abdication: int 减法是否退位
     :param is_bracket: int 是否包含括号
     :param is_result: int 求结果，求运算项
     :return: str 一道符合规则的口算运算题
     '''
-
-    a, b, c = formulas[0], formulas[1], formulas[2]  # 获取运算项的数值
-    syms = getRandomSymbols(symbols, 2)
-    s1, s2 = syms[0], syms[1]  # 获取运算符号
-
-    if is_bracket == 0:  # 无括号
-
-        if (isItem(s1, a, b, result, carry, abdication)):  # 判断a与b的运算结果
-
-            tp = eval(str(a) + getSymbol(s1) + str(b))  # a与b的运算结果
-
-            if (isItem(s2, tp, c, result, carry, abdication)):  # 判断第二步运算结果
-                rs = eval("{}{}{}{}{}".format(a, getSymbol(s1), b, getSymbol(s2), c, ))
-                return getXStepstr("{}{}{}{}{}=".format(a, repSymbol(s1), b, repSymbol(s2), c, ),str(rs),is_result)
-            else:
-                return False
-        else:
-            return False
-    elif is_bracket == 1:  # 有括号
-        k = random.randint(0, len(formulas) - 2)  # 获得一个括号起始指针
-        if k == 0:
-            if isItem(syms[k], formulas[k], formulas[k + 1], result, carry, abdication):  # 判断括号内的运算是否符合条件
-                tp = eval(str(formulas[k]) + getSymbol(syms[k]) + str(formulas[k + 1]))  # 括号内的运算结果
-                if (isItem(syms[k + 1], tp, formulas[k + 2], result, carry, abdication)):  # 判断第二步运算结果
-                    rs = eval("{}{}{}{}{}{}{}".format("(", a, getSymbol(s1), b, ")", getSymbol(s2), c, ))
-                    return getXStepstr("{}{}{}{}{}{}{}=".format("(", a, repSymbol(s1), b, ")", repSymbol(s2), c, ), str(rs),
-                                       is_result)
-                else:
-                    return False
-            else:
-                return False
-        elif k == 1:
-            if isItem(syms[k], formulas[k], formulas[k + 1], result, carry, abdication):  # 判断括号内的运算是否符合条件
-                tp = eval(str(formulas[k]) + getSymbol(syms[k]) + str(formulas[k + 1]))  # 括号内的运算结果
-                if (isItem(syms[k - 1], formulas[k - 1], tp, result, carry, abdication)):  # 判断第二步运算结果
-                    rs = eval("{}{}{}{}{}{}{}".format(a, getSymbol(s1), "(", b, getSymbol(s2), c, ")"))
-                    return getXStepstr("{}{}{}{}{}{}{}=".format(a, repSymbol(s1), "(", b, repSymbol(s2), c, ")"),
-                                       str(rs),
-                                       is_result)
-                else:
-                    return False
-            else:
-                return False
-
-
+    f = getRandomNum(formulas, step)
+    str = getPSMstr(f, symbols, step, is_bracket)
+    if validator(str, result, carry, abdication):
+        return getXStepstr(str, is_result)
 
     else:
+        # print("校验失败")
         return False
-def getXStepstr(src,rs,is_result):
+
+
+def getPSMstr(formulas, symbols, step, is_bracket):
+    '''
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    生成算式题
+    :param formulas: list 给定的算数项列表
+    :param symbols: list 每步题的算数符号（例 [[1,2],[1,]]  第一个运算符可以为+或-，第二个运算符只能为+）
+    :param step: int 步数
+    :param is_bracket: int  括号
+    :return:
+    '''
+    ss = ""
+    sym = getRandomSymbols(symbols, step)
+    for i in range(step):
+        formulas.insert(i * 2 + 1, getSymbol(sym[i]))
+
+    if is_bracket:
+        k = getRandomBracket(step)  # 获得一个括号起始指针
+        for i in range(2):
+
+            if i == 0:
+                formulas.insert(k + 4 * i, ('('))
+            else:
+                formulas.insert(k + 4 * i, (')'))
+
+    for s in formulas:
+        ss = ss + str(s)
+    return ss
+
+
+def getRandomBracket(step):
+    '''
+        Author  : J.sky
+    Mail    : bosichong@qq.com
+    返回一个括号起始随机数
+    :param step:
+    :return:
+    '''
+    while True:
+        k = random.randint(0, step * 2 + 1 - 3)  # 获得一个括号起始指针
+        if not k % 2:
+            return k
+
+
+########2步算式相关判断设置##########
+
+
+def getXStepstr(src, is_result):
     '''
     Author  : J.sky
     Mail    : bosichong@qq.com
     给定一组算式和其结果，根据条件生成求结果或是求算数项的题型
     :param src: str 算式
-    :param rs : str 结果
     :param is_result: 0or1
     :return: str
     '''
     if is_result == 0:
-        return src
-    elif is_result ==1:
-        return getRandomItem(src+rs)
+        return repSymStr(src) + "="
+    elif is_result == 1:
+        return getRandomItem(repSymStr(src) + "=" + str(int(eval(src))))
     else:
-        raise Exception ("is_result求结果，求算数项参数设置错误！")
+        raise Exception("is_result求结果，求算数项参数设置错误！")
 
+
+def repSymStr(s):
+    '''
+        Author  : J.sky
+    Mail    : bosichong@qq.com
+    更换乘除法符号
+    :param s:
+    :return:
+    '''
+    if re.search('\*', s):
+        s = re.sub('\*', 'x', s)
+    if re.search('/', s):
+        s = re.sub('/', '÷', s)
+    return s
 
 
 def getRandomItem(sr):
@@ -117,28 +359,9 @@ def getRandomItem(sr):
     p = re.compile('\d+')
     sc = p.findall(sr)
     i = random.randint(0, len(sc) - 2)  # -2防止替换结果
-    sr = sr.replace(sc[i], "__",1)
+    sr = sr.replace(sc[i], "__", 1)
     # print(sr)
     return sr
-
-
-def repSymbol(signum):
-    '''
-    Author  : J.sky
-    Mail    : bosichong@qq.com
-
-    输出运算符号用来打印算式，主要处理*/法的符号
-    :param signum:
-    :return:
-    '''
-    if signum == 1:
-        return "+"
-    elif signum == 2:
-        return "-"
-    elif signum == 3:
-        return "x"
-    elif signum == 4:
-        return "÷"
 
 
 def getSymbol(sym):
@@ -159,93 +382,6 @@ def getSymbol(sym):
         return "/"
 
 
-def isItem(signum, a, b, result, carry, abdication):
-    '''
-    Author  : J.sky
-    Mail    : bosichong@qq.com
-
-    判断两个数成立的算式是否合法
-    :param a:
-    :param b:
-    :param result:
-    :param carry:
-    :param abdication:
-    :return: bool
-    '''
-    if signum == 1:
-        return isTwoAdd(a, b, result, carry)
-    elif signum == 2:
-        return isTwoSub(a, b, result, abdication)
-    elif signum == 3:
-        return isTwoMult(a, b, result)
-    elif signum == 4:
-        return isTwoDiv(a, b, result)
-
-
-def isTwoAdd(a, b, result, carry):
-    '''
-    Author  : J.sky
-    Mail    : bosichong@qq.com
-
-    判断两个数成立的加法算式是否合法
-
-    :param a:
-    :param b:
-    :param result:
-    :param carry:
-    :return: bool
-    '''
-    return getOneAdd((a, b), result, carry, 1)
-
-
-def isTwoSub(a, b, result, abdication):
-    '''
-    Author  : J.sky
-    Mail    : bosichong@qq.com
-
-    判断两个数成立的减法算式是否合法
-
-    :param a:
-    :param b:
-    :param result:
-    :param carry:
-    :return: bool
-    '''
-    return getOneSub((a, b), result, abdication, 1)
-
-
-def isTwoMult(a, b, result, ):
-    '''
-    Author  : J.sky
-    Mail    : bosichong@qq.com
-
-    判断两个数成立的乘法算式是否合法
-
-    :param a:
-    :param b:
-    :param result:
-    :param carry:
-    :return: bool
-    '''
-    return getOneMult((a, b), result, 1)
-
-
-def isTwoDiv(a, b, result, ):
-    '''
-    Author  : J.sky
-    Mail    : bosichong@qq.com
-
-    判断两个数成立的除法算式是否合法
-
-    :param a:
-    :param b:
-    :param result:
-    :param carry:
-    :return: bool
-    '''
-    return getOneDiv((a, b), result, 1)
-
-
 def getRandomSymbols(symbols, step):
     '''
 
@@ -259,7 +395,7 @@ def getRandomSymbols(symbols, step):
     :return:
     '''
     newList = []
-    for i in range(0, step):
+    for i in range(step):
         index = random.randint(0, len(symbols[i]) - 1)
         newList.append(symbols[i][index])
     return newList
@@ -268,34 +404,7 @@ def getRandomSymbols(symbols, step):
 ########加法相关判断设置##########
 
 
-def getOneAdd(formulas, result, carry, is_result):
-    '''
-    根据条件生成一道一步加法算式题
-    :param formulas: 给定的单步加法的两个值
-    :param carry: int 加法进位
-    :param is_result: 求结果或求运算项
-    :return: bool or str 成功返回一个符合条件的加法算数题str，失败返回False
-    '''
-    a, b = formulas[0], formulas[1]
-
-    if result[0] <= a + b <= result[1]:
-        if carry == 1:  # 随机
-            return getOneStr(a, b, is_result, 1)
-        elif carry == 2:  # 进位
-            if is_addcarry(a, b):
-                return getOneStr(a, b, is_result, 1)
-            else:
-                return False
-        elif carry == 3:  # 不进位
-            if is_addnocarry(a, b):
-                return getOneStr(a, b, is_result, 1)
-            else:
-                return False
-    else:
-        return False
-
-
-def is_addcarry(a, b,):
+def is_addcarry(a, b, ):
     '''
     判断加法进位
     :param a: int
@@ -304,10 +413,7 @@ def is_addcarry(a, b,):
     :return: boolean
     '''
 
-    if (get_num(a) + get_num(b) < 10):
-        return False
-    else:
-        return True
+    return (get_num(a) + get_num(b) > 10)
 
 
 def is_addnocarry(a, b):
@@ -322,33 +428,6 @@ def is_addnocarry(a, b):
 
 
 ########减法相关判断设置##########
-
-
-def getOneSub(formulas, result, abdication, is_result):
-    '''
-    根据条件生成一道一步减法算式题
-    :param formulas: 给定的单步减法的两个值
-    :param carry: int 减法退位
-    :param is_result: 求结果或求运算项
-    :return: bool or str 成功返回一个符合条件的减法算数题str，失败返回False
-    '''
-    a, b = formulas[0], formulas[1]
-
-    if result[0] <= a - b <= result[1]:
-        if abdication == 1:  # 随机
-            return getOneStr(a, b, is_result, 2)
-        elif abdication == 2:  # 退位
-            if is_abdication(a, b):
-                return getOneStr(a, b, is_result, 2)
-            else:
-                return False
-        elif abdication == 3:  # 不退位
-            if is_noabdication(a, b):
-                return getOneStr(a, b, is_result, 2)
-            else:
-                return False
-    else:
-        return False
 
 
 def is_abdication(a, b):
@@ -379,20 +458,6 @@ def is_noabdication(a, b):
 
 ########乘法相关判断设置##########
 
-def getOneMult(formulas, result, is_result):
-    '''
-    根据条件生成一道一步乘法算式题
-    :param formulas: 给定的单步乘法的两个值
-    :param result : int 结果值最大范围
-    :param is_result: 求结果或求运算项
-    :return: bool or str 成功返回一个符合条件的减法算数题str，失败返回False
-    '''
-    a, b = formulas[0], formulas[1]
-    if result[0] <= a * b <= result[1]:
-        return getOneStr(a, b, is_result, 3)
-    else:
-        return False
-
 
 def is_multcarry(a, b):
     '''
@@ -410,21 +475,6 @@ def is_multcarry(a, b):
 
 
 ########除法相关判断设置##########
-
-
-def getOneDiv(formulas, result, is_result):
-    '''
-    根据条件生成一道一步除法算式题
-    :param formulas: 给定的单步除法的两个值
-    :param result : int 结果值最大范围
-    :param is_result: 求结果或求运算项
-    :return: bool or str 成功返回一个符合条件的减法算数题str，失败返回False
-    '''
-    a, b = formulas[0], formulas[1]
-    if (result[0] <= a / b <= result[1]) and b > 0 and (a % b == 0):  # 并且整除
-        return getOneStr(a, b, is_result, 4)
-    else:
-        return False
 
 
 ########其它相关判断设置##########
@@ -450,25 +500,16 @@ def get_num(number):
     return number - value0 * 10
 
 
-def getOneStr(a, b, is_result, signum):
-    '''
-    返回一道单步算式题str（可以返回+-*/单步算试题）
-    :param a: int
-    :param b: int
-    :return: str
-    '''
-
-    rst = int(eval(str(a) + getSymbol(signum) + str(b)))
-    return getXStepstr("{}{}{}=".format(a, repSymbol(signum), b),str(rst),is_result)
-
-
 def getRandomNum(list, step):
     '''
-
     Author  : andywu1998
     Mail    : 1078539713@qq.com
-    返回一组算式项
 
+    Author  : J.sky
+    Mail    : bosichong@qq.com
+    :param list:
+    :param step:
+    :return:
     '''
     newList = []
     for i in range(0, step + 1):
@@ -501,11 +542,18 @@ def get_time(func):
 
 
 def main():
-    print(getTwoStep([8, 5, 3], [0, 500], [[1, 2, ], [1, 2, ]], 1, 1, 1, 1))
-    print(getOneAdd([3, 9], [1, 20], 1, 1))
-    print(getOneSub([9, 3], [1, 20], 1, 0))
-    print(getOneMult([3, 9], [21, 81], 0))
-    print(getOneDiv([9, 3], [1, 9], 1))
+    # 加法进退位随机
+    print(getOne([[1, 9], [1, 9]], 1, [1, 20], 1, 1, 0))
+    print(getOne([[1, 9], [1, 9]], 2, [1, 81], 1, 1, 0))
+    print(getOne([[1, 9], [1, 9]], 3, [1, 81], 3, 1, 0))
+    print(getOne([[9, 81], [2, 9]], 4, [2, 9], 1, 1, 0))
+
+    # 生成算式测试
+    # print(getPSMstr([5,8,9,9,8],[[1,2],[1,],[2],[1,]],4,1))
+
+    # print(getMoreStep([[1, 55], [1, 99], [1, 99], [1, 9]], [1, 99], [[1, 3], [4], [4]], 2, 1, 1, 1, 0))
+
+    # print(isMultDivOk('18/9',[1,99]))
 
 
 if __name__ == '__main__':

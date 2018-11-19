@@ -25,6 +25,7 @@
     2.保存为.docx用来打印.
 
 
+
 开心Python Django 学习交流q群：217840699
 
 
@@ -34,6 +35,9 @@ Mail    : bosichong@qq.com
 Author  : rcddup
 Mail    : 410093793@qq.com
 
+Author  : andywu1998
+Mail    : 1078539713@qq.com
+
 
 '''
 import random,os,shutil
@@ -42,8 +46,9 @@ from tkinter import messagebox  # 导入提示窗口包
 
 from Psmrcddup import Generator
 from PrintPreview import PrintPreview
+from utils.PSM_help import *
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 
 
@@ -92,7 +97,7 @@ def createPSM():
 
     tmplist = eval(multistep1_entry.get())#获取运算项及运算结果范围设置
 
-    multistep = {"n1": tmplist[0], "n2": tmplist[1], "n3": tmplist[2], "n4": tmplist[3], "result": tmplist[4],}
+    multistep = [tmplist[0], tmplist[1], tmplist[2], tmplist[3], tmplist[4],]
 
     signum = ra1Var.get()#获取题类型设置
     step = rc1Var.get()#获取需要几步计算
@@ -103,10 +108,10 @@ def createPSM():
     symbols = eval(multistep2_entry.get())
     number = sumVar.get()#获取需要生成的题数
 
-    add = {"result": multistep["result"], "carry": add1Var.get(), }  # 加法设置
-    sub = {"result": multistep["result"], "abdication": sub1Var.get(), }  # 减法设置
-    mult = {"result": multistep["result"],}  # 乘法设置
-    div = {"result": multistep["result"],}  # 除法设置
+    add = {"carry": add1Var.get(), }  # 加法设置
+    sub = { "abdication": sub1Var.get(), }  # 减法设置
+    mult = {}  # 乘法设置
+    div = {}  # 除法设置
 
 
     # 组装
@@ -136,7 +141,9 @@ def createPSM():
         psm_info.append("两步计算口算题" + str(number) + "道")
         inofstr.set(psm_info)
 
-
+    elif step ==3:
+        psm_info.append("三步计算口算题" + str(number) + "道")
+        inofstr.set(psm_info)
 
 
 
@@ -151,6 +158,7 @@ def cleanPSM():
     psm_info.append(info_tit)
     inofstr.set(psm_info)
     psm_info.clear()#添加完毕后再次清空内容提示列表，如果重新添加口算题将重新添加list，防止list第一行为空
+
 
 def producePSM():
     '''发布口算题保存.docx文件'''
@@ -272,7 +280,7 @@ rc1=tk.Radiobutton(t2_frame,text='单步',value='1',variable=rc1Var)
 rc1.pack(anchor=tk.W,side=tk.LEFT)
 rc2=tk.Radiobutton(t2_frame,text='两步',value='2',variable=rc1Var,)
 rc2.pack(anchor=tk.W,side=tk.LEFT)
-rc3=tk.Radiobutton(t2_frame,text='三步',value='3',variable=rc1Var,state=tk.DISABLED)
+rc3=tk.Radiobutton(t2_frame,text='三步',value='3',variable=rc1Var,)
 rc3.pack(anchor=tk.W,side=tk.LEFT)
 rc1.select()
 
@@ -357,7 +365,7 @@ multistep1_label = tk.Label(multistep_frame, text="运算项及结果范围设�
 multistep1_label.pack(side=tk.LEFT,fill=tk.X)
 multistep1_entry = tk.Entry(multistep_frame,width=34)
 multistep1_entry.pack(fill=tk.X, side= tk.LEFT)
-multistep1_entry.insert(0,'[[1,9],[1,9],[1,9],[1,9],[1,20]]')
+multistep1_entry.insert(0,'[[2,9],[2,9],[2,9],[2,9],[2,20]]')
 
 multistep2_label = tk.Label(multistep_frame, text="运算符号设置:",font=("Symbol", 14))
 multistep2_label.pack(side=tk.LEFT,fill=tk.X)

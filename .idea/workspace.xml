@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="34e32fa1-0595-45b0-acb0-186f150c9334" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/App.py" afterPath="$PROJECT_DIR$/App.py" />
+      <change beforePath="$PROJECT_DIR$/Psmrcddup.py" afterPath="$PROJECT_DIR$/Psmrcddup.py" />
       <change beforePath="$PROJECT_DIR$/readme.md" afterPath="$PROJECT_DIR$/readme.md" />
+      <change beforePath="$PROJECT_DIR$/utils/PSM_help.py" afterPath="$PROJECT_DIR$/utils/PSM_help.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,20 +20,31 @@
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$Psm.coverage" NAME="Psm Coverage Results" MODIFIED="1540345215266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$PrintPreview.coverage" NAME="PrintPreview Coverage Results" MODIFIED="1540812288196" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$text.coverage" NAME="text Coverage Results" MODIFIED="1541337268307" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PrimarySchoolMath$PSM_help.coverage" NAME="PSM_help Coverage Results" MODIFIED="1542154100183" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
-    <SUITE FILE_PATH="coverage/PrimarySchoolMath$App.coverage" NAME="App Coverage Results" MODIFIED="1542329139090" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PrimarySchoolMath$Psm_rcddup.coverage" NAME="Psm-rcddup Coverage Results" MODIFIED="1542287121077" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PrimarySchoolMath$PSM_help.coverage" NAME="PSM_help Coverage Results" MODIFIED="1542633401241" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
+    <SUITE FILE_PATH="coverage/PrimarySchoolMath$App.coverage" NAME="App Coverage Results" MODIFIED="1542634253804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PrimarySchoolMath$Psm_rcddup.coverage" NAME="Psm-rcddup Coverage Results" MODIFIED="1542632484845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PrimarySchoolMath$eee.coverage" NAME="eee Coverage Results" MODIFIED="1542605382812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file leaf-file-name="App.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/App.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="45" column="21" lean-forward="true" selection-start-line="45" selection-start-column="21" selection-end-line="45" selection-end-column="21" />
+            <state relative-caret-position="86">
+              <caret line="367" column="48" lean-forward="false" selection-start-line="367" selection-start-column="48" selection-end-line="367" selection-end-column="48" />
               <folding>
-                <element signature="e#628#651#0" expanded="true" />
+                <element signature="e#679#702#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="readme.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/readme.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="576">
+              <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -46,9 +60,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>document</find>
-      <find>self.p_list</find>
-      <find>number</find>
       <find>&quot;*&quot;</find>
       <find>&quot;/&quot;</find>
       <find>readonly</find>
@@ -76,6 +87,9 @@
       <find>rc1</find>
       <find>tmp_num</find>
       <find>list</find>
+      <find>加法校验</find>
+      <find>getSymbol</find>
+      <find>ssss</find>
     </findStrings>
     <replaceStrings>
       <replace>add1_label</replace>
@@ -112,11 +126,13 @@
         <option value="$PROJECT_DIR$/utils/utils.py" />
         <option value="$PROJECT_DIR$/utils/__init__.py" />
         <option value="$PROJECT_DIR$/utils.PSM_help.py" />
+        <option value="$PROJECT_DIR$/PrintPreview.py" />
+        <option value="$PROJECT_DIR$/eee.py" />
+        <option value="$PROJECT_DIR$/utils/eee.py" />
         <option value="$PROJECT_DIR$/utils/PSM_help.py" />
         <option value="$PROJECT_DIR$/Psmrcddup.py" />
-        <option value="$PROJECT_DIR$/PrintPreview.py" />
-        <option value="$PROJECT_DIR$/App.py" />
         <option value="$PROJECT_DIR$/readme.md" />
+        <option value="$PROJECT_DIR$/App.py" />
       </list>
     </option>
   </component>
@@ -149,7 +165,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -167,6 +182,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -176,6 +192,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/utils" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -230,25 +247,6 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="PrintPreview" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="PrimarySchoolMath" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PrintPreview.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
     <configuration name="Psm-rcddup" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -263,6 +261,25 @@
       <module name="PrimarySchoolMath" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Psmrcddup.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="eee" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="PrimarySchoolMath" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/utils/eee.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -289,18 +306,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.Psm-rcddup" />
-      <item index="1" class="java.lang.String" itemvalue="Python.PrintPreview" />
-      <item index="2" class="java.lang.String" itemvalue="Python.App" />
-      <item index="3" class="java.lang.String" itemvalue="Python.text" />
-      <item index="4" class="java.lang.String" itemvalue="Python.PSM_help" />
+      <item index="1" class="java.lang.String" itemvalue="Python.App" />
+      <item index="2" class="java.lang.String" itemvalue="Python.text" />
+      <item index="3" class="java.lang.String" itemvalue="Python.PSM_help" />
+      <item index="4" class="java.lang.String" itemvalue="Python.eee" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.App" />
-        <item index="1" class="java.lang.String" itemvalue="Python.Psm-rcddup" />
-        <item index="2" class="java.lang.String" itemvalue="Python.PSM_help" />
-        <item index="3" class="java.lang.String" itemvalue="Python.text" />
-        <item index="4" class="java.lang.String" itemvalue="Python.PrintPreview" />
+        <item index="1" class="java.lang.String" itemvalue="Python.PSM_help" />
+        <item index="2" class="java.lang.String" itemvalue="Python.Psm-rcddup" />
+        <item index="3" class="java.lang.String" itemvalue="Python.eee" />
+        <item index="4" class="java.lang.String" itemvalue="Python.text" />
       </list>
     </recent_temporary>
   </component>
@@ -327,9 +344,9 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.369863" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43150684" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15380493" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16023579" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972583" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -358,35 +375,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/App.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="33" column="16" lean-forward="true" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/PSM_help.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="972">
-          <caret line="54" column="24" lean-forward="true" selection-start-line="54" selection-start-column="24" selection-end-line="54" selection-end-column="24" />
-          <folding>
-            <element signature="e#4985#5200#0" expanded="false" />
-            <element signature="e#5505#5714#0" expanded="false" />
-            <element signature="e#5751#5959#0" expanded="false" />
-            <element signature="e#7395#7531#0" expanded="false" />
-            <element signature="e#8592#8730#0" expanded="false" />
-            <element signature="e#9175#9375#0" expanded="false" />
-            <element signature="e#9879#9978#0" expanded="false" />
-            <element signature="e#10006#10154#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Psmrcddup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4068">
           <caret line="227" column="24" lean-forward="true" selection-start-line="227" selection-start-column="24" selection-end-line="227" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -401,7 +393,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3960">
           <caret line="221" column="21" lean-forward="true" selection-start-line="221" selection-start-column="21" selection-end-line="221" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -417,7 +408,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -439,7 +429,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2646">
           <caret line="155" column="0" lean-forward="true" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -455,7 +444,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4428">
           <caret line="254" column="34" lean-forward="false" selection-start-line="254" selection-start-column="34" selection-end-line="254" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -471,7 +459,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4428">
           <caret line="254" column="34" lean-forward="true" selection-start-line="254" selection-start-column="34" selection-end-line="254" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -487,7 +474,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -503,7 +489,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3204">
           <caret line="178" column="17" lean-forward="true" selection-start-line="178" selection-start-column="17" selection-end-line="178" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -519,7 +504,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2466">
           <caret line="137" column="20" lean-forward="true" selection-start-line="137" selection-start-column="16" selection-end-line="137" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -528,7 +512,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2214">
           <caret line="123" column="45" lean-forward="true" selection-start-line="123" selection-start-column="45" selection-end-line="123" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -584,34 +567,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test.py" />
-    <entry file="file://$PROJECT_DIR$/utils/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils.PSM_help.py" />
-    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2017.3/python_stubs/-1199943127/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="475" column="4" lean-forward="false" selection-start-line="475" selection-start-column="4" selection-end-line="475" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons/re.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1882">
           <caret line="123" column="26" lean-forward="false" selection-start-line="123" selection-start-column="26" selection-end-line="123" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/re.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="183" column="45" lean-forward="false" selection-start-line="183" selection-start-column="40" selection-end-line="183" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -626,42 +586,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="174">
           <caret line="195" column="0" lean-forward="false" selection-start-line="195" selection-start-column="0" selection-end-line="195" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/PSM_help.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="263" column="0" lean-forward="false" selection-start-line="263" selection-start-column="0" selection-end-line="263" selection-end-column="0" />
-          <folding>
-            <element signature="e#4985#5200#0" expanded="false" />
-            <element signature="e#5505#5714#0" expanded="false" />
-            <element signature="e#5751#5959#0" expanded="false" />
-            <element signature="e#7395#7531#0" expanded="false" />
-            <element signature="e#8592#8730#0" expanded="false" />
-            <element signature="e#9175#9375#0" expanded="false" />
-            <element signature="e#9879#9978#0" expanded="false" />
-            <element signature="e#10006#10154#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Psmrcddup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3744">
-          <caret line="211" column="15" lean-forward="false" selection-start-line="211" selection-start-column="15" selection-end-line="211" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PrintPreview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="74" column="31" lean-forward="false" selection-start-line="74" selection-start-column="31" selection-end-line="74" selection-end-column="31" />
-          <folding>
-            <element signature="e#584#628#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -669,24 +593,88 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="188">
           <caret line="2763" column="8" lean-forward="false" selection-start-line="2763" selection-start-column="8" selection-end-line="2763" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/sre_parse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="614" column="0" lean-forward="false" selection-start-line="614" selection-start-column="0" selection-end-line="614" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/eee.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2898">
+          <caret line="161" column="0" lean-forward="false" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2017.3/python_stubs/-1199943127/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="245" column="4" lean-forward="false" selection-start-line="245" selection-start-column="4" selection-end-line="245" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/re.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="181" column="0" lean-forward="false" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PrintPreview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="497">
+          <caret line="41" column="20" lean-forward="true" selection-start-line="41" selection-start-column="20" selection-end-line="41" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Psmrcddup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="44" column="9" lean-forward="true" selection-start-line="44" selection-start-column="9" selection-end-line="44" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/PSM_help.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="13" column="27" lean-forward="false" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
+          <folding>
+            <element signature="e#335#348#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/readme.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="972">
-          <caret line="54" column="0" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+        <state relative-caret-position="576">
+          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="45" column="21" lean-forward="true" selection-start-line="45" selection-start-column="21" selection-end-line="45" selection-end-column="21" />
+        <state relative-caret-position="86">
+          <caret line="367" column="48" lean-forward="false" selection-start-line="367" selection-start-column="48" selection-end-line="367" selection-end-column="48" />
           <folding>
-            <element signature="e#628#651#0" expanded="true" />
+            <element signature="e#679#702#0" expanded="true" />
           </folding>
         </state>
       </provider>
