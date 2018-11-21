@@ -65,11 +65,12 @@ info_tit ="还没添加任何口算题到卷子中，请点击添加口算题按
 def movdocx():
     '''负责把生成的口算题文件移动到指定目录'''
     docs = []#当前目录生成的文件列表
-    for p in os.listdir(os.path.dirname(__file__)):
+    print(os.path.dirname(os.path.abspath(__file__)))
+    for p in os.listdir(os.path.dirname(os.path.abspath(__file__))):
         if p.endswith('.docx'):
             docs.append(p)
     # print(docs)
-    p = os.path.join(os.path.dirname(__file__), 'docx')
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'docx')
     if os.path.isdir(p):
         shutil.rmtree(p)
         os.mkdir(p)
@@ -365,7 +366,7 @@ multistep1_label = tk.Label(multistep_frame, text="运算项及结果范围设�
 multistep1_label.pack(side=tk.LEFT,fill=tk.X)
 multistep1_entry = tk.Entry(multistep_frame,width=34)
 multistep1_entry.pack(fill=tk.X, side= tk.LEFT)
-multistep1_entry.insert(0,'[[2,9],[2,9],[2,9],[2,9],[2,20]]')
+multistep1_entry.insert(0,'[[2,20],[2,20],[2,9],[2,9],[2,20]]')
 
 multistep2_label = tk.Label(multistep_frame, text="运算符号设置:",font=("Symbol", 14))
 multistep2_label.pack(side=tk.LEFT,fill=tk.X)
