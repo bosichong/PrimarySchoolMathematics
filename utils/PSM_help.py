@@ -87,6 +87,7 @@ def validator(s, result, carry, abdication):
     :param s: 算式
     :return: bool
     '''
+
     if isResultOk(s, result):
         if f1(s):
 
@@ -138,11 +139,13 @@ def validator2(s, result, carry, abdication):
         if isMultDivOk(f, result):
             r = eval(f)
             s = s.replace(f, str(int(float(r))))
+            # print(r,s)
         else:
             return False
     # 加减法验证
     while f3(s):
         f = f3(s)
+        # print(f)
         if isAddSub(f, result, carry, abdication):
             r = eval(f)
             s = s.replace(f, str(r))
@@ -201,9 +204,7 @@ def isAddSub(s, result, carry, abdication):
     :return: bool
     '''
     tmp = re.split("[\+\-]", s)
-    # print(tmp)
     if isResultOk(s, result):
-
         if re.search("\+", s):
 
             if carry == 1:
@@ -260,6 +261,7 @@ def getMoreStep(formulas, result, symbols, step, carry, abdication, is_bracket, 
     '''
     f = getRandomNum(formulas, step)
     str = getPSMstr(f, symbols, step, is_bracket)
+    print(str)
     if validator(str, result, carry, abdication):
         return getXStepstr(str, is_result)
 
@@ -543,15 +545,15 @@ def get_time(func):
 
 def main():
     # 加法进退位随机
-    print(getOne([[1, 9], [1, 9]], 1, [1, 20], 1, 1, 0))
-    print(getOne([[0, 9], [0, 9]], 2, [1, 20], 2, 2, 0))
-    print(getOne([[1, 9], [1, 9]], 3, [1, 81], 3, 1, 0))
-    print(getOne([[9, 81], [2, 9]], 4, [2, 9], 1, 1, 0))
+    # print(getOne([[1, 9], [1, 9]], 1, [1, 20], 1, 1, 0))
+    # print(getOne([[0, 9], [0, 9]], 2, [1, 20], 2, 2, 0))
+    # print(getOne([[1, 9], [1, 9]], 3, [1, 81], 3, 1, 0))
+    # print(getOne([[9, 81], [2, 9]], 4, [2, 9], 1, 1, 0))
 
     # 生成算式测试
     # print(getPSMstr([5,8,9,9,8],[[1,2],[1,],[2],[1,]],4,1))
 
-    # print(getMoreStep([[1, 55], [1, 99], [1, 99], [1, 9]], [1, 99], [[1, 3], [4], [4]], 2, 1, 1, 1, 0))
+    print(getMoreStep([[1, 55], [1, 99], [1, 99], [1, 9]], [1, 99], [[1, 3], [4], [4]], 2, 1, 1, 1, 0))
 
     # print(isMultDivOk('18/9',[1,99]))
 

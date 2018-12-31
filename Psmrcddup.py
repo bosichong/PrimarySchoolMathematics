@@ -135,7 +135,8 @@ class Generator(object):
         for i in range(self.step+1):
             f.append(self.multistep[i])
         if self.step == 1:
-            # 返回一步加法运算题
+            # 返回一步口算题
+
             return getOne(f, self.signum, self.multistep[4], self.addattrs["carry"],
                           self.subattrs["abdication"], self.is_result)
         elif self.step >1:
@@ -148,7 +149,9 @@ class Generator(object):
         slist = []
         k = 0
         # 循环生成所有加法口算题
+
         while True:
+
             formula = self.__getFormula()  # 生成一道算式题
             if formula:
                 slist.append(formula)
