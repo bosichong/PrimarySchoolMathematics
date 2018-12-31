@@ -63,7 +63,7 @@ class MyFrame(wx.Frame):
                                        style=wx.RA_SPECIFY_ROWS)
         self.radio_box_3 = wx.RadioBox(self, wx.ID_ANY, u"题型设置", choices=[u"求结果", u"求算数项"], majorDimension=1,
                                        style=wx.RA_SPECIFY_ROWS)
-        self.button_1 = wx.Button(self, wx.ID_ANY, u"运行项及结果范围设置")
+        self.button_1 = wx.Button(self, wx.ID_ANY, u"运算项及结果范围设置")
         self.button_1.Bind(wx.EVT_BUTTON, self.onRET1)
         self.button_2 = wx.Button(self, wx.ID_ANY, u"运算符号设置")
         self.button_2.Bind(wx.EVT_BUTTON, self.onRET2)
