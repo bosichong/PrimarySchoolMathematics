@@ -18,11 +18,20 @@
 
 1 确定本机支持python3.6.1以上版本
 
-2 安装.docx模块 安装方法：`pip3 install python-docx`
+2 安装.docx模块,安装wxPython模块 安装方法：
 
-3 下载程序进入主目录，终端下运行`python3 App.py `
+`pip3 install python-docx`
 
-4 修改运算项和结果范围里的数值，`[[1,9],[1,9],[1,9],[1,9],[1,20]]`其中前四个是算数项取值范围，后一个是结果取值范围，修改运算符号`[[1,2],[1,2],[1,2,3,4]]`，其中1234分别带表加减乘除，[1,2]表示其中一项符号可以使用+或-。
+`pip3 install wxpython`
+
+
+3 下载程序进入主目录，终端下运行`python App.py `
+
+4 修改运算项和结果范围里的数值,多步运算请添加修改需要的运算符号:
+
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0102/165520_883d5be6_125848.png "Snip20190102_2.png")
+
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0102/165618_0aa67ce2_125848.png "Snip20190102_3.png")
 
 5 添加口算题到列表中，然后生成口算题,生成的口算题文件都在docx文件目录下，打开后连接打印机就可以开印了。
 
@@ -31,7 +40,7 @@
 
 程序界面截图：
 
-![](http://www.17python.com/media/upload/2018/11/Snip20181116_1.png)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0102/165314_cc68e64d_125848.png "Snip20190102_1.png")
 
 
 程序成生的口算题截图：
