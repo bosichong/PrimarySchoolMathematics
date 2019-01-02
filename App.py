@@ -456,7 +456,7 @@ class MyDialog1(wx.Dialog):
 
     def __set_properties(self):
         # begin wxGlade: MyDialog1.__set_properties
-        self.SetTitle("dialog_1")
+        self.SetTitle("运算符号的选择与修改")
         self.checkbox_2.SetValue(1)
         self.checkbox_7.SetValue(1)
         self.checkbox_10.SetValue(1)
