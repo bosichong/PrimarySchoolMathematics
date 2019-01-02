@@ -16,7 +16,7 @@
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$Psm.coverage" NAME="Psm Coverage Results" MODIFIED="1540345215266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$text.coverage" NAME="text Coverage Results" MODIFIED="1541337268307" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$PrintPreview.coverage" NAME="PrintPreview Coverage Results" MODIFIED="1544097224211" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PrimarySchoolMath$mainApp.coverage" NAME="mainApp Coverage Results" MODIFIED="1546244643575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PrimarySchoolMath$mainApp.coverage" NAME="mainApp Coverage Results" MODIFIED="1546415882283" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$PSM_help.coverage" NAME="PSM_help Coverage Results" MODIFIED="1546234475418" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$App.coverage" NAME="App Coverage Results" MODIFIED="1546238338209" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PrimarySchoolMath$Psm_rcddup.coverage" NAME="Psm-rcddup Coverage Results" MODIFIED="1546233870429" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -39,19 +39,19 @@
       <file leaf-file-name="App.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/App.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="65" column="55" lean-forward="false" selection-start-line="65" selection-start-column="55" selection-end-line="65" selection-end-column="55" />
+            <state relative-caret-position="272">
+              <caret line="238" column="76" lean-forward="false" selection-start-line="238" selection-start-column="76" selection-end-line="238" selection-end-column="76" />
               <folding>
-                <element signature="e#681#690#0" expanded="true" />
-                <element signature="e#3693#4136#0" expanded="false" />
-                <element signature="e#4173#7133#0" expanded="false" />
-                <element signature="e#7168#7403#0" expanded="false" />
-                <element signature="e#7438#7674#0" expanded="false" />
-                <element signature="e#7707#8303#0" expanded="false" />
-                <element signature="e#10225#10536#0" expanded="false" />
-                <element signature="e#13184#13754#0" expanded="false" />
-                <element signature="e#13791#16451#0" expanded="false" />
-                <element signature="e#17119#21221#0" expanded="false" />
+                <element signature="e#680#689#0" expanded="true" />
+                <element signature="e#3690#4132#0" expanded="false" />
+                <element signature="e#4169#7129#0" expanded="false" />
+                <element signature="e#7164#7399#0" expanded="false" />
+                <element signature="e#7434#7670#0" expanded="false" />
+                <element signature="e#7703#8299#0" expanded="false" />
+                <element signature="e#10913#11230#0" expanded="false" />
+                <element signature="e#13882#14452#0" expanded="false" />
+                <element signature="e#14489#17149#0" expanded="false" />
+                <element signature="e#17817#21959#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -174,7 +174,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -187,6 +186,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -346,15 +346,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="812" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43103448" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43103448" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18253969" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18542568" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22508039" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329582" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -652,7 +651,7 @@
         <state relative-caret-position="872">
           <caret line="139" column="23" lean-forward="false" selection-start-line="139" selection-start-column="23" selection-end-line="139" selection-end-column="23" />
           <folding>
-            <element signature="e#703#716#0" expanded="true" />
+            <element signature="e#703#716#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -666,19 +665,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="65" column="55" lean-forward="false" selection-start-line="65" selection-start-column="55" selection-end-line="65" selection-end-column="55" />
+        <state relative-caret-position="272">
+          <caret line="238" column="76" lean-forward="false" selection-start-line="238" selection-start-column="76" selection-end-line="238" selection-end-column="76" />
           <folding>
-            <element signature="e#681#690#0" expanded="true" />
-            <element signature="e#3693#4136#0" expanded="false" />
-            <element signature="e#4173#7133#0" expanded="false" />
-            <element signature="e#7168#7403#0" expanded="false" />
-            <element signature="e#7438#7674#0" expanded="false" />
-            <element signature="e#7707#8303#0" expanded="false" />
-            <element signature="e#10225#10536#0" expanded="false" />
-            <element signature="e#13184#13754#0" expanded="false" />
-            <element signature="e#13791#16451#0" expanded="false" />
-            <element signature="e#17119#21221#0" expanded="false" />
+            <element signature="e#680#689#0" expanded="true" />
+            <element signature="e#3690#4132#0" expanded="false" />
+            <element signature="e#4169#7129#0" expanded="false" />
+            <element signature="e#7164#7399#0" expanded="false" />
+            <element signature="e#7434#7670#0" expanded="false" />
+            <element signature="e#7703#8299#0" expanded="false" />
+            <element signature="e#10913#11230#0" expanded="false" />
+            <element signature="e#13882#14452#0" expanded="false" />
+            <element signature="e#14489#17149#0" expanded="false" />
+            <element signature="e#17817#21959#0" expanded="false" />
           </folding>
         </state>
       </provider>

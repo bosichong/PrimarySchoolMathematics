@@ -41,15 +41,12 @@ Mail    : 1078539713@qq.com
 
 '''
 
-
 import wx
 import os
 import shutil
 import random
 from Psmrcddup import Generator
 from PrintPreview import PrintPreview
-
-
 
 
 class MyFrame(wx.Frame):
@@ -85,7 +82,6 @@ class MyFrame(wx.Frame):
                                        style=wx.TE_LEFT)
         self.button_8 = wx.Button(self, wx.ID_ANY, u"点此生成口算题打印文档")
 
-
         self.app_title = "基于Python开发的小学生口算题生成器"
         self.info_tit = "还没添加任何口算题到卷子中，请点击添加口算题按钮开始添加口算题！"  # 当前口算题卷子包含内容
 
@@ -98,11 +94,9 @@ class MyFrame(wx.Frame):
 
         self.__set_properties()
         self.__do_layout()
-        self.button_6.Bind(wx.EVT_BUTTON,self.createPSM)
-        self.button_7.Bind(wx.EVT_BUTTON,self.cleanPSM)
-        self.button_8.Bind(wx.EVT_BUTTON,self.producePSM)
-
-
+        self.button_6.Bind(wx.EVT_BUTTON, self.createPSM)
+        self.button_7.Bind(wx.EVT_BUTTON, self.cleanPSM)
+        self.button_8.Bind(wx.EVT_BUTTON, self.producePSM)
 
         # end wxGlade
 
@@ -117,7 +111,6 @@ class MyFrame(wx.Frame):
         self.button_6.SetMinSize((160, 22))
         self.button_7.SetMinSize((160, 22))
         self.text_ctrl_1.SetMinSize((100, 40))
-
 
         # end wxGlade
 
@@ -213,66 +206,80 @@ class MyFrame(wx.Frame):
             for f in docs:
                 shutil.move(f, p)
 
-    def createPSM(self,e):
+    def createPSM(self, e):
         '''创建口算题最终打印前的配置'''
 
-        signum = self.radio_box_1.GetSelection()+1 # 获取题类型设置
-        step = self.radio_box_2.GetSelection()+1  # 获取需要几步计算
+        signum = self.radio_box_1.GetSelection() + 1  # 获取题类型设置
+        step = self.radio_box_2.GetSelection() + 1  # 获取需要几步计算
         is_result = self.radio_box_3.GetSelection()  # 题型设置
         if self.checkbox_1.GetValue():
-            is_bracket = 1 # 是否需要括号
+            is_bracket = 1  # 是否需要括号
         else:
-            is_bracket =0
+            is_bracket = 0
 
-        number = int(self.text_ctrl_16.GetValue()) # 获取需要生成的题数
+        number = int(self.text_ctrl_16.GetValue())  # 获取需要生成的题数
 
-        add = {"carry": self.radio_box_4.GetSelection()+1, }  # 加法设置
-        sub = {"abdication": self.radio_box_5.GetSelection()+1, }  # 减法设置
+        add = {"carry": self.radio_box_4.GetSelection() + 1, }  # 加法设置
+        sub = {"abdication": self.radio_box_5.GetSelection() + 1, }  # 减法设置
         mult = {}  # 乘法设置
         div = {}  # 除法设置
 
         # 组装
         tmp_type = [add, sub, mult, div, signum, step, number, is_result, is_bracket, self.multistep, self.symbols]
 
+        if step == 1 and signum == 4:
+            if self.multistep[1][0] <= 0:
+                wx.MessageBox('除法时余数不能为0，请修改算数项设置', '错误提示',
+                              wx.OK | wx.ICON_ERROR)
+                return 0
+        #多步运算时除法余数为零判断
+        if step > 1:
+            print(4 in self.symbols[0] and self.multistep[1][0] <= 0)
+            if (4 in self.symbols[0] and self.multistep[1][0] <= 0) or (
+                    4 in self.symbols[1] and self.multistep[2][0] <= 0) or (
+                    4 in self.symbols[2] and self.multistep[3][0] <= 0):
+                wx.MessageBox('除法时余数不能为0，请修改算数项设置', '错误提示',
+                              wx.OK | wx.ICON_ERROR)
+
         # 更新题库内容提示
         self.psm_type.append(tmp_type)
         if step == 1:
 
             if signum == 1:
-                self.psm_info=self.psm_info+"加法口算题" + str(number) + "道|||"
+                self.psm_info = self.psm_info + "加法口算题" + str(number) + "道|||"
                 print(self.psm_info)
                 self.text_ctrl_1.SetValue(self.psm_info)
             elif signum == 2:
-                self.psm_info = self.psm_info +"减法口算题" + str(number) + "道|||"
+                self.psm_info = self.psm_info + "减法口算题" + str(number) + "道|||"
                 self.text_ctrl_1.SetValue(self.psm_info)
             elif signum == 3:
-                self.psm_info = self.psm_info +"乘法口算题" + str(number) + "道|||"
+                self.psm_info = self.psm_info + "乘法口算题" + str(number) + "道|||"
                 self.text_ctrl_1.SetValue(self.psm_info)
             elif signum == 4:
-                self.psm_info = self.psm_info +"除法口算题" + str(number) + "道|||"
+                self.psm_info = self.psm_info + "除法口算题" + str(number) + "道|||"
                 self.text_ctrl_1.SetValue(self.psm_info)
             else:
                 raise Exception("没有这个题型哦")
 
         elif step == 2:
-            self.psm_info = self.psm_info +"两步计算口算题" + str(number) + "道|||"
+            self.psm_info = self.psm_info + "两步计算口算题" + str(number) + "道|||"
             self.text_ctrl_1.SetValue(self.psm_info)
 
         elif step == 3:
-            self.psm_info = self.psm_info +"三步计算口算题" + str(number) + "道|||"
+            self.psm_info = self.psm_info + "三步计算口算题" + str(number) + "道|||"
             self.text_ctrl_1.SetValue(self.psm_info)
 
-    def cleanPSM(self,e):
+    def cleanPSM(self, e):
         '''清空当前口算题所有配置。'''
 
         self.psm_type.clear()  # 清空配置表
-        self.psm_info=""  # 清空内容提示
+        self.psm_info = ""  # 清空内容提示
         self.text_ctrl_1.SetValue("")  # 清空当前口算题卷子包含内容文本框
-        self.psm_info=self.info_tit
+        self.psm_info = self.info_tit
         self.text_ctrl_1.SetValue(self.psm_info)
-        self.psm_info=""  # 添加完毕后再次清空内容提示列表，如果重新添加口算题将重新添加list，防止list第一行为空
+        self.psm_info = ""  # 添加完毕后再次清空内容提示列表，如果重新添加口算题将重新添加list，防止list第一行为空
 
-    def producePSM(self,e):
+    def producePSM(self, e):
         '''发布口算题保存.docx文件'''
         print(self.psm_type)  # 打印测试
         if len(self.psm_type) == 0:
@@ -291,7 +298,7 @@ class MyFrame(wx.Frame):
                 random.shuffle(templist)
                 print(templist)
                 self.psm_list.append(templist)
-            # 为生成的文件起名r
+                # 为生成的文件起名r
                 self.psm_title.clear()
 
             for i in range(int(self.text_ctrl_2.GetValue())):
@@ -305,7 +312,6 @@ class MyFrame(wx.Frame):
             self.movdocx()
             wx.MessageBox('文件发布成功，保存在docx目录下，请查看！！', '成功提示',
                           wx.OK | wx.ICON_INFORMATION)
-
 
 
 # end of class MyFrame
@@ -507,7 +513,8 @@ class MyDialog1(wx.Dialog):
         self.ret = 1
         self.retdata = [self.getsymbols(self.checkbox_2, self.checkbox_3, self.checkbox_4, self.checkbox_5),
                         self.getsymbols(self.checkbox_6, self.checkbox_7, self.checkbox_8, self.checkbox_9),
-                        self.getsymbols(self.checkbox_10, self.checkbox_11, self.checkbox_12, self.checkbox_13)]  # 默认运算符号值
+                        self.getsymbols(self.checkbox_10, self.checkbox_11, self.checkbox_12,
+                                        self.checkbox_13)]  # 默认运算符号值
         self.EndModal(1)
 
     def onButton_10(self, e):
