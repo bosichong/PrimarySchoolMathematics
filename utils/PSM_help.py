@@ -261,7 +261,7 @@ def getMoreStep(formulas, result, symbols, step, carry, abdication, is_bracket, 
     '''
     f = getRandomNum(formulas, step)
     str = getPSMstr(f, symbols, step, is_bracket)
-    print(str)
+    # print(str)
     if validator(str, result, carry, abdication):
         return getXStepstr(str, is_result)
 

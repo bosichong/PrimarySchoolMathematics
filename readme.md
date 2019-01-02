@@ -29,9 +29,9 @@
 
 4 修改运算项和结果范围里的数值,多步运算请添加修改需要的运算符号:
 
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0102/165520_883d5be6_125848.png "Snip20190102_2.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0102/165520_883d5be6_125848.png)
 
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0102/171459_54f73539_125848.png "Snip20190102_4.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0102/204453_e30f38d6_125848.png)
 
 5 添加口算题到列表中，然后生成口算题,生成的口算题文件都在docx文件目录下，打开后连接打印机就可以开印了。
 
