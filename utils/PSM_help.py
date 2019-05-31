@@ -170,8 +170,12 @@ def isResultOk(str, result):
     :param list 结果范围
     :return: bool
     '''
-    # print('比较结果：',eval(str),result[0] <= eval(str) <= result[1])
-    return result[0] <= eval(str) <= result[1]
+    try:
+        # print('比较结果：',str)
+        return result[0] <= eval(str) <= result[1]
+    except(ZeroDivisionError):
+        return False
+
 
 
 def isMultDivOk(s, result):
@@ -504,6 +508,7 @@ def get_num(number):
 
 def getRandomNum(list, step):
     '''
+    根据所给的数值范围，步数，返回合法的数值。
     Author  : andywu1998
     Mail    : 1078539713@qq.com
 

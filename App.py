@@ -47,6 +47,7 @@ import shutil
 import random
 from Psmrcddup import Generator
 from PrintPreview import PrintPreview
+from APPconfig import AppConfig
 
 
 class MyFrame(wx.Frame):
@@ -54,6 +55,17 @@ class MyFrame(wx.Frame):
         # begin wxGlade: MyFrame.__init__
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
+
+        self.multistep = [[1, 20], [1, 20], [1, 20], [1, 20], [1, 20]]  # 默认算数项值
+        self.symbols = [[1, 2], [1, 2], [1, 2]]  # 默认运算符号值
+        self.psm_list = []  # 最终需要打印的所有口算题卷子
+        self.psm_type = []  # 口算题详细配置参数
+        self.psm_title = []  # 口算卷子标题
+        self.psm_info = ""  # 卷内容提示语
+        self.config = AppConfig()#程序配置文件对象
+
+
+
         self.radio_box_1 = wx.RadioBox(self, wx.ID_ANY, u"运算类型选择", choices=[u"加法", u"减法", u"乘法", u"除法"],
                                        majorDimension=1, style=wx.RA_SPECIFY_ROWS)
         self.radio_box_2 = wx.RadioBox(self, wx.ID_ANY, u"选择几步运算", choices=[u"一步", u"二步", u"三步"], majorDimension=1,
@@ -85,12 +97,8 @@ class MyFrame(wx.Frame):
         self.app_title = "基于Python开发的小学生口算题生成器"
         self.info_tit = "还没添加任何口算题到卷子中，请点击添加口算题按钮开始添加口算题！"  # 当前口算题卷子包含内容
 
-        self.multistep = [[1, 20], [1, 20], [1, 20], [1, 20], [1, 20]]  # 默认算数项值
-        self.symbols = [[1, 2], [1, 2], [1, 2]]  # 默认运算符号值
-        self.psm_list = []  # 最终需要打印的所有口算题卷子
-        self.psm_type = []  # 口算题详细配置参数
-        self.psm_title = []  # 口算卷子标题
-        self.psm_info = ""  # 卷内容提示语
+
+
 
         self.__set_properties()
         self.__do_layout()
@@ -98,16 +106,36 @@ class MyFrame(wx.Frame):
         self.button_7.Bind(wx.EVT_BUTTON, self.cleanPSM)
         self.button_8.Bind(wx.EVT_BUTTON, self.producePSM)
 
+        self.radio_box_1.Bind(wx.EVT_RADIOBOX,self.saveSignum)
+        self.radio_box_2.Bind(wx.EVT_RADIOBOX, self.saveStep)
+        self.radio_box_3.Bind(wx.EVT_RADIOBOX, self.saveIs_Result)
+        self.radio_box_4.Bind(wx.EVT_RADIOBOX, self.saveAdd)
+        self.radio_box_5.Bind(wx.EVT_RADIOBOX, self.saveSub)
+
+        self.checkbox_1.Bind(wx.EVT_CHECKBOX,self.saveIs_Bracket)
+
+        self.text_ctrl_2.Bind(wx.EVT_TEXT,self.saveJuanzishu)
+        self.text_ctrl_3.Bind(wx.EVT_TEXT, self.saveLieshu)
+        self.text_ctrl_4.Bind(wx.EVT_TEXT, self.saveJz_title)
+        self.text_ctrl_5.Bind(wx.EVT_TEXT, self.saveInf_title)
+        self.text_ctrl_16.Bind(wx.EVT_TEXT, self.saveNumber)
+
         # end wxGlade
 
     def __set_properties(self):
         # begin wxGlade: MyFrame.__set_properties
         self.SetTitle(self.app_title)
-        self.radio_box_1.SetSelection(0)
-        self.radio_box_2.SetSelection(0)
-        self.radio_box_3.SetSelection(0)
-        self.radio_box_4.SetSelection(0)
-        self.radio_box_5.SetSelection(0)
+        self.radio_box_1.SetSelection(int(self.config.c.get('config','signum'))-1)
+        self.radio_box_2.SetSelection(int(self.config.c.get('config','step'))-1)
+        self.radio_box_3.SetSelection(int(self.config.c.get('config','is_result'))-1)
+        self.radio_box_4.SetSelection(int(self.config.c.get('addattrs','carry'))-1)
+        self.radio_box_5.SetSelection(int(self.config.c.get('subattrs','abdication'))-1)
+        self.checkbox_1.SetValue(int(self.config.c.get('config','is_bracket')))
+        self.text_ctrl_16.SetValue(self.config.c.get('config','number'))
+        self.text_ctrl_2.SetValue(self.config.c.get('config', 'juanzishu'))
+        self.text_ctrl_3.SetValue(self.config.c.get('config', 'lieshu'))
+        self.text_ctrl_4.SetValue(self.config.c.get('config', 'jz_title'))
+        self.text_ctrl_5.SetValue(self.config.c.get('config', 'inf_title'))
         self.button_6.SetMinSize((160, 22))
         self.button_7.SetMinSize((160, 22))
         self.text_ctrl_1.SetMinSize((100, 40))
@@ -178,6 +206,7 @@ class MyFrame(wx.Frame):
         if myDialog.ret:
             self.multistep = myDialog.retdata  # 取得算数项设置的返回结果
             print(self.multistep)
+            self.config.saveMultistep(str(myDialog.retdata))
 
     def onRET2(self, e):
         '''点击弹出算数项及结果设置Dialog'''
@@ -186,6 +215,7 @@ class MyFrame(wx.Frame):
         if myDialog1.ret:
             self.symbols = myDialog1.retdata  # 取得算数项设置的返回结果
             print(self.symbols)
+            self.config.saveSymbols(str(myDialog1.retdata))
 
     def movdocx(self):
         '''负责把生成的口算题文件移动到指定目录'''
@@ -208,24 +238,46 @@ class MyFrame(wx.Frame):
 
     def createPSM(self, e):
         '''创建口算题最终打印前的配置'''
+        self.config.readINI()
+        # signum = self.radio_box_1.GetSelection() + 1  # 获取题类型设置
+        # step = self.radio_box_2.GetSelection() + 1  # 获取需要几步计算
+        # is_result = self.radio_box_3.GetSelection()  # 题型设置
+        # if self.checkbox_1.GetValue():
+        #     is_bracket = 1  # 是否需要括号
+        # else:
+        #     is_bracket = 0
+        #
+        # number = int(self.text_ctrl_16.GetValue())  # 获取需要生成的题数
+        #
+        # add = {"carry": self.radio_box_4.GetSelection() + 1, }  # 加法设置
+        # sub = {"abdication": self.radio_box_5.GetSelection() + 1, }  # 减法设置
+        # mult = {}  # 乘法设置
+        # div = {}  # 除法设置
+        #
+        # add = int(self.config.c.get('addattrs','carry'))
+        # sub = int(self.config.c.get('subattrs','abdication'))
+        signum = int(self.config.c.get('config','signum'))
+        step = int(self.config.c.get('config','step'))
+        number = int(self.config.c.get('config','number'))
+        # is_result = int(self.config.c.get('config','is_result'))
+        # is_bracket = int(self.config.c.get('config','is_bracket'))
+        # multistep = eval(self.config.c.get('config','multistep'))
+        #
+        # tmpsym = eval(self.config.c.get('config','symbols'))
+        # symbols = [[],[],[]]
+        # kk = 0
+        # for x in tmpsym:
+        #     for y in x :
+        #         if y > 0:
+        #             symbols[kk].append(y)
+        #     kk+=1
+        #
+        # print(symbols)
 
-        signum = self.radio_box_1.GetSelection() + 1  # 获取题类型设置
-        step = self.radio_box_2.GetSelection() + 1  # 获取需要几步计算
-        is_result = self.radio_box_3.GetSelection()  # 题型设置
-        if self.checkbox_1.GetValue():
-            is_bracket = 1  # 是否需要括号
-        else:
-            is_bracket = 0
 
-        number = int(self.text_ctrl_16.GetValue())  # 获取需要生成的题数
-
-        add = {"carry": self.radio_box_4.GetSelection() + 1, }  # 加法设置
-        sub = {"abdication": self.radio_box_5.GetSelection() + 1, }  # 减法设置
-        mult = {}  # 乘法设置
-        div = {}  # 除法设置
 
         # 组装
-        tmp_type = [add, sub, mult, div, signum, step, number, is_result, is_bracket, self.multistep, self.symbols]
+        tmp_type = self.config.loadINI()#加载
 
         if step == 1 and signum == 4:
             if self.multistep[1][0] <= 0:
@@ -314,23 +366,80 @@ class MyFrame(wx.Frame):
                           wx.OK | wx.ICON_INFORMATION)
 
 
+    def saveSignum(self,e):
+        '''保存题型设置'''
+        rb = e.GetEventObject()
+        # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
+        self.config.saveSignum('{0}'.format(rb.GetSelection()+1))
+
+    def saveStep(self,e):
+        rb = e.GetEventObject()
+        # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
+        self.config.saveStep('{0}'.format(rb.GetSelection()+1))
+
+    def saveIs_Result(self,e):
+        rb = e.GetEventObject()
+        # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
+        self.config.saveIs_Result('{0}'.format(rb.GetSelection()))
+
+    def saveAdd(self,e):
+        rb = e.GetEventObject()
+        # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
+        self.config.saveAdd('{0}'.format(rb.GetSelection()+1))
+
+    def saveSub(self,e):
+        rb = e.GetEventObject()
+        # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
+        self.config.saveSub('{0}'.format(rb.GetSelection()+1))
+
+    def saveIs_Bracket(self,e):
+        cb = e.GetEventObject()
+        if cb.GetValue():
+            self.config.saveIs_Bracket("1")
+        else:
+            self.config.saveIs_Bracket("0")
+
+
+
+    def saveJuanzishu(self,e):
+        # print(self.text_ctrl_2.GetValue())
+        self.config.saveJuanzishu(str(self.text_ctrl_2.GetValue()))
+
+    def saveLieshu(self,e):
+        # print(self.text_ctrl_3.GetValue())
+        self.config.saveLieshu(str(self.text_ctrl_3.GetValue()))
+
+    def saveJz_title(self,e):
+        # print(self.text_ctrl_4.GetValue())
+        self.config.saveJz_title(str(self.text_ctrl_4.GetValue()))
+
+    def saveInf_title(self,e):
+        # print(self.text_ctrl_5.GetValue())
+        self.config.saveInf_title(str(self.text_ctrl_5.GetValue()))
+
+    def saveNumber(self,e):
+        # print(self.text_ctrl_16.GetValue())
+        self.config.saveNumber(str(self.text_ctrl_16.GetValue()))
+
 # end of class MyFrame
 
 class MyDialog(wx.Dialog):
-    def __init__(self, *args, **kwds):
+    def __init__(self,*args, **kwds):
         # begin wxGlade: MyDialog.__init__
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
-        wx.Dialog.__init__(self, *args, **kwds)
-        self.text_ctrl_6 = wx.TextCtrl(self, wx.ID_ANY, "1")
-        self.text_ctrl_7 = wx.TextCtrl(self, wx.ID_ANY, "20")
-        self.text_ctrl_8 = wx.TextCtrl(self, wx.ID_ANY, "1")
-        self.text_ctrl_9 = wx.TextCtrl(self, wx.ID_ANY, "20")
-        self.text_ctrl_10 = wx.TextCtrl(self, wx.ID_ANY, "1")
-        self.text_ctrl_11 = wx.TextCtrl(self, wx.ID_ANY, "20")
-        self.text_ctrl_12 = wx.TextCtrl(self, wx.ID_ANY, "1")
-        self.text_ctrl_13 = wx.TextCtrl(self, wx.ID_ANY, "20")
-        self.text_ctrl_14 = wx.TextCtrl(self, wx.ID_ANY, "1")
-        self.text_ctrl_15 = wx.TextCtrl(self, wx.ID_ANY, "20")
+        wx.Dialog.__init__(self,*args, **kwds)
+        self.config = AppConfig()
+        tmdata = eval(self.config.c.get('config', 'multistep'))
+        self.text_ctrl_6 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[0][0]))
+        self.text_ctrl_7 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[0][1]))
+        self.text_ctrl_8 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[1][0]))
+        self.text_ctrl_9 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[1][1]))
+        self.text_ctrl_10 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[2][0]))
+        self.text_ctrl_11 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[2][1]))
+        self.text_ctrl_12 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[3][0]))
+        self.text_ctrl_13 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[3][1]))
+        self.text_ctrl_14 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[4][0]))
+        self.text_ctrl_15 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[4][1]))
         self.button_9 = wx.Button(self, wx.ID_ANY, u"提交修改")
         self.button_9.Bind(wx.EVT_BUTTON, self.onButton_9)
         self.button_10 = wx.Button(self, wx.ID_ANY, u"关闭窗口")
@@ -432,6 +541,8 @@ class MyDialog1(wx.Dialog):
         # begin wxGlade: MyDialog1.__init__
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
+        self.config = AppConfig()
+        self.tmdata = eval(self.config.c.get('config', 'symbols'))
         self.checkbox_2 = wx.CheckBox(self, wx.ID_ANY, u"+(加法)")
         self.checkbox_3 = wx.CheckBox(self, wx.ID_ANY, u"-(减法)")
         self.checkbox_4 = wx.CheckBox(self, wx.ID_ANY, u"×(乘法)")
@@ -457,9 +568,21 @@ class MyDialog1(wx.Dialog):
     def __set_properties(self):
         # begin wxGlade: MyDialog1.__set_properties
         self.SetTitle("运算符号的选择与修改")
-        self.checkbox_2.SetValue(1)
-        self.checkbox_7.SetValue(1)
-        self.checkbox_10.SetValue(1)
+        self.checkbox_2.SetValue(int(self.tmdata[0][0]))
+        self.checkbox_3.SetValue(int(self.tmdata[0][1]))
+        self.checkbox_4.SetValue(int(self.tmdata[0][2]))
+        self.checkbox_5.SetValue(int(self.tmdata[0][3]))
+
+        self.checkbox_6.SetValue(int(self.tmdata[1][0]))
+        self.checkbox_7.SetValue(int(self.tmdata[1][1]))
+        self.checkbox_8.SetValue(int(self.tmdata[1][2]))
+        self.checkbox_9.SetValue(int(self.tmdata[1][3]))
+
+        self.checkbox_10.SetValue(int(self.tmdata[2][0]))
+        self.checkbox_11.SetValue(int(self.tmdata[2][1]))
+        self.checkbox_12.SetValue(int(self.tmdata[2][2]))
+        self.checkbox_13.SetValue(int(self.tmdata[2][3]))
+
         # end wxGlade
 
     def __do_layout(self):
@@ -501,12 +624,21 @@ class MyDialog1(wx.Dialog):
         tmplist = []
         if a.GetValue():
             tmplist.append(1)
+        else:
+            tmplist.append(0)
         if b.GetValue():
             tmplist.append(2)
+        else:
+            tmplist.append(0)
         if c.GetValue():
             tmplist.append(3)
+        else:
+            tmplist.append(0)
         if d.GetValue():
             tmplist.append(4)
+        else:
+            tmplist.append(0)
+
         return tmplist
 
     def onButton_9(self, e):
@@ -529,6 +661,8 @@ class MyApp(wx.App):
         self.SetTopWindow(self.frame)
         self.frame.Show()
         return True
+    def OnExit(self):
+        print('程序退出前准备操作')
 
 
 # end of class MyApp

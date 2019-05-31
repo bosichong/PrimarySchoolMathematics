@@ -73,26 +73,26 @@ class Generator(object):
                  symbols):
         '''
         :param addattrs: dict 加法设置属性，
-        包括 结果数值范围设置，进位随机选择项单选，随机1，进位2，不进位3
+       进位随机选择项单选，随机1，进位2，不进位3
         {"carry":1,}
 
         :param subattrs: dict 减法设置属性，
-        包括 结果数值范围设置，退位随机选择项单选，随机1，退位2，不退位3
+        退位随机选择项单选，随机1，退位2，不退位3
         {"abdication":1,}
 
         :param:multattrs dict 乘法
-        包括 及结果数值范围设置
+        数值范围设置
         {"result":[21,81],}
 
         :param:divattrs dict 除法
-        包括 结果数值范围设置
+        数值范围设置
         {"result":[1,9],}
 
 
         :param signum: list 包含题型需要的 1+ 2- 3* 4/
         :param step: int 生成几步运算, 默认: 1 取值范围 1-3
         :param is_result :int 0求结果，1求运算项
-        is_bracket: int 是否需要括号 0不需要 1需要
+        :param is_bracket: int 是否需要括号 0不需要 1需要
         :param num: int 需要生成的题数
 
 
@@ -124,6 +124,7 @@ class Generator(object):
         self.number = number
 
         self.multistep = multistep
+
         self.symbols = symbols
 
         self.__data_list = []  # 生成的口算题
