@@ -127,7 +127,7 @@ class MyFrame(wx.Frame):
         self.SetTitle(self.app_title)
         self.radio_box_1.SetSelection(int(self.config.c.get('config','signum'))-1)
         self.radio_box_2.SetSelection(int(self.config.c.get('config','step'))-1)
-        self.radio_box_3.SetSelection(int(self.config.c.get('config','is_result'))-1)
+        self.radio_box_3.SetSelection(int(self.config.c.get('config','is_result')))
         self.radio_box_4.SetSelection(int(self.config.c.get('addattrs','carry'))-1)
         self.radio_box_5.SetSelection(int(self.config.c.get('subattrs','abdication'))-1)
         self.checkbox_1.SetValue(int(self.config.c.get('config','is_bracket')))
