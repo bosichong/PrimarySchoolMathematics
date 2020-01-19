@@ -347,7 +347,7 @@ def repSymStr(s):
     :return:
     '''
     if re.search('\*', s):
-        s = re.sub('\*', 'x', s)
+        s = re.sub('\*', '×', s)
     if re.search('/', s):
         s = re.sub('/', '÷', s)
     return s
