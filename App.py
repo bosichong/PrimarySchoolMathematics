@@ -81,6 +81,8 @@ class MyFrame(wx.Frame):
                                        style=wx.RA_SPECIFY_ROWS)
         self.radio_box_5 = wx.RadioBox(self, wx.ID_ANY, u"减法设置", choices=[u"随机退位", u"减法退位", u"没有退位"], majorDimension=1,
                                        style=wx.RA_SPECIFY_ROWS)
+        self.radio_box_divsetting = wx.RadioBox(self, wx.ID_ANY, u"除法设置", choices=[u"不限", u"商[1,9]"], majorDimension=1,
+                                       style=wx.RA_SPECIFY_ROWS)
         self.text_ctrl_16 = wx.TextCtrl(self, wx.ID_ANY, "20", style=wx.TE_CENTRE)
         self.button_6 = wx.Button(self, wx.ID_ANY, u"添加口算题")
 
@@ -111,6 +113,7 @@ class MyFrame(wx.Frame):
         self.radio_box_3.Bind(wx.EVT_RADIOBOX, self.saveIs_Result)
         self.radio_box_4.Bind(wx.EVT_RADIOBOX, self.saveAdd)
         self.radio_box_5.Bind(wx.EVT_RADIOBOX, self.saveSub)
+        self.radio_box_divsetting.Bind(wx.EVT_RADIOBOX, self.saveDiv)
 
         self.checkbox_1.Bind(wx.EVT_CHECKBOX,self.saveIs_Bracket)
 
@@ -130,6 +133,7 @@ class MyFrame(wx.Frame):
         self.radio_box_3.SetSelection(int(self.config.c.get('config','is_result')))
         self.radio_box_4.SetSelection(int(self.config.c.get('addattrs','carry'))-1)
         self.radio_box_5.SetSelection(int(self.config.c.get('subattrs','abdication'))-1)
+        self.radio_box_divsetting.SetSelection(int(self.config.c.get('divattrs','divresultrange'))-1)
         self.checkbox_1.SetValue(int(self.config.c.get('config','is_bracket')))
         self.text_ctrl_16.SetValue(self.config.c.get('config','number'))
         self.text_ctrl_2.SetValue(self.config.c.get('config', 'juanzishu'))
@@ -166,6 +170,7 @@ class MyFrame(wx.Frame):
         sizer_4.Add(sizer_5, 1, wx.EXPAND, 0)
         sizer_24.Add(self.radio_box_4, 0, 0, 0)
         sizer_24.Add(self.radio_box_5, 0, 0, 0)
+        sizer_24.Add(self.radio_box_divsetting, 0, 0, 0)
         sizer_4.Add(sizer_24, 1, wx.EXPAND, 0)
         sizer_3.Add(sizer_4, 1, wx.EXPAND, 0)
         sizer_1.Add(sizer_3, 0, wx.ALL | wx.EXPAND, 1)
@@ -391,6 +396,10 @@ class MyFrame(wx.Frame):
         rb = e.GetEventObject()
         # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
         self.config.saveSub('{0}'.format(rb.GetSelection()+1))
+
+    def saveDiv(self,e):
+        rb = e.GetEventObject()
+        self.config.saveDiv('{0}'.format(rb.GetSelection()+1))
 
     def saveIs_Bracket(self,e):
         cb = e.GetEventObject()

@@ -1,3 +1,16 @@
+致敬 @bosichong
+更新windows 10下环境搭建： （因为非常喜爱apt-get，所以舍近求远尝试了Chocolatey，此处抱怨下$MS, 为啥不整一套apt-get一样的工具。）
+1. Make sure powershell is installed on your computer. (You can try latest windows terminal.)
+2. Open the shell Prompt as Administrator
+3. Install Chocolatey with below script.
+`Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))`
+4. Install Python (You can get Python verison after installation. Make sure above python3.6.1)
+`choco install python`.
+5. `choco install pip`
+6. `pip install python-docx`
+7. `pip install wxpython`
+---
+```
 孩子上小学一年级了，加减乘除的口算就要开始练习了，估计老师肯定会让家长出题，所以提前准备一下，利用Python开发了一套自动生成小学生口算题的小应用。而且今天是程序员节，撸200行代码庆祝一下。：）
 
 
@@ -52,3 +65,4 @@
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1119/214230_b9c6e3ef_125848.png "003.png")
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1119/214240_e946434d_125848.png "004.png")
+```

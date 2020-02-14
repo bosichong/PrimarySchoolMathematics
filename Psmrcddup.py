@@ -131,7 +131,7 @@ class Generator(object):
 
     def __getFormula(self):
         '''根据给出的属性返回一道合法的口算题'''
-
+        
         f = []
         for i in range(self.step+1):
             f.append(self.multistep[i])
@@ -139,10 +139,10 @@ class Generator(object):
             # 返回一步口算题
 
             return getOne(f, self.signum, self.multistep[4], self.addattrs["carry"],
-                          self.subattrs["abdication"], self.is_result)
+                          self.subattrs["abdication"], self.divattrs["divresultrange"], self.is_result)
         elif self.step >1:
             return getMoreStep(f, self.multistep[4], self.symbols,self.step, self.addattrs["carry"],
-                          self.subattrs["abdication"],self.is_bracket, self.is_result)
+                          self.subattrs["abdication"], self.divattrs["divresultrange"], self.is_bracket, self.is_result)
 
     def generate_data(self):
         '''根据条件生成所需口算题'''
@@ -191,7 +191,7 @@ def main():
     add = {"carry": 1, }  # 加法设置
     sub = {"abdication": 1, }  # 减法设置
     mult = { }  # 乘法设置
-    div = { }  # 除法设置
+    div = {"divresultrange": 1, }  # 除法设置
 
     signum = 4
     step = 2

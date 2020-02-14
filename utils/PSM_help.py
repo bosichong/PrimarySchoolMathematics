@@ -79,7 +79,7 @@ def f4(s):
         return ss.group(0)
 
 
-def validator(s, result, carry, abdication):
+def validator(s, result, carry, abdication, divresultrange):
     '''
     算式分解校验器
     Author  : J.sky
@@ -91,20 +91,20 @@ def validator(s, result, carry, abdication):
     if isResultOk(s, result):
         if f1(s):
 
-            s = validator1(s, result, carry, abdication)
+            s = validator1(s, result, carry, abdication, divresultrange)
 
             if s:
-                return validator2(s, result, carry, abdication)
+                return validator2(s, result, carry, abdication, divresultrange)
             else:
                 return False
 
         else:#校验无括号算式
-            return validator2(s, result, carry, abdication)
+            return validator2(s, result, carry, abdication, divresultrange)
     else:
         return False
 
 
-def validator1(s, result, carry, abdication):
+def validator1(s, result, carry, abdication, divresultrange):
     '''
     算式分解校验器提取括号内算式，然后递归给validator2进行算式验证
     本方法可以递归提取括号嵌套算式
@@ -116,7 +116,7 @@ def validator1(s, result, carry, abdication):
     while f1(s):
         fa = f1(s)
         fb = f4(f1(s))
-        r = validator2(fb, result, carry, abdication)
+        r = validator2(fb, result, carry, abdication, divresultrange)
         if r:
             s = s.replace(fa, "{}".format(int(float(r))))
         else:
@@ -124,7 +124,7 @@ def validator1(s, result, carry, abdication):
     return s
 
 
-def validator2(s, result, carry, abdication):
+def validator2(s, result, carry, abdication, divresultrange):
     '''
     分解乘除加减法计算结果并校验
         Author  : J.sky
@@ -136,7 +136,7 @@ def validator2(s, result, carry, abdication):
     # 乘除法验证
     while f2(s):
         f = f2(s)
-        if isMultDivOk(f, result):
+        if isMultDivOk(f, result, divresultrange):
             r = eval(f)
             s = s.replace(f, str(int(float(r))))
             # print(r,s)
@@ -178,7 +178,7 @@ def isResultOk(str, result):
 
 
 
-def isMultDivOk(s, result):
+def isMultDivOk(s, result, divresultrange):
     '''
     判断乘除法正确性
     :param str: 算式
@@ -190,14 +190,23 @@ def isMultDivOk(s, result):
         if int(divs[1]) == 0:
             return False
         else:
-            if isResultOk(s, result) and ((int(divs[0]) % int(divs[1])) == 0) and eval(s) > 0 : # 除法，除数不能为0，并且结果在范围内,并且整除无余数
+            if isResultOk(s, result) and ((int(divs[0]) % int(divs[1])) == 0) and eval(s) > 0 and isDivResultInRange(divs[0], divs[1], divresultrange): # 除法，除数不能为0，并且结果在范围内,并且整除无余数
                 return True
             else:
                 return False
     if re.search("\*", s):
         return isResultOk(s, result)  # 乘法结果在范围内
 
-
+def isDivResultInRange(s1, s2, divresultrange):
+    result = int(s1)/int(s2)
+    if divresultrange == 2:
+        if result > 0 and result <10:
+            return True
+        else:
+            return False
+    else:
+        return True
+ 
 def isAddSub(s, result, carry, abdication):
     '''
     判断加减法正确性
@@ -231,7 +240,7 @@ def isAddSub(s, result, carry, abdication):
             return False
 
 
-def getOne(formulas, signum, result, carry, abdication, is_result):
+def getOne(formulas, signum, result, carry, abdication, divresultrange, is_result):
     '''
     Author  : J.sky
     Mail    : bosichong@qq.com
@@ -243,10 +252,10 @@ def getOne(formulas, signum, result, carry, abdication, is_result):
     :param is_result: 求结果或求运算项
     :return: bool or str 成功返回一个符合条件的加法算数题str，失败返回False
     '''
-    return getMoreStep(formulas, result, [[signum], ], 1, carry, abdication, 0, is_result)
+    return getMoreStep(formulas, result, [[signum], ], 1, carry, abdication,divresultrange, 0, is_result)
 
 
-def getMoreStep(formulas, result, symbols, step, carry, abdication, is_bracket, is_result, ):
+def getMoreStep(formulas, result, symbols, step, carry, abdication, divresultrange, is_bracket, is_result,):
     '''
 
 
@@ -266,7 +275,7 @@ def getMoreStep(formulas, result, symbols, step, carry, abdication, is_bracket, 
     f = getRandomNum(formulas, step)
     str = getPSMstr(f, symbols, step, is_bracket)
     # print(str)
-    if validator(str, result, carry, abdication):
+    if validator(str, result, carry, abdication, divresultrange ):
         return getXStepstr(str, is_result)
 
     else:
@@ -558,7 +567,7 @@ def main():
     # 生成算式测试
     # print(getPSMstr([5,8,9,9,8],[[1,2],[1,],[2],[1,]],4,1))
 
-    print(getMoreStep([[1, 55], [1, 99], [1, 99], [1, 9]], [1, 99], [[1, 3], [4], [4]], 2, 1, 1, 1, 0))
+    print(getMoreStep([[1, 55], [1, 99], [1, 99], [1, 9]], [1, 99], [[1, 3], [4], [4]], 2, 1, 1, 1, 1, 0))
 
     # print(isMultDivOk('18/9',[1,99]))
 

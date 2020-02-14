@@ -67,7 +67,7 @@ class AppConfig:
         self.c.add_section('subattrs')
         self.c.set('subattrs', 'abdication', '1')  # 退位随机选择项单选，随机1，退位2，不退位3
         # self.c.set('multattrs', 'multattrs', '0')  # 暂时无配置项
-        # self.c.set('divattrs', 'divattrs', '0')  # 暂时无配置项
+        self.c.set('divattrs', 'divresultrange', '0')  # 暂时无配置项
 
         self.c.set('config', 'number', '30')  # 需要生成的题数
         self.c.set('config', 'juanzishu', '5')  # 需要打印的卷子数
@@ -98,7 +98,8 @@ class AppConfig:
         add = {"carry": int(self.c.get('addattrs','carry')), }
         sub = {"abdication":  int(self.c.get('subattrs','abdication')), }
         mult = {}  # 乘法设置
-        div = {}  # 除法设置
+        # 除法设置
+        div = {"divresultrange":  int(self.c.get('divattrs','divresultrange')), }  
 
         signum = int(self.c.get('config','signum'))
         step = int(self.c.get('config', 'step'))
@@ -163,6 +164,11 @@ class AppConfig:
     def saveSub(self,sub):
         '''保存减法设置数据'''
         self.c.set('subattrs','abdication',sub)
+        self.saveINI()
+
+    def saveDiv(self,div):
+        '''保存除法设置数据'''
+        self.c.set('divattrs','divresultrange',div)
         self.saveINI()
 
     def saveSignum(self,signum):
