@@ -1,45 +1,11 @@
-#!/usr/bin/env python3
-# -*- coding=utf-8 -*-
-
-# @Time    : 2018-11-02
-# @Author  : J.sky
-# @Mail    : bosichong@qq.com
-# @Site    : www.17python.com
-# @Title   : 基于Python开发的小学生口算题生成器
-# @Url     : http://www.17python.com/blog/29
-# @Details : Python实现小学生加减乘除速算考试题卷。
-# @Other   : OS X 10.11.6
-#            Python 3.6.1
-#            PyCharm
-
-
-'''
-孩子上小学一年级了，加减乘除的口算就要开始练习了，估计老题肯定会让家长出题，所以提前准备一下.
-
-利用Python开发了一套自动生成小学生口算题的小应用。而且今天是程序员节，撸200行代码庆祝一下。：）
-
-程序核心功能：
-
-    1.根据条件生成相关的口算题.
-
-    2.保存为.docx用来打印.
-
-
-开心Python Django 学习交流q群：217840699
-
-
-Author  : J.sky
-Mail    : bosichong@qq.com
-
-
-'''
-
 from docx import Document  # 引入docx类生成docx文档
 from docx.shared import RGBColor
 from docx.shared import Pt
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Cm
+#from docx.enum.text import WD_ALIGN_PARAGRAPH Issue #601
+#from docx.enum.table import WD_ROW_HEIGHT_RULE
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 class PrintPreview:
@@ -65,7 +31,7 @@ class PrintPreview:
     p_subtitle_size = None
     p_content_siae = None
 
-    def __init__(self, l, tit, subtitle, col=3, tsize=26, subsize=11, csize=16):
+    def __init__(self, l, tit, subtitle, col=3, tsize=11, subsize=8, csize=12):
         '''
         :param l: list 需要打印的口算题列表
         :param tit: list 口算页标题
@@ -96,31 +62,32 @@ class PrintPreview:
         p_docx = Document()  # 创建一个docx文档
         p_docx.styles['Normal'].font.name = u'Times'  # 可换成word里面任意字体
         p = p_docx.add_paragraph()
-        p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER  # 段落文字居中设置
+        p.paragraph_format.alignment = 1 #WD_ALIGN_PARAGRAPH.CENTER  # 段落文字居中设置
         run = p.add_run(page_title)
         run.font.color.rgb = RGBColor(54, 0, 0)  # 颜色设置，这里是用RGB颜色
         run.font.size = Pt(self.p_title_size)  # 字体大小设置，和word里面的字号相对应
 
         sp = p_docx.add_paragraph()
-        sp.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER  # 段落文字居中设置
+        sp.paragraph_format.alignment = 1 # WD_ALIGN_PARAGRAPH.CENTER  # 段落文字居中设置
         srun = sp.add_run(self.p_subtitle)
         srun.font.color.rgb = RGBColor(54, 0, 0)  # 颜色设置，这里是用RGB颜色
         srun.font.size = Pt(self.p_subtitle_size)  # 字体大小设置，和word里面的字号相对应
 
         # 判断需要用到的行数
         if (len(l) % self.p_column):
-            rs = len(l) // self.p_column + 2
+            rs = len(l) // self.p_column + 1
         else:
-            rs = len(l) // self.p_column +1
+            rs = len(l) // self.p_column
 
         # print(rs)
 
         # 将口算题添加到docx表格中
         k = 0  # 计数器
         table = p_docx.add_table(rows=rs, cols=self.p_column)
-
         for i in range(rs):
-            if i >0:
+            if i >= 0:
+                table.rows[i].height = Cm(0.8)
+                table.rows[i].height_rule = 2 # WD_ROW_HEIGHT_RULE.EXACTLY Issue #652
                 row_cells = table.rows[i].cells
                 for j in range(self.p_column):
                     if (k > len(l) - 1):
@@ -128,7 +95,7 @@ class PrintPreview:
                     else:
                         row_cells[j].text = l[k]
                         k = k + 1
-        table.style.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        table.style.paragraph_format.alignment = 1 # WD_ALIGN_PARAGRAPH.CENTER
         table.style.font.color.rgb = RGBColor(54, 0, 0)  # 颜色设置，这里是用RGB颜色
         table.style.font.size = Pt(self.p_content_siae)  # 字体大小设置，和word里面的字号相对应
         p_docx.save('{}.docx'.format(docxname))  # 输出docx
