@@ -1,5 +1,10 @@
-致敬 @bosichong
-更新windows 10下环境搭建： （因为非常喜爱apt-get，所以舍近求远尝试了Chocolatey，此处抱怨下$MS, 为啥不整一套apt-get一样的工具。）
+
+```原设计会产生24/2+5，这类题目，不适合小学二年级上的学生。故然，增加一个除法设置，让除法的商在1到9之间。```
+
+```因VS Code不支持wxglade，暂时移除layout文件，需要GUI设计的话，纯手撕。如果有必要可以考虑用qt python改写。```
+
+---
+更新windows 10下环境搭建： （推荐使用vs code。因为非常喜爱apt-get，所以舍近求远尝试了Chocolatey，此处抱怨下$MS, 为啥不整一套apt-get一样的工具。）
 1. Make sure powershell is installed on your computer. (You can try latest windows terminal.)
 2. Open the shell Prompt as Administrator
 3. Install Chocolatey with below script.
@@ -9,8 +14,10 @@
 5. `choco install pip`
 6. `pip install python-docx`
 7. `pip install wxpython`
----
 
+---
+致敬 @bosichong
+---
 孩子上小学一年级了，加减乘除的口算就要开始练习了，估计老师肯定会让家长出题，所以提前准备一下，利用Python开发了一套自动生成小学生口算题的小应用。而且今天是程序员节，撸200行代码庆祝一下。：）
 
 

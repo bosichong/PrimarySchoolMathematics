@@ -95,6 +95,7 @@ class MyFrame(wx.Frame):
         self.text_ctrl_5 = wx.TextCtrl(self, wx.ID_ANY, u"姓名：__________ 日期：____月____日 时间：________ 对题：____道",
                                        style=wx.TE_LEFT)
         self.button_8 = wx.Button(self, wx.ID_ANY, u"点此生成口算题打印文档")
+        self.button_8.SetBackgroundColour(wx.Colour(105,105,105))
 
         self.app_title = "基于Python开发的小学生口算题生成器"
         self.info_tit = "还没添加任何口算题到卷子中，请点击添加口算题按钮开始添加口算题！"  # 当前口算题卷子包含内容
@@ -123,6 +124,7 @@ class MyFrame(wx.Frame):
         self.text_ctrl_5.Bind(wx.EVT_TEXT, self.saveInf_title)
         self.text_ctrl_16.Bind(wx.EVT_TEXT, self.saveNumber)
 
+        self.CreateStatusBar()
         # end wxGlade
 
     def __set_properties(self):
@@ -198,7 +200,7 @@ class MyFrame(wx.Frame):
         sizer_14.Add(label_5, 0, 0, 0)
         sizer_14.Add(self.text_ctrl_5, 1, wx.ALL, 0)
         sizer_1.Add(sizer_14, 0, wx.ALL | wx.EXPAND, 1)
-        sizer_1.Add(self.button_8, 0, wx.ALL | wx.EXPAND, 1)
+        sizer_1.Add(self.button_8, 1, wx.ALL | wx.EXPAND, 1)
         self.SetSizer(sizer_1)
         sizer_1.Fit(self)
         self.Layout()
