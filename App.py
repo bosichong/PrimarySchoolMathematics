@@ -6,7 +6,7 @@
 # @Mail    : bosichong@qq.com
 # @Site    : www.17python.com
 # @Title   : 基于Python开发的小学生口算题生成器
-# @Url     : http://www.17python.com/blog/29
+# @Url     : http://2vv.net/blog/83.html
 # @Details : Python实现小学生加减乘除速算考试题卷。
 # @Other   : OS X 10.11.6
 #            Python 3.6.1
@@ -32,6 +32,9 @@
 Author  : J.sky
 Mail    : bosichong@qq.com
 
+
+特别感谢一下二位的鼎力支持！
+
 Author  : rcddup
 Mail    : 410093793@qq.com
 
@@ -56,15 +59,14 @@ class MyFrame(wx.Frame):
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
 
-        self.multistep = [[1, 20], [1, 20], [1, 20], [1, 20], [1, 20]]  # 默认算数项值
+        self.multistep = [[1, 20], [1, 20], [
+            1, 20], [1, 20], [1, 20]]  # 默认算数项值
         self.symbols = [[1, 2], [1, 2], [1, 2]]  # 默认运算符号值
         self.psm_list = []  # 最终需要打印的所有口算题卷子
         self.psm_type = []  # 口算题详细配置参数
         self.psm_title = []  # 口算卷子标题
         self.psm_info = ""  # 卷内容提示语
-        self.config = AppConfig()#程序配置文件对象
-
-
+        self.config = AppConfig()  # 程序配置文件对象
 
         self.radio_box_1 = wx.RadioBox(self, wx.ID_ANY, u"运算类型选择", choices=[u"加法", u"减法", u"乘法", u"除法"],
                                        majorDimension=1, style=wx.RA_SPECIFY_ROWS)
@@ -81,14 +83,18 @@ class MyFrame(wx.Frame):
                                        style=wx.RA_SPECIFY_ROWS)
         self.radio_box_5 = wx.RadioBox(self, wx.ID_ANY, u"减法设置", choices=[u"随机退位", u"减法退位", u"没有退位"], majorDimension=1,
                                        style=wx.RA_SPECIFY_ROWS)
-        self.text_ctrl_16 = wx.TextCtrl(self, wx.ID_ANY, "20", style=wx.TE_CENTRE)
+        self.text_ctrl_16 = wx.TextCtrl(
+            self, wx.ID_ANY, "20", style=wx.TE_CENTRE)
         self.button_6 = wx.Button(self, wx.ID_ANY, u"添加口算题")
 
         self.button_7 = wx.Button(self, wx.ID_ANY, u"清空口算题")
 
         self.text_ctrl_1 = wx.TextCtrl(self, wx.ID_ANY, "")
-        self.text_ctrl_2 = wx.TextCtrl(self, wx.ID_ANY, "5", style=wx.TE_CENTRE)
-        self.text_ctrl_3 = wx.TextCtrl(self, wx.ID_ANY, "3", style=wx.TE_CENTRE)
+        self.text_ctrl_2 = wx.TextCtrl(
+            self, wx.ID_ANY, "5", style=wx.TE_CENTRE)
+        self.text_ctrl_3 = wx.TextCtrl(
+            self, wx.ID_ANY, "3", style=wx.TE_CENTRE)
+        self.button_3 = wx.Button(self, wx.ID_ANY, u"设置口算卷子保存目录")
         self.text_ctrl_4 = wx.TextCtrl(self, wx.ID_ANY, u"小学生口算题")
         self.text_ctrl_5 = wx.TextCtrl(self, wx.ID_ANY, u"姓名：__________ 日期：____月____日 时间：________ 对题：____道",
                                        style=wx.TE_LEFT)
@@ -97,24 +103,23 @@ class MyFrame(wx.Frame):
         self.app_title = "基于Python开发的小学生口算题生成器"
         self.info_tit = "还没添加任何口算题到卷子中，请点击添加口算题按钮开始添加口算题！"  # 当前口算题卷子包含内容
 
-
-
-
         self.__set_properties()
         self.__do_layout()
+
         self.button_6.Bind(wx.EVT_BUTTON, self.createPSM)
         self.button_7.Bind(wx.EVT_BUTTON, self.cleanPSM)
+        self.button_3.Bind(wx.EVT_BUTTON, self.save_PSM_dir)
         self.button_8.Bind(wx.EVT_BUTTON, self.producePSM)
 
-        self.radio_box_1.Bind(wx.EVT_RADIOBOX,self.saveSignum)
+        self.radio_box_1.Bind(wx.EVT_RADIOBOX, self.saveSignum)
         self.radio_box_2.Bind(wx.EVT_RADIOBOX, self.saveStep)
         self.radio_box_3.Bind(wx.EVT_RADIOBOX, self.saveIs_Result)
         self.radio_box_4.Bind(wx.EVT_RADIOBOX, self.saveAdd)
         self.radio_box_5.Bind(wx.EVT_RADIOBOX, self.saveSub)
 
-        self.checkbox_1.Bind(wx.EVT_CHECKBOX,self.saveIs_Bracket)
+        self.checkbox_1.Bind(wx.EVT_CHECKBOX, self.saveIs_Bracket)
 
-        self.text_ctrl_2.Bind(wx.EVT_TEXT,self.saveJuanzishu)
+        self.text_ctrl_2.Bind(wx.EVT_TEXT, self.saveJuanzishu)
         self.text_ctrl_3.Bind(wx.EVT_TEXT, self.saveLieshu)
         self.text_ctrl_4.Bind(wx.EVT_TEXT, self.saveJz_title)
         self.text_ctrl_5.Bind(wx.EVT_TEXT, self.saveInf_title)
@@ -125,13 +130,19 @@ class MyFrame(wx.Frame):
     def __set_properties(self):
         # begin wxGlade: MyFrame.__set_properties
         self.SetTitle(self.app_title)
-        self.radio_box_1.SetSelection(int(self.config.c.get('config','signum'))-1)
-        self.radio_box_2.SetSelection(int(self.config.c.get('config','step'))-1)
-        self.radio_box_3.SetSelection(int(self.config.c.get('config','is_result')))
-        self.radio_box_4.SetSelection(int(self.config.c.get('addattrs','carry'))-1)
-        self.radio_box_5.SetSelection(int(self.config.c.get('subattrs','abdication'))-1)
-        self.checkbox_1.SetValue(int(self.config.c.get('config','is_bracket')))
-        self.text_ctrl_16.SetValue(self.config.c.get('config','number'))
+        self.radio_box_1.SetSelection(
+            int(self.config.c.get('config', 'signum')) - 1)
+        self.radio_box_2.SetSelection(
+            int(self.config.c.get('config', 'step')) - 1)
+        self.radio_box_3.SetSelection(
+            int(self.config.c.get('config', 'is_result')))
+        self.radio_box_4.SetSelection(
+            int(self.config.c.get('addattrs', 'carry')) - 1)
+        self.radio_box_5.SetSelection(
+            int(self.config.c.get('subattrs', 'abdication')) - 1)
+        self.checkbox_1.SetValue(
+            int(self.config.c.get('config', 'is_bracket')))
+        self.text_ctrl_16.SetValue(self.config.c.get('config', 'number'))
         self.text_ctrl_2.SetValue(self.config.c.get('config', 'juanzishu'))
         self.text_ctrl_3.SetValue(self.config.c.get('config', 'lieshu'))
         self.text_ctrl_4.SetValue(self.config.c.get('config', 'jz_title'))
@@ -145,17 +156,24 @@ class MyFrame(wx.Frame):
     def __do_layout(self):
         # begin wxGlade: MyFrame.__do_layout
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
-        sizer_14 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"卷子大标题小标题设置"), wx.HORIZONTAL)
-        sizer_13 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"口算卷设置"), wx.HORIZONTAL)
-        sizer_12 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"当前口算题包含内容"), wx.HORIZONTAL)
-        sizer_11 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"添加口算题到卷子"), wx.VERTICAL)
+        sizer_14 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"卷子大标题小标题设置"), wx.HORIZONTAL)
+        sizer_13 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"口算卷设置"), wx.HORIZONTAL)
+        sizer_12 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"当前口算题包含内容"), wx.HORIZONTAL)
+        sizer_11 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"添加口算题到卷子"), wx.VERTICAL)
         sizer_22 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_23 = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_3 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"详细设置"), wx.VERTICAL)
+        sizer_3 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"详细设置"), wx.VERTICAL)
         sizer_4 = wx.BoxSizer(wx.VERTICAL)
         sizer_24 = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_5 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"运算项结果符号设置"), wx.HORIZONTAL)
-        sizer_2 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"口算题类型选择"), wx.HORIZONTAL)
+        sizer_5 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"运算项结果符号设置"), wx.HORIZONTAL)
+        sizer_2 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"口算题类型选择"), wx.HORIZONTAL)
         sizer_2.Add(self.radio_box_1, 0, 0, 0)
         sizer_2.Add(self.radio_box_2, 0, 0, 0)
         sizer_2.Add(self.radio_box_3, 0, 0, 0)
@@ -185,6 +203,7 @@ class MyFrame(wx.Frame):
         label_3 = wx.StaticText(self, wx.ID_ANY, u"口算题列数：")
         sizer_13.Add(label_3, 0, 0, 0)
         sizer_13.Add(self.text_ctrl_3, 0, 0, 0)
+        sizer_13.Add(self.button_3, 0, 0, 0)
         sizer_1.Add(sizer_13, 0, wx.ALL | wx.EXPAND, 1)
         label_4 = wx.StaticText(self, wx.ID_ANY, u"卷子标题：")
         sizer_14.Add(label_4, 0, 0, 0)
@@ -218,14 +237,18 @@ class MyFrame(wx.Frame):
             self.config.saveSymbols(str(myDialog1.retdata))
 
     def movdocx(self):
-        '''负责把生成的口算题文件移动到指定目录'''
+        '''负责把生成的口算题文件移动到指定目录
+        默认把口算题移动到'项目/docx/'下，其他目录需要指定。
+
+        '''
         docs = []  # 当前目录生成的文件列表
         print(os.path.dirname(os.path.abspath(__file__)))
         for p in os.listdir(os.path.dirname(os.path.abspath(__file__))):
             if p.endswith('.docx'):
                 docs.append(p)
         # print(docs)
-        p = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'docx')
+        # p = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'docx')
+        p = os.path.join(self.config.c.get('config','docx'), 'docx')#最后保存目录设置，保存在当前目录下的docx目录下
         if os.path.isdir(p):
             shutil.rmtree(p)
             os.mkdir(p)
@@ -239,52 +262,20 @@ class MyFrame(wx.Frame):
     def createPSM(self, e):
         '''创建口算题最终打印前的配置'''
         self.config.readINI()
-        # signum = self.radio_box_1.GetSelection() + 1  # 获取题类型设置
-        # step = self.radio_box_2.GetSelection() + 1  # 获取需要几步计算
-        # is_result = self.radio_box_3.GetSelection()  # 题型设置
-        # if self.checkbox_1.GetValue():
-        #     is_bracket = 1  # 是否需要括号
-        # else:
-        #     is_bracket = 0
-        #
-        # number = int(self.text_ctrl_16.GetValue())  # 获取需要生成的题数
-        #
-        # add = {"carry": self.radio_box_4.GetSelection() + 1, }  # 加法设置
-        # sub = {"abdication": self.radio_box_5.GetSelection() + 1, }  # 减法设置
-        # mult = {}  # 乘法设置
-        # div = {}  # 除法设置
-        #
-        # add = int(self.config.c.get('addattrs','carry'))
-        # sub = int(self.config.c.get('subattrs','abdication'))
-        signum = int(self.config.c.get('config','signum'))
-        step = int(self.config.c.get('config','step'))
-        number = int(self.config.c.get('config','number'))
-        # is_result = int(self.config.c.get('config','is_result'))
-        # is_bracket = int(self.config.c.get('config','is_bracket'))
-        # multistep = eval(self.config.c.get('config','multistep'))
-        #
-        # tmpsym = eval(self.config.c.get('config','symbols'))
-        # symbols = [[],[],[]]
-        # kk = 0
-        # for x in tmpsym:
-        #     for y in x :
-        #         if y > 0:
-        #             symbols[kk].append(y)
-        #     kk+=1
-        #
-        # print(symbols)
 
-
+        signum = int(self.config.c.get('config', 'signum'))
+        step = int(self.config.c.get('config', 'step'))
+        number = int(self.config.c.get('config', 'number'))
 
         # 组装
-        tmp_type = self.config.loadINI()#加载
+        tmp_type = self.config.loadINI()  # 加载
 
         if step == 1 and signum == 4:
             if self.multistep[1][0] <= 0:
                 wx.MessageBox('除法时余数不能为0，请修改算数项设置', '错误提示',
                               wx.OK | wx.ICON_ERROR)
                 return 0
-        #多步运算时除法余数为零判断
+        # 多步运算时除法余数为零判断
         if step > 1:
             print(4 in self.symbols[0] and self.multistep[1][0] <= 0)
             if (4 in self.symbols[0] and self.multistep[1][0] <= 0) or (
@@ -333,7 +324,7 @@ class MyFrame(wx.Frame):
 
     def producePSM(self, e):
         '''发布口算题保存.docx文件'''
-        print(self.psm_type)  # 打印测试
+        # print(self.psm_type)  # 打印测试
         if len(self.psm_type) == 0:
             print('还没有添加口算题到列表中哈！')  # 打印测试
             wx.MessageBox('还没有添加口算题到列表中哈！', '提示',
@@ -345,7 +336,8 @@ class MyFrame(wx.Frame):
                 templist = []
                 for l in self.psm_type:
                     print(l)
-                    g = Generator(l[0], l[1], l[2], l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10])
+                    g = Generator(l[0], l[1], l[2], l[3], l[4],
+                                  l[5], l[6], l[7], l[8], l[9], l[10])
                     templist = templist + g.generate_data()
                 random.shuffle(templist)
                 print(templist)
@@ -358,88 +350,105 @@ class MyFrame(wx.Frame):
             # print(self.psm_title)
             subtit = self.text_ctrl_5.GetValue()
 
-            pp = PrintPreview(self.psm_list, self.psm_title, subtit, col=int(self.text_ctrl_3.GetValue()))
+            pp = PrintPreview(self.psm_list, self.psm_title,
+                              subtit, col=int(self.text_ctrl_3.GetValue()))
             pp.produce()  # 生成docx
             self.psm_list.clear()  # 清空打印列表。
             self.movdocx()
             wx.MessageBox('文件发布成功，保存在docx目录下，请查看！！', '成功提示',
                           wx.OK | wx.ICON_INFORMATION)
 
-
-    def saveSignum(self,e):
+    def saveSignum(self, e):
         '''保存题型设置'''
         rb = e.GetEventObject()
         # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
-        self.config.saveSignum('{0}'.format(rb.GetSelection()+1))
+        self.config.saveSignum('{0}'.format(rb.GetSelection() + 1))
 
-    def saveStep(self,e):
+    def saveStep(self, e):
         rb = e.GetEventObject()
         # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
-        self.config.saveStep('{0}'.format(rb.GetSelection()+1))
+        self.config.saveStep('{0}'.format(rb.GetSelection() + 1))
 
-    def saveIs_Result(self,e):
+    def saveIs_Result(self, e):
         rb = e.GetEventObject()
         # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
         self.config.saveIs_Result('{0}'.format(rb.GetSelection()))
 
-    def saveAdd(self,e):
+    def saveAdd(self, e):
         rb = e.GetEventObject()
         # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
-        self.config.saveAdd('{0}'.format(rb.GetSelection()+1))
+        self.config.saveAdd('{0}'.format(rb.GetSelection() + 1))
 
-    def saveSub(self,e):
+    def saveSub(self, e):
         rb = e.GetEventObject()
         # print(rb.GetSelection(), rb.GetStringSelection())  # 打印当前单选按钮的选项
-        self.config.saveSub('{0}'.format(rb.GetSelection()+1))
+        self.config.saveSub('{0}'.format(rb.GetSelection() + 1))
 
-    def saveIs_Bracket(self,e):
+    def saveIs_Bracket(self, e):
         cb = e.GetEventObject()
         if cb.GetValue():
             self.config.saveIs_Bracket("1")
         else:
             self.config.saveIs_Bracket("0")
 
-
-
-    def saveJuanzishu(self,e):
+    def saveJuanzishu(self, e):
         # print(self.text_ctrl_2.GetValue())
         self.config.saveJuanzishu(str(self.text_ctrl_2.GetValue()))
 
-    def saveLieshu(self,e):
+    def saveLieshu(self, e):
         # print(self.text_ctrl_3.GetValue())
         self.config.saveLieshu(str(self.text_ctrl_3.GetValue()))
 
-    def saveJz_title(self,e):
+    def saveJz_title(self, e):
         # print(self.text_ctrl_4.GetValue())
         self.config.saveJz_title(str(self.text_ctrl_4.GetValue()))
 
-    def saveInf_title(self,e):
+    def saveInf_title(self, e):
         # print(self.text_ctrl_5.GetValue())
         self.config.saveInf_title(str(self.text_ctrl_5.GetValue()))
 
-    def saveNumber(self,e):
+    def saveNumber(self, e):
         # print(self.text_ctrl_16.GetValue())
         self.config.saveNumber(str(self.text_ctrl_16.GetValue()))
 
+    def save_PSM_dir(self, e):
+        '''设置口算卷子保存目录
+        '''
+        dlg = wx.DirDialog(self, message="选择文件夹")
+        if dlg.ShowModal() == wx.ID_OK:
+            #print(dlg.GetPath())
+            self.config.saveDocx(dlg.GetPath())
+
 # end of class MyFrame
 
+
 class MyDialog(wx.Dialog):
-    def __init__(self,*args, **kwds):
+    def __init__(self, *args, **kwds):
         # begin wxGlade: MyDialog.__init__
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
-        wx.Dialog.__init__(self,*args, **kwds)
+        wx.Dialog.__init__(self, *args, **kwds)
         self.config = AppConfig()
         tmdata = eval(self.config.c.get('config', 'multistep'))
-        self.text_ctrl_6 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[0][0]))
-        self.text_ctrl_7 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[0][1]))
-        self.text_ctrl_8 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[1][0]))
-        self.text_ctrl_9 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[1][1]))
-        self.text_ctrl_10 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[2][0]))
-        self.text_ctrl_11 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[2][1]))
-        self.text_ctrl_12 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[3][0]))
-        self.text_ctrl_13 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[3][1]))
-        self.text_ctrl_14 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[4][0]))
-        self.text_ctrl_15 = wx.TextCtrl(self, wx.ID_ANY, '{0}'.format(tmdata[4][1]))
+        self.text_ctrl_6 = wx.TextCtrl(
+            self, wx.ID_ANY, '{0}'.format(tmdata[0][0]))
+        self.text_ctrl_7 = wx.TextCtrl(
+            self, wx.ID_ANY, '{0}'.format(tmdata[0][1]))
+        self.text_ctrl_8 = wx.TextCtrl(
+            self, wx.ID_ANY, '{0}'.format(tmdata[1][0]))
+        self.text_ctrl_9 = wx.TextCtrl(
+            self, wx.ID_ANY, '{0}'.format(tmdata[1][1]))
+        self.text_ctrl_10 = wx.TextCtrl(
+            self, wx.ID_ANY, '{0}'.format(tmdata[2][0]))
+        self.text_ctrl_11 = wx.TextCtrl(
+            self, wx.ID_ANY, '{0}'.format(tmdata[2][1]))
+        self.text_ctrl_12 = wx.TextCtrl(
+            self, wx.ID_ANY, '{0}'.format(tmdata[3][0]))
+        self.text_ctrl_13 = wx.TextCtrl(
+            self, wx.ID_ANY, '{0}'.format(tmdata[3][1]))
+        self.text_ctrl_14 = wx.TextCtrl(
+            self, wx.ID_ANY, '{0}'.format(tmdata[4][0]))
+        self.text_ctrl_15 = wx.TextCtrl(
+            self, wx.ID_ANY, '{0}'.format(tmdata[4][1]))
         self.button_9 = wx.Button(self, wx.ID_ANY, u"提交修改")
         self.button_9.Bind(wx.EVT_BUTTON, self.onButton_9)
         self.button_10 = wx.Button(self, wx.ID_ANY, u"关闭窗口")
@@ -468,14 +477,16 @@ class MyDialog(wx.Dialog):
     def __do_layout(self):
         # begin wxGlade: MyDialog.__do_layout
         sizer_15 = wx.BoxSizer(wx.VERTICAL)
-        sizer_16 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"算数项及结果取值范围"), wx.VERTICAL)
+        sizer_16 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"算数项及结果取值范围"), wx.VERTICAL)
         sizer_30 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_21 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_20 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_19 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_18 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_17 = wx.BoxSizer(wx.HORIZONTAL)
-        label_6 = wx.StaticText(self, wx.ID_ANY, u"何为算数项和结果？例如：3+7=10，3和7是算数项，10为结果。")
+        label_6 = wx.StaticText(
+            self, wx.ID_ANY, u"何为算数项和结果？例如：3+7=10，3和7是算数项，10为结果。")
         sizer_15.Add(label_6, 0, wx.ALL | wx.EXPAND, 5)
         label_7 = wx.StaticText(self, wx.ID_ANY, u"第1个算数项取值范围：")
         sizer_17.Add(label_7, 0, 0, 0)
@@ -524,9 +535,12 @@ class MyDialog(wx.Dialog):
     def onButton_9(self, e):
         self.ret = 1
         self.retdata = [[int(self.text_ctrl_6.GetValue()), int(self.text_ctrl_7.GetValue())],
-                        [int(self.text_ctrl_8.GetValue()), int(self.text_ctrl_9.GetValue())],
-                        [int(self.text_ctrl_10.GetValue()), int(self.text_ctrl_11.GetValue())],
-                        [int(self.text_ctrl_12.GetValue()), int(self.text_ctrl_13.GetValue())],
+                        [int(self.text_ctrl_8.GetValue()),
+                         int(self.text_ctrl_9.GetValue())],
+                        [int(self.text_ctrl_10.GetValue()),
+                         int(self.text_ctrl_11.GetValue())],
+                        [int(self.text_ctrl_12.GetValue()),
+                         int(self.text_ctrl_13.GetValue())],
                         [int(self.text_ctrl_14.GetValue()), int(self.text_ctrl_15.GetValue())]]
         self.EndModal(1)
 
@@ -590,10 +604,14 @@ class MyDialog1(wx.Dialog):
         sizer_25 = wx.BoxSizer(wx.VERTICAL)
         sizer_26 = wx.BoxSizer(wx.VERTICAL)
         sizer_30 = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_29 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"第3处运算符号选择"), wx.HORIZONTAL)
-        sizer_28 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"第2处运算符号选择"), wx.HORIZONTAL)
-        sizer_27 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"第1处运算符号选择"), wx.HORIZONTAL)
-        label_18 = wx.StaticText(self, wx.ID_ANY, u"此处为多步运算题生成运算符号选择，比如4+8-5=，\n你要做的是选择+和-号位置可以使用什么运算符号。")
+        sizer_29 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"第3处运算符号选择"), wx.HORIZONTAL)
+        sizer_28 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"第2处运算符号选择"), wx.HORIZONTAL)
+        sizer_27 = wx.StaticBoxSizer(wx.StaticBox(
+            self, wx.ID_ANY, u"第1处运算符号选择"), wx.HORIZONTAL)
+        label_18 = wx.StaticText(
+            self, wx.ID_ANY, u"此处为多步运算题生成运算符号选择，比如4+8-5=，\n你要做的是选择+和-号位置可以使用什么运算符号。")
         sizer_25.Add(label_18, 0, wx.ALL | wx.EXPAND, 5)
         sizer_27.Add(self.checkbox_2, 0, 0, 0)
         sizer_27.Add(self.checkbox_3, 0, 0, 0)
@@ -644,7 +662,8 @@ class MyDialog1(wx.Dialog):
     def onButton_9(self, e):
         self.ret = 1
         self.retdata = [self.getsymbols(self.checkbox_2, self.checkbox_3, self.checkbox_4, self.checkbox_5),
-                        self.getsymbols(self.checkbox_6, self.checkbox_7, self.checkbox_8, self.checkbox_9),
+                        self.getsymbols(
+                            self.checkbox_6, self.checkbox_7, self.checkbox_8, self.checkbox_9),
                         self.getsymbols(self.checkbox_10, self.checkbox_11, self.checkbox_12,
                                         self.checkbox_13)]  # 默认运算符号值
         self.EndModal(1)
@@ -661,8 +680,6 @@ class MyApp(wx.App):
         self.SetTopWindow(self.frame)
         self.frame.Show()
         return True
-    def OnExit(self):
-        print('程序退出前准备操作')
 
 
 # end of class MyApp
