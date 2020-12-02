@@ -34,7 +34,7 @@ class AppConfig:
     # INI文件地址
     INI_PATH = os.path.join(BASE_DIR, 'config.ini')
     # DOCX 默认的目录地址，存放在项目目录根目录docx/
-    DOCX = os.path.join(BASE_DIR, 'docx')
+    DOCX = BASE_DIR
 
     def __init__(self):
         print(self.BASE_DIR)

@@ -355,7 +355,7 @@ class MyFrame(wx.Frame):
             pp.produce()  # 生成docx
             self.psm_list.clear()  # 清空打印列表。
             self.movdocx()
-            wx.MessageBox('文件发布成功，保存在docx目录下，请查看！！', '成功提示',
+            wx.MessageBox('文件发布成功，保存在'+self.config.c.get('config','docx')+os.sep+'docx 目录下，请查看！！', '成功提示',
                           wx.OK | wx.ICON_INFORMATION)
 
     def saveSignum(self, e):
@@ -418,6 +418,8 @@ class MyFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             #print(dlg.GetPath())
             self.config.saveDocx(dlg.GetPath())
+            wx.MessageBox('设置文件保存目录'+self.config.c.get('config','docx')+os.sep+'docx 成功！', '成功提示',
+                          wx.OK | wx.ICON_INFORMATION)
 
 # end of class MyFrame
 
