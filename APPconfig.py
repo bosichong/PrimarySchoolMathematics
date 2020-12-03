@@ -4,13 +4,13 @@
 # @Time    : 2018-11-02
 # @Author  : J.sky
 # @Mail    : bosichong@qq.com
-# @Site    : www.17python.com
+# @Site    : www.2vv.net
 # @Title   : 基于Python开发的小学生口算题生成器
-# @Url     : http://www.17python.com/blog/29
+# @Url     : http://2vv.net/blog/83.html
 # @Details : Python实现小学生加减乘除速算考试题卷。
 # @Other   : OS X 10.11.6
 #            Python 3.6.1
-#            PyCharm
+#            vscode
 
 
 import os

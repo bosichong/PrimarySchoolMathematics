@@ -4,13 +4,13 @@
 # @Time    : 2018-11-02
 # @Author  : J.sky
 # @Mail    : bosichong@qq.com
-# @Site    : www.17python.com
+# @Site    : www.2vv.net
 # @Title   : 基于Python开发的小学生口算题生成器
-# @Url     : http://www.17python.com/blog/29
+# @Url     : http://2vv.net/blog/83.html
 # @Details : Python实现小学生加减乘除速算考试题卷。
 # @Other   : OS X 10.11.6
 #            Python 3.6.1
-#            PyCharm
+#            vscode
 
 
 '''
@@ -33,13 +33,14 @@ Mail    : bosichong@qq.com
 
 
 '''
+import os
 
 from docx import Document  # 引入docx类生成docx文档
 from docx.shared import RGBColor
 from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 class PrintPreview:
@@ -57,15 +58,10 @@ class PrintPreview:
 
     '''
 
-    p_list = None
-    p_title = None
-    p_subtitle = None
-    p_column = None
-    p_title_size = None
-    p_subtitle_size = None
-    p_content_siae = None
 
-    def __init__(self, l, tit, subtitle, col=3, tsize=26, subsize=11, csize=16):
+    def __init__(self, l, tit, subtitle, col=3, tsize=26, subsize=11, csize=16,
+                # 默认输出文件地址为项目根目录 
+                docxpath=os.path.join(os.path.dirname(os.path.abspath(__file__)),"")):
         '''
         :param l: list 需要打印的口算题列表
         :param tit: list 口算页标题
@@ -73,6 +69,8 @@ class PrintPreview:
         :param col: int 列数
         :param tsize: int 标题字号
         :param csize: int 口算题字号
+        :param docxpath str 保存路径
+        
         '''
         self.p_list = l
         self.p_title = tit
@@ -81,6 +79,7 @@ class PrintPreview:
         self.p_title_size = tsize
         self.p_subtitle_size = subsize
         self.p_content_siae = csize
+        self.docxpath = docxpath
 
     def create_psmdocx(self, l, title, docxname):
         '''
@@ -131,7 +130,8 @@ class PrintPreview:
         table.style.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
         table.style.font.color.rgb = RGBColor(54, 0, 0)  # 颜色设置，这里是用RGB颜色
         table.style.font.size = Pt(self.p_content_siae)  # 字体大小设置，和word里面的字号相对应
-        p_docx.save('{}.docx'.format(docxname))  # 输出docx
+        print(self.docxpath+'{}.docx'.format(docxname))
+        p_docx.save(self.docxpath+'{}.docx'.format(docxname))  # 输出docx
 
     def produce(self):
         k = 1
@@ -147,5 +147,5 @@ if __name__ == '__main__':
          ['1-17=', '3-4=', '13-6=', '15-5=', '2-4=', '15-9=', '12-13=', '15-12=', '14-16=', '4-11=', '18-16=', '12-14=',
           '14-7=', '7-17=', '16-19=',  ]]
     t = ['小学生口算题', '小学生口算题']
-    pp = PrintPreview(l, t,"姓名：__________ 日期：____月____日 时间：________ 对题：____道" ,4)
+    pp = PrintPreview(l, t,"姓名：__________ 日期：____月____日 时间：________ 对题：____道",)
     pp.produce()

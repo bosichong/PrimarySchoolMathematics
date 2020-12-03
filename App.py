@@ -4,13 +4,13 @@
 # @Time    : 2018-11-02
 # @Author  : J.sky
 # @Mail    : bosichong@qq.com
-# @Site    : www.17python.com
+# @Site    : www.2vv.net
 # @Title   : 基于Python开发的小学生口算题生成器
 # @Url     : http://2vv.net/blog/83.html
 # @Details : Python实现小学生加减乘除速算考试题卷。
 # @Other   : OS X 10.11.6
 #            Python 3.6.1
-#            PyCharm
+#            vscode
 
 
 '''
@@ -33,7 +33,7 @@ Author  : J.sky
 Mail    : bosichong@qq.com
 
 
-特别感谢一下二位的鼎力支持！
+特别感谢一下二位大神的鼎力支持！
 
 Author  : rcddup
 Mail    : 410093793@qq.com
@@ -43,6 +43,9 @@ Mail    : 1078539713@qq.com
 
 
 '''
+
+__version__ = "1.0.3"
+
 
 import wx
 import os
@@ -242,7 +245,7 @@ class MyFrame(wx.Frame):
 
         '''
         docs = []  # 当前目录生成的文件列表
-        print(os.path.dirname(os.path.abspath(__file__)))
+        
         for p in os.listdir(os.path.dirname(os.path.abspath(__file__))):
             if p.endswith('.docx'):
                 docs.append(p)
@@ -351,11 +354,11 @@ class MyFrame(wx.Frame):
             subtit = self.text_ctrl_5.GetValue()
 
             pp = PrintPreview(self.psm_list, self.psm_title,
-                              subtit, col=int(self.text_ctrl_3.GetValue()))
+                              subtit, col=int(self.text_ctrl_3.GetValue()),docxpath=self.config.c.get('config','docx')+os.sep)
             pp.produce()  # 生成docx
             self.psm_list.clear()  # 清空打印列表。
-            self.movdocx()
-            wx.MessageBox('文件发布成功，保存在'+self.config.c.get('config','docx')+os.sep+'docx 目录下，请查看！！', '成功提示',
+            # self.movdocx()
+            wx.MessageBox('文件发布成功，保存在'+self.config.c.get('config','docx')+'目录下，请查看！！', '成功提示',
                           wx.OK | wx.ICON_INFORMATION)
 
     def saveSignum(self, e):
@@ -418,7 +421,7 @@ class MyFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             #print(dlg.GetPath())
             self.config.saveDocx(dlg.GetPath())
-            wx.MessageBox('设置文件保存目录'+self.config.c.get('config','docx')+os.sep+'docx 成功！', '成功提示',
+            wx.MessageBox('设置文件保存目录为：'+self.config.c.get('config','docx')+os.sep, '成功提示',
                           wx.OK | wx.ICON_INFORMATION)
 
 # end of class MyFrame
@@ -686,6 +689,10 @@ class MyApp(wx.App):
 
 # end of class MyApp
 
-if __name__ == "__main__":
+def main():
     app = MyApp(0)
     app.MainLoop()
+
+
+if __name__ == "__main__":
+    main()

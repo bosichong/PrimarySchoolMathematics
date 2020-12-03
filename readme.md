@@ -10,18 +10,30 @@
 
 2.可以简单设置文档标题，小标题。设置生成的口算题文档个数
 
+pip安装：
+
+    pip install PrimarySchoolMath
+
+运行：
+
+终端进入python3的交互界面：
+
+    import PrimarySchoolMath
+
+如果提示缺少相关依赖包，请安装一下依赖：
+
+    pip install python-docx==0.8.7
+    pip install wxPython==4.0.3
 
 
-使用方法：
+Git克隆或是下载压缩包：
 
-1 确定本机支持python3.6.1以上版本
-
-2 安装程序相关依赖，在程序根目录下运行终端：
+下载程序进入程序主目录，安装程序相关依赖，在程序根目录下运行终端：
 
     pip install -r requirements.txt
 
 
-3 下载程序进入主目录，终端下运行`python App.py `
+3 程序主目录终端下运行`python App.py `
 
 4 修改运算项和结果范围里的数值,多步运算请添加修改需要的运算符号:
 
