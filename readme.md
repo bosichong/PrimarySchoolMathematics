@@ -22,8 +22,8 @@ pip安装：
 
 如果提示缺少相关依赖包，请安装一下依赖：
 
-    pip install python-docx==0.8.7
-    pip install wxPython==4.0.3
+    pip install python-docx==0.8.10
+    pip install wxPython==4.1.1
 
 
 Git克隆或是下载压缩包：
@@ -33,7 +33,7 @@ Git克隆或是下载压缩包：
     pip install -r requirements.txt
 
 
-3 程序主目录终端下运行`python App.py `
+3 程序主目录终端下运行`python App.py`,Mac下边如果遇到无法启动请试试：`pythonw App.py`
 
 4 修改运算项和结果范围里的数值,多步运算请添加修改需要的运算符号:
 

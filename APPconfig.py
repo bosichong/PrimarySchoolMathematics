@@ -37,16 +37,17 @@ class AppConfig:
     DOCX = BASE_DIR
 
     def __init__(self):
-        print(self.BASE_DIR)
-        print(self.INI_PATH)
-        print(os.path.isfile(self.INI_PATH))
+        # print(self.BASE_DIR)
+        # print(self.INI_PATH)
+        # print(os.path.isfile(self.INI_PATH))
         self.c = ConfigParser()
 
-        self.readINI()
         # 若没有配置文件，则创建。
         if(not os.path.isfile(self.INI_PATH)):
             # print("ini文件不存在，开始创建！")
             self.create_ini()
+
+        self.readINI()
 
     def create_ini(self):
         '''
@@ -112,7 +113,6 @@ class AppConfig:
         is_bracket = int(self.c.get('config', 'is_bracket'))
 
         multistep = eval(self.c.get('config', 'multistep'))
-
         tmpsym = eval(self.c.get('config', 'symbols'))
         symbols = [[], [], []]
         kk = 0
@@ -121,11 +121,18 @@ class AppConfig:
                 if y > 0:
                     symbols[kk].append(y)
             kk += 1
+
+        juanzishu = int(self.c.get("config", "juanzishu"))
+        lieshu = int(self.c.get("config", "lieshu"))
+        jz_title = self.c.get("config", "jz_title")
+        inf_title = self.c.get("config", "inf_title")
         docx = self.c.get('config', 'docx')
-        tmp_type = [add, sub, mult, div, signum, step,
-                    number, is_result, is_bracket, multistep, symbols, docx, ]
+        tempconfig = {"add": add, "sub": sub, "mult": mult, "div": div, "signum": signum, "step": step, "number": number,
+                      "is_result": is_result, "is_bracket": is_bracket, "multistep": multistep, "symbols": symbols, 
+                      "juanzishu": juanzishu,"lieshu":lieshu,"jz_title":jz_title,"inf_title":inf_title,"docx":docx,
+                      }
         # print(tmp_type)
-        return tmp_type  # 返回一个list 包含程序配置数据。
+        return tempconfig  # 返回一个字典 包含程序配置数据。
 
     def saveDocx(self, path):
         '''保存算数项设置数据'''

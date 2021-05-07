@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Jekyll v4.0.1">
+  <title>PrimarySchoolMathematics 依托Python开发了一套自动生成小学生口算题的小应用</title>
+  <!-- <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}"> -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/font-awesome-4.7.0/css/font-awesome.min.css') }}"
+    type="text/css">
+
+</head>
+
+<body style="padding-top: 3.5rem;">
+
+  <div class="container">
+    <div class="text-center">
+      <h2>程序参数设置</h2>
+      <p class="lead">如果您对程序的设置不太理解，请查阅帮助文档</p>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 order-md-1">
+        <form class="needs-validation">
+
+          <div class="form-row">
+            <div class="col">
+              <fieldset>
+                <legend>运算类型选择</legend>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="signum1" name="signum" class="custom-control-input" value="1" >
+                  <label class="custom-control-label" for="step1">加法</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="signum2" name="signum" class="custom-control-input" value="2" >
+                  <label class="custom-control-label" for="step2">减法</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="signum3" name="signum" class="custom-control-input" value="3" >
+                  <label class="custom-control-label" for="step3">乘法</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="signum4" name="signum" class="custom-control-input" value="4" >
+                  <label class="custom-control-label" for="step3">除法</label>
+                </div>
+
+              </fieldset>
+            </div>
+            <div class="col">
+              <fieldset>
+                <legend>选择几步运算</legend>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="step1" name="step" class="custom-control-input" value="1" >
+                  <label class="custom-control-label" for="step1">一步</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="step2" name="step" class="custom-control-input" value="2" >
+                  <label class="custom-control-label" for="step2">二步</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="step3" name="step" class="custom-control-input" value="3" >
+                  <label class="custom-control-label" for="step3">三步</label>
+                </div>
+
+              </fieldset>
+            </div>
+            <div class="col">
+              <fieldset>
+                <legend>题型设置</legend>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="is_result0" name="is_result" class="custom-control-input" value="0">
+                  <label class="custom-control-label" for="is_result0">求结果</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="is_result1" name="is_result" class="custom-control-input" value="1">
+                  <label class="custom-control-label" for="is_result1">求算数项</label>
+                </div>
+              </fieldset>
+            </div>
+            <div class="col">
+              <fieldset>
+                <legend>括号设置</legend>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input class="form-check-input" type="checkbox" id="is_bracket">
+                  <label class="form-check-label" for="is_bracket">使用括号</label>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <hr class="mb-4">
+
+          <div class="form-row">
+            <div class="col">
+              <fieldset>
+                <legend>加法设置</legend>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="carry1" name="carry" class="custom-control-input" value="1">
+                  <label class="custom-control-label" for="carry1">随机进位</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="carry2" name="carry" class="custom-control-input" value="2">
+                  <label class="custom-control-label" for="carry2">加法进位</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="carry3" name="carry" class="custom-control-input" value="3">
+                  <label class="custom-control-label" for="carry3">没有进位</label>
+                </div>
+
+              </fieldset>
+            </div>
+            <div class="col">
+              <fieldset>
+                <legend>减法设置</legend>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="abdication1" name="abdication" class="custom-control-input" value="1">
+                  <label class="custom-control-label" for="abdication1">随机进位</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="abdication2" name="abdication" class="custom-control-input" value="2">
+                  <label class="custom-control-label" for="abdication2">加法进位</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="abdication3" name="abdication" class="custom-control-input" value="3">
+                  <label class="custom-control-label" for="abdication3">没有进位</label>
+                </div>
+
+              </fieldset>
+            </div>
+            <div class="col">
+              <fieldset>
+                <legend>除法设置</legend>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="divattrs1" name="divattrs" class="custom-control-input" value="1">
+                  <label class="custom-control-label" for="divattrs1">随机有余数</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="divattrs2" name="divattrs" class="custom-control-input" value="2">
+                  <label class="custom-control-label" for="divattrs2">结果整除</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="divattrs3" name="divattrs" class="custom-control-input" value="3">
+                  <label class="custom-control-label" for="divattrs3">结果有余数</label>
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+          <hr class="mb-4">
+
+          <div class="form-row">
+            <div class="col">
+              <fieldset>
+                <legend>运算项及结果范围数值设置</legend>
+                <div class="form-row">
+                  <p>第1个算数项取值范围</p>
+                  <div class="col">
+                    <input type="text" class="form-control form-control-sm" id="multistep_a1" placeholder="" value="">
+                  </div>
+                  <div class="col-1">
+                    到
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control form-control-sm" id="multistep_a2" placeholder="" value="">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <p>第2个算数项取值范围</p>
+                  <div class="col">
+                    <input type="text" class="form-control form-control-sm" id="multistep_b1" placeholder="" value="">
+                  </div>
+                  <div class="col-1">
+                    到
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control form-control-sm" id="multistep_b2" placeholder="" value="">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <p>第3个算数项取值范围</p>
+                  <div class="col">
+                    <input type="text" class="form-control form-control-sm" id="multistep_c1" placeholder="" value="">
+                  </div>
+                  <div class="col-1">
+                    到
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control form-control-sm" id="multistep_c2" placeholder="" value="">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <p>第4个算数项取值范围</p>
+                  <div class="col">
+                    <input type="text" class="form-control form-control-sm" id="multistep_d1" placeholder="" value="">
+                  </div>
+                  <div class="col-1">
+                    到
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control form-control-sm" id="multistep_d2" placeholder="" value="">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <p>运算结果取值范围</p>
+                  <div class="col">
+                    <input type="text" class="form-control form-control-sm" id="multistep_e1" placeholder="" value="">
+                  </div>
+                  <div class="col-1">
+                    到
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control form-control-sm" id="multistep_e2" placeholder="" value="">
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div class="col">
+              <fieldset>
+                <legend>运算符号的选择</legend>
+                <div class="form-row">
+                  <p>第1处运算符号选择</p>
+                  <div class="col">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_a1" name="symbols_a" value="1">
+                      <label class="form-check-label" for="symbols_a1">+(加法)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_a2" name="symbols_a" value="2">
+                      <label class="form-check-label" for="symbols_a2">-(减法)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_a3" name="symbols_a" value="3">
+                      <label class="form-check-label" for="symbols_a3">×(乘法)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_a4" name="symbols_a" value="4">
+                      <label class="form-check-label" for="symbols_a4">÷(除法)</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <p>第2处运算符号选择</p>
+                  <div class="col">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_b1" name="symbols_b" value="1">
+                      <label class="form-check-label" for="symbols_b1">+(加法)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_b2" name="symbols_b" value="2">
+                      <label class="form-check-label" for="symbols_b2">-(减法)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_b3" name="symbols_b" value="3">
+                      <label class="form-check-label" for="symbols_b3">×(乘法)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_b4" name="symbols_b" value="4">
+                      <label class="form-check-label" for="symbols_b4">÷(除法)</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <p>第3处运算符号选择</p>
+                  <div class="col">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_c1" name="symbols_c" value="1">
+                      <label class="form-check-label" for="symbols_c1">+(加法)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_c2" name="symbols_c" value="2">
+                      <label class="form-check-label" for="symbols_c2">-(减法)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_c3" name="symbols_c" value="3">
+                      <label class="form-check-label" for="symbols_c3">×(乘法)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="symbols_c4" name="symbols_c" value="4">
+                      <label class="form-check-label" for="symbols_c4">÷(除法)</label>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <hr class="mb-4">
+
+          <div class="form-row">
+            <div class="col">
+              <fieldset>
+                <legend>口算卷子设置</legend>
+                <div class="form-row">
+
+                  <p>生成的卷子数量</p>
+                  <div class="col-md-2 mb-3">
+                    <input type="text" class="form-control form-control-sm" id="juanzishu" placeholder="" required="">
+                  </div>
+
+                  <p>口算题列数</p>
+                  <div class="col-md-2 mb-3">
+                    <input type="text" class="form-control form-control-sm" id="lieshu" placeholder="" required="">
+                  </div>
+
+                  <p>卷子保存地址</p>
+                  <div class="col-md-2 mb-3">
+                    <input type="text" class="form-control form-control-sm" id="docx" placeholder="" required="">
+                  </div>
+                  <div class="col-md-1 mb-3">
+                    <button type="button" class="btn btn-primary btn-sm">设置保存地址</button>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <p>卷子标题</p>
+                  <div class="col-md-3 mb-3">
+                    <input type="text" class="form-control form-control-sm" id="jz_title" placeholder="" required="">
+                  </div>
+                  <p>卷子副标题</p>
+                  <div class="col-md-7 mb-3">
+                    <input type="text" class="form-control form-control-sm" id="inf_title" placeholder="" required="">
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <hr class="mb-4">
+
+          <div class="form-row">
+            <div class="col">
+              <fieldset>
+                <legend>添加口算题到卷子</legend>
+                <div class="form-row">
+
+                  <p>口算题数量</p>
+                  <div class="col-md-2 mb-3">
+                    <input type="text" class="form-control form-control-sm" id="number" placeholder="" required="">
+                  </div>
+                  <div class="col-md-1 mb-3">
+                    <button type="button" class="btn btn-primary btn-sm" id="addpsm">添加口算题</button>
+                  </div>                 
+                  <div class="col-md-1 mb-3">
+                    <button type="button" class="btn btn-primary btn-sm" id="cleanpsm">清空口算题</button>
+                  </div>
+
+
+                
+                </div>
+                <div class="form-row">
+                  <div class="col-md-9 mb-3">
+                    <label for="exampleFormControlTextarea1">当前口算题包含内容</label>
+                    <textarea class="form-control" id="psmtextarea" rows="3"></textarea>
+                  </div>
+      
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <hr class="mb-4">
+
+
+          <button class="btn btn-primary btn-lg btn-block" id="psmsubmit" type="button" data-target="#exampleModal">点此生成口算题</button>
+        </form>
+      </div>
+    </div>
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+      <p class="mb-1">© 2018-2021 J.sky</p>
+      <ul class="list-inline">
+        <li class="list-inline-item">Powered by</li>
+        <li class="list-inline-item"><a href="#">Flask</a></li>
+        <li class="list-inline-item"><a href="#">jQuery</a></li>
+        <li class="list-inline-item"><a href="#">Bootstrap 4</a></li>
+      </ul>
+    </footer>
+  </div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">提示！</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body psminfo">
+        haha
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+
+</html>

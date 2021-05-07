@@ -33,7 +33,7 @@ Author  : J.sky
 Mail    : bosichong@qq.com
 
 
-特别感谢一下二位大神的鼎力支持！
+特别感谢一下二位大佬的鼎力支持！
 
 Author  : rcddup
 Mail    : 410093793@qq.com
