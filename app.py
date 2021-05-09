@@ -39,11 +39,13 @@ app.secret_key = 'secret string'
 
 
 # APP配置文件 对象
-appConfig = AppConfig()  # 程序配置文件对象
+appConfig = AppConfig() 
+ # 程序配置文件对象
 
 
 @app.route('/')
 def index():
+    # appConfig.isINI()
     return render_template("index.html",)
 
 

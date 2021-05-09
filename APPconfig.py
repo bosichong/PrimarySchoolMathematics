@@ -43,11 +43,16 @@ class AppConfig:
         self.c = ConfigParser()
 
         # 若没有配置文件，则创建。
+        self.isINI()
+
+        self.readINI()
+
+    def isINI(self):
+        # 若没有配置文件，则创建。
         if(not os.path.isfile(self.INI_PATH)):
             # print("ini文件不存在，开始创建！")
             self.create_ini()
 
-        self.readINI()
 
     def create_ini(self):
         '''

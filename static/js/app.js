@@ -214,9 +214,15 @@ $(document).ready(function () {
                 }
                 else {
                     if (psm_tmp.is_result == 1 || psm_tmp.step >1){
-                        alert("如果题型为求算数项或是多步运算时，除法结果则不能选择有余数！")
+                        // alert("如果题型为求算数项或是多步运算时，除法结果则不能选择有余数！")
+                        $(".psminfo").text("如果题型为求算数项或是多步运算时，除法结果则不能选择有余数！")
+                        // alert(message["info"])
+                        $('#exampleModal').modal("show")
                     }else{
-                        alert("除数不能为0!请修改运算项范围数值设置！")
+                        // alert("除数不能为0!请修改运算项范围数值设置！")
+                        $(".psminfo").text("除数不能为0!请修改运算项范围数值设置！")
+                        // alert(message["info"])
+                        $('#exampleModal').modal("show")
                     }
                 }
 
