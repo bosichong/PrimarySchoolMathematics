@@ -44,7 +44,7 @@ Mail    : 1078539713@qq.com
 import random
 import re
 
-from utils.PSM_help import *
+from .utils.PSM_help import *
 
 __version__ = "0.2.0"
 

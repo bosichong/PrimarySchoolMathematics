@@ -22,7 +22,13 @@ Mail    : 1078539713@qq.com
 from flask import Flask, render_template, jsonify, request
 
 import json
+import os
+import shutil
+import random
 
+
+from .Psmrcddup import Generator
+from .PrintPreview import PrintPreview
 from .APPconfig import AppConfig
 
 
@@ -66,8 +72,12 @@ def createPSM():
 @app.route('/api_producePSM', methods=['POST'])
 def producePSM():
     jsondata = request.get_json()
-    print(jsondata)
-    rs = {"info": "口算题生成完毕！"}
+    # print(jsondata)
+    isok = producePSM(jsondata)
+    if isok:
+        rs = {"info": "口算题生成完毕！"}
+    else:
+        rs = {"info": "口算题生成失败！"}
     return jsonify(rs)
 
 #############################
@@ -106,3 +116,41 @@ def isZeroA(step, signum, multistep, symbols, number):
 
     elif step == 3:
         return "三步计算口算题" + str_number + "道|||"
+
+
+def producePSM(json_data):
+    '''发布口算题保存.docx文件'''
+    print(json_data[0][0]["multistep"])  # 打印测试
+    psm_list = []  # 口算题列表
+    psm_title = []  # 标题列表
+    if len(json_data) == 0:
+        print('还没有添加口算题到列表中哈！')  # 打印测试
+        return 0
+    else:
+        # 循环生成每套题
+        for i in range(json_data[1]["juanzishu"]):
+            templist = []
+            for j in json_data[0]:
+                print(j)
+                g = Generator(addattrs=j["add"], subattrs=j["sub"], multattrs=j["mult"], divattrs=j["div"],
+                              symbols=j["symbols"], multistep=j[
+                                  "multistep"], number=j["number"],signum=j["signum"], step=j["step"],
+                            is_result=j["is_result"], is_bracket=j["is_bracket"],)
+                templist = templist + g.generate_data()
+            random.shuffle(templist)
+            print(templist)
+            psm_list.append(templist)
+            # 为生成的文件起名r
+            psm_title.clear()
+
+        for i in range(json_data[1]["juanzishu"]):
+            psm_title.append(json_data[1]["jz_title"])
+        # print(self.psm_title)
+        subtit = json_data[1]["inf_title"]
+
+        pp = PrintPreview(psm_list, psm_title,
+                          subtit, col=json_data[1]["lieshu"], )
+        pp.produce()  # 生成docx
+        psm_list.clear()  # 清空打印列表。
+        # self.movdocx()
+        return 1

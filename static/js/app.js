@@ -17,6 +17,7 @@ $(document).ready(function () {
             $("#is_result" + appconfig.config.is_result).attr("checked", true); //题型设置
             $("#carry" + appconfig.config.add.carry).attr("checked", true); //加法设置
             $("#abdication" + appconfig.config.sub.abdication).attr("checked", true); //减法设置
+            $("#remainder" + appconfig.config.div.remainder).attr("checked", true); //减法设置
 
             // 运算项及结果范围数值设置
             $("#multistep_a1").attr("value", appconfig.config.multistep[0][0]);
@@ -156,13 +157,15 @@ $(document).ready(function () {
 
 
         psm_tmp.add = {
-            "carry ": parseInt($('input[name="carry"]:checked').val())
+            "carry": parseInt($('input[name="carry"]:checked').val())
         }
         psm_tmp.sub = {
             "abdication": parseInt($('input[name="abdication"]:checked').val())
         }
         psm_tmp.mult = {}
-        psm_tmp.div = {}
+        psm_tmp.div = {
+            "remainder": parseInt($('input[name="remainder"]:checked').val())
+        }
 
         psm_tmp.multistep = [
             [parseInt($("#multistep_a1").val()), parseInt($("#multistep_a2").val()),],

@@ -61,7 +61,7 @@ class PrintPreview:
 
     def __init__(self, l, tit, subtitle, col=3, tsize=26, subsize=11, csize=16,
                 # 默认输出文件地址为项目根目录 
-                docxpath=os.path.join(os.path.dirname(os.path.abspath(__file__)),"")):
+                docxpath=os.path.join(os.path.dirname(os.path.abspath(__file__)),"docx"+os.sep)):
         '''
         :param l: list 需要打印的口算题列表
         :param tit: list 口算页标题
@@ -131,6 +131,7 @@ class PrintPreview:
         table.style.font.color.rgb = RGBColor(54, 0, 0)  # 颜色设置，这里是用RGB颜色
         table.style.font.size = Pt(self.p_content_siae)  # 字体大小设置，和word里面的字号相对应
         print(self.docxpath+'{}.docx'.format(docxname))
+        self.createDir(self.docxpath)#判断目录是否存在并创建
         p_docx.save(self.docxpath+'{}.docx'.format(docxname))  # 输出docx
 
     def produce(self):
@@ -138,6 +139,16 @@ class PrintPreview:
         for l, t in zip(self.p_list, self.p_title):
             self.create_psmdocx(l, t, t + str(k))
             k = k + 1
+
+    def createDir(self,path):
+        '''
+        若目录不存在则，创建一个目录
+        :param path: 路径地址 请传入目录的绝对地址
+        path = os.path.dirname(os.path.abspath(__file__))
+        IMAGES_PATH = os.path.join(path,"chinaztu")
+        '''
+        if not os.path.exists(path):
+            os.makedirs(path)
 
 
 

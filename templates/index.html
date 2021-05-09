@@ -7,7 +7,7 @@
   <meta name="description" content="">
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Jekyll v4.0.1">
-  <title>PrimarySchoolMathematics 依托Python开发了一套自动生成小学生口算题的小应用</title>
+  <title>PrimarySchoolMathematics 依托Flask、jQuery、python-docx等框架开发的自动生成小学生口算题的小应用</title>
   <!-- <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}"> -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
@@ -34,19 +34,19 @@
                 <legend>运算类型选择</legend>
                 <div class="custom-control custom-radio custom-control-inline">
                   <input type="radio" id="signum1" name="signum" class="custom-control-input" value="1" >
-                  <label class="custom-control-label" for="step1">加法</label>
+                  <label class="custom-control-label" for="signum1">加法</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                   <input type="radio" id="signum2" name="signum" class="custom-control-input" value="2" >
-                  <label class="custom-control-label" for="step2">减法</label>
+                  <label class="custom-control-label" for="signum2">减法</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                   <input type="radio" id="signum3" name="signum" class="custom-control-input" value="3" >
-                  <label class="custom-control-label" for="step3">乘法</label>
+                  <label class="custom-control-label" for="signum3">乘法</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                   <input type="radio" id="signum4" name="signum" class="custom-control-input" value="4" >
-                  <label class="custom-control-label" for="step3">除法</label>
+                  <label class="custom-control-label" for="signum4">除法</label>
                 </div>
 
               </fieldset>
@@ -135,16 +135,16 @@
               <fieldset>
                 <legend>除法设置</legend>
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" id="divattrs1" name="divattrs" class="custom-control-input" value="1">
-                  <label class="custom-control-label" for="divattrs1">随机有余数</label>
+                  <input type="radio" id="remainder1" name="remainder" class="custom-control-input" value="1">
+                  <label class="custom-control-label" for="remainder1">随机有余数</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" id="divattrs2" name="divattrs" class="custom-control-input" value="2">
-                  <label class="custom-control-label" for="divattrs2">结果整除</label>
+                  <input type="radio" id="remainder2" name="remainder" class="custom-control-input" value="2">
+                  <label class="custom-control-label" for="remainder2">结果整除</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" id="divattrs3" name="divattrs" class="custom-control-input" value="3">
-                  <label class="custom-control-label" for="divattrs3">结果有余数</label>
+                  <input type="radio" id="remainder3" name="remainder" class="custom-control-input" value="3">
+                  <label class="custom-control-label" for="remainder3">结果有余数</label>
                 </div>
 
               </fieldset>
@@ -310,7 +310,7 @@
                     <input type="text" class="form-control form-control-sm" id="docx" placeholder="" required="">
                   </div>
                   <div class="col-md-1 mb-3">
-                    <button type="button" class="btn btn-primary btn-sm">设置保存地址</button>
+                    <button type="button" class="btn btn-primary btn-sm" disabled>设置保存地址</button>
                   </div>
                 </div>
                 <div class="form-row">
