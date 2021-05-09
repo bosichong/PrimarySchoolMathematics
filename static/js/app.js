@@ -213,7 +213,11 @@ $(document).ready(function () {
                     $("#psmtextarea").val(psm_app.psminfo)
                 }
                 else {
-                    alert("除数不能为0，请重新设置参数！");
+                    if (psm_tmp.is_result == 1 || psm_tmp.step >1){
+                        alert("如果题型为求算数项或是多步运算时，除法结果则不能选择有余数！")
+                    }else{
+                        alert("除数不能为0!请修改运算项范围数值设置！")
+                    }
                 }
 
 

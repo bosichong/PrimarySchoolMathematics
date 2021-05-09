@@ -16,9 +16,9 @@
 import os
 from configparser import ConfigParser
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 '''
-开心Python Django 学习交流q群：217840699
+开心Python Flask Django 学习交流q群：217840699
 Author  : J.sky
 Mail    : bosichong@qq.com
 '''
@@ -79,8 +79,8 @@ class AppConfig:
         self.c.set('divattrs', 'remainder', '2')  # 除法 随机1，整除2，有余数3
 
         self.c.set('config', 'number', '30')  # 需要生成的题数
-        self.c.set('config', 'juanzishu', '5')  # 需要打印的卷子数
-        self.c.set('config', 'lieshu', '3')  # 需要打印的卷子题列数
+        self.c.set('config', 'juanzishu', '3')  # 需要打印的卷子数
+        self.c.set('config', 'lieshu', '4')  # 需要打印的卷子题列数
         self.c.set('config', 'jz_title', '小学生口算题')  # 需要打印的卷子题列数
         self.c.set('config', 'inf_title',
                    '姓名：__________ 日期：____月____日 时间：________ 对题：____道')  # 需要打印的卷子题列数
@@ -105,7 +105,8 @@ class AppConfig:
         add = {"carry": int(self.c.get('addattrs', 'carry')), }
         sub = {"abdication":  int(self.c.get('subattrs', 'abdication')), }
         mult = {}  # 乘法设置
-        div = {"remainder":  int(self.c.get('divattrs', 'remainder')), }  # 除法设置
+        div = {"remainder":  int(self.c.get(
+            'divattrs', 'remainder')), }  # 除法设置
 
         signum = int(self.c.get('config', 'signum'))
         step = int(self.c.get('config', 'step'))
@@ -129,29 +130,48 @@ class AppConfig:
         inf_title = self.c.get("config", "inf_title")
         docx = self.c.get('config', 'docx')
         tempconfig = {"add": add, "sub": sub, "mult": mult, "div": div, "signum": signum, "step": step, "number": number,
-                      "is_result": is_result, "is_bracket": is_bracket, "multistep": multistep, "symbols": symbols, 
-                      "juanzishu": juanzishu,"lieshu":lieshu,"jz_title":jz_title,"inf_title":inf_title,"docx":docx,
+                      "is_result": is_result, "is_bracket": is_bracket, "multistep": multistep, "symbols": symbols,
+                      "juanzishu": juanzishu, "lieshu": lieshu, "jz_title": jz_title, "inf_title": inf_title, "docx": docx,
                       }
         # print(tmp_type)
         return tempconfig  # 返回一个字典 包含程序配置数据。
 
+    def saveAll(self,data):
+        '''
+        保存所有配置文件数据到INI
+        
+        '''
+        l1 = data[0][-1]
+        l2 = data[1]
+        self.c.set('config', 'docx', l2["docx"])
+        self.c.set('config', 'signum', str(l1["signum"]))
+        self.c.set('config', 'step', str(l1["step"]))
+        self.c.set('config', 'is_result', str(l1["is_result"]))
+        self.c.set('config', 'is_bracket', str(l1["is_bracket"]))
+        self.c.set('config', 'multistep', str(l1["multistep"]))
+        self.c.set('config', 'symbols', str(l1["symbols"]))
+        self.c.set('config', 'number', str(l1["number"]))
+        self.c.set('config', 'juanzishu', str(l2["juanzishu"]))
+        self.c.set('config', 'lieshu', str(l2["lieshu"]))
+        self.c.set('config', 'jz_title', l2["jz_title"])
+        self.c.set('config', 'inf_title', l2["inf_title"])
+        self.c.set('addattrs', 'carry', str(l1["add"]["carry"]))
+        self.c.set('subattrs', 'abdication', str(l1["sub"]["abdication"]))
+        self.c.set('divattrs', 'remainder', str(l1["div"]["remainder"]))
+        self.saveINI()#保存所有配置项
+
+
+
     def saveDocx(self, path):
-        '''保存算数项设置数据'''
         self.c.set('config', 'docx', path)
         self.saveINI()
 
     def saveMultistep(self, multistep):
-        '''保存算数项设置数据'''
         self.c.set('config', 'multistep', multistep)
         self.saveINI()
 
-    def saveMultistep(self, multistep):
-        '''保存算数项设置数据'''
-        self.c.set('config', 'multistep', multistep)
-        self.saveINI()
 
     def saveSymbols(self, symbols):
-        '''保存运算符号设置数据'''
         self.c.set('config', 'symbols', symbols)
         self.saveINI()
 
@@ -183,6 +203,11 @@ class AppConfig:
     def saveSub(self, sub):
         '''保存减法设置数据'''
         self.c.set('subattrs', 'abdication', sub)
+        self.saveINI()
+
+    def saveDiv(self, remainder):
+        '''保存除法法设置数据'''
+        self.c.set('divattrs', 'remainder', remainder)
         self.saveINI()
 
     def saveSignum(self, signum):

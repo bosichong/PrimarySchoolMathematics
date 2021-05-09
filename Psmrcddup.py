@@ -46,7 +46,7 @@ import re
 
 from .utils.PSM_help import *
 
-__version__ = "0.2.0"
+__version__ = "1.0.0"
 
 
 class Generator(object):
@@ -85,8 +85,8 @@ class Generator(object):
         {"result":[21,81],}
 
         :param:divattrs dict 除法
-        数值范围设置
-        {"result":[1,9],}
+        退位随机选择项单选，随机1，整除2，有余数3
+        {"remainder":2,}
 
 
         :param signum: list 包含题型需要的 1+ 2- 3* 4/
@@ -130,7 +130,9 @@ class Generator(object):
         self.__data_list = []  # 生成的口算题
 
     def __getFormula(self):
-        '''根据给出的属性返回一道合法的口算题'''
+        '''
+        根据给出的属性返回一道合法的口算题
+        '''
 
         f = []
         for i in range(self.step+1):
@@ -139,10 +141,10 @@ class Generator(object):
             # 返回一步口算题
 
             return getOne(f, self.signum, self.multistep[4], self.addattrs["carry"],
-                          self.subattrs["abdication"], self.is_result)
+                          self.subattrs["abdication"], self.divattrs["remainder"],self.is_result)
         elif self.step >1:
             return getMoreStep(f, self.multistep[4], self.symbols,self.step, self.addattrs["carry"],
-                          self.subattrs["abdication"],self.is_bracket, self.is_result)
+                          self.subattrs["abdication"], self.divattrs["remainder"],self.is_bracket, self.is_result)
 
     def generate_data(self):
         '''根据条件生成所需口算题'''
