@@ -38,7 +38,7 @@ app.jinja_env.lstrip_blocks = True
 app.secret_key = 'secret string'
 
 
-# APP配置文件 对象
+# APP配置文件对象
 appConfig = AppConfig() 
  # 程序配置文件对象
 
@@ -73,14 +73,26 @@ def createPSM():
 
 @app.route('/api_producePSM', methods=['POST'])
 def producePSM():
+    '''
+    接受前端发来的口算题配置生成口算题并保存到文件
+    '''
     jsondata = request.get_json()
     # print(jsondata)
     isok = producePSM(jsondata)
+    rs = getRstr(isok)
+    return jsonify(rs)
+
+def getRstr(isok):
+    '''
+    根据判断返回口算题是否生成的提示文字
+    :param isok bool
+    :return bool
+    '''
     if isok:
         rs = {"info": "口算题生成完毕！"}
     else:
         rs = {"info": "口算题生成失败！"}
-    return jsonify(rs)
+    return rs
 
 #############################
 
@@ -127,7 +139,7 @@ def isZeroA(step, signum, multistep, symbols, number,remainder,is_result):
 
 def producePSM(json_data):
     '''发布口算题保存.docx文件'''
-    print(json_data)  # 打印测试
+    # print(json_data)  # 打印测试
     psm_list = []  # 口算题列表
     psm_title = []  # 标题列表
     if len(json_data) == 0:
@@ -136,19 +148,11 @@ def producePSM(json_data):
     else:
         # 循环生成每套题
         for i in range(json_data[1]["juanzishu"]):
-            templist = []
-            for j in json_data[0]:
-                # print(j)
-                g = Generator(addattrs=j["add"], subattrs=j["sub"], multattrs=j["mult"], divattrs=j["div"],
-                              symbols=j["symbols"], multistep=j[
-                                  "multistep"], number=j["number"],signum=j["signum"], step=j["step"],
-                            is_result=j["is_result"], is_bracket=j["is_bracket"],)
-                templist = templist + g.generate_data()
-            random.shuffle(templist)
-            # print(templist)
-            psm_list.append(templist)
+            templist = getPsmList(json_data)#生成一页口算题
+            random.shuffle(templist)#随机打乱
+            psm_list.append(templist)#添加到list 准备后期打印
             # 为生成的文件起名r
-            psm_title.clear()
+            # psm_title.clear()
 
         for i in range(json_data[1]["juanzishu"]):
             psm_title.append(json_data[1]["jz_title"])
@@ -162,3 +166,19 @@ def producePSM(json_data):
         appConfig.saveAll(json_data)#保存所有配置项
         # self.movdocx()
         return 1
+
+def getPsmList(json_data):
+    '''
+    根据配置文件生成一套口算题的所有题
+    :param json_data 口算题的所有配置
+    :return list 最终的口算题页
+    '''
+    templist = []
+    for j in json_data[0]:
+                # print(j)
+        g = Generator(addattrs=j["add"], subattrs=j["sub"], multattrs=j["mult"], divattrs=j["div"],
+                              symbols=j["symbols"], multistep=j[
+                                  "multistep"], number=j["number"],signum=j["signum"], step=j["step"],
+                            is_result=j["is_result"], is_bracket=j["is_bracket"],)
+        templist = templist + g.generate_data()
+    return templist

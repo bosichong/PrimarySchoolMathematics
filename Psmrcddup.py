@@ -27,7 +27,7 @@
     3.保存为.docx用来打印.
 
 
-开心Python Django 学习交流q群：217840699
+开心Python Flask Django 学习交流q群：217840699
 
 
 Author  : J.sky
@@ -134,32 +134,36 @@ class Generator(object):
         根据给出的属性返回一道合法的口算题
         '''
 
-        f = []
-        for i in range(self.step+1):
-            f.append(self.multistep[i])
+        f = self.get_formulas()
         if self.step == 1:
             # 返回一步口算题
-
             return getOne(f, self.signum, self.multistep[4], self.addattrs["carry"],
                           self.subattrs["abdication"], self.divattrs["remainder"],self.is_result)
         elif self.step >1:
             return getMoreStep(f, self.multistep[4], self.symbols,self.step, self.addattrs["carry"],
                           self.subattrs["abdication"], self.divattrs["remainder"],self.is_bracket, self.is_result)
 
+    def get_formulas(self):
+        '''
+        return 口算题算数项的取值范围list
+        '''
+        f = []
+        for i in range(self.step+1):
+            f.append(self.multistep[i])
+        return f
+
     def generate_data(self):
         '''根据条件生成所需口算题'''
 
         slist = []
-        k = 0
-        # 循环生成所有加法口算题
-
+        # k = 0
         while True:
-
             formula = self.__getFormula()  # 生成一道算式题
             if formula:
                 slist.append(formula)
-                k += 1  # 成功添加一道
-            if k == self.number:
+                # k += 1  # 成功添加一道
+            # if k == self.number:
+            if len(slist) == self.number:
                 break
 
         random.shuffle(slist)  # 洗牌，先打乱list中的排序
