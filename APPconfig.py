@@ -146,6 +146,7 @@ class AppConfig:
         保存所有配置文件数据到INI
         
         '''
+        # 分解数据，用来保存INI
         l1 = data[0][-1]
         l2 = data[1]
         self.c.set('config', 'docx', l2["docx"])
@@ -166,79 +167,6 @@ class AppConfig:
         self.saveINI()#保存所有配置项
 
 
-
-    def saveDocx(self, path):
-        self.c.set('config', 'docx', path)
-        self.saveINI()
-
-    def saveMultistep(self, multistep):
-        self.c.set('config', 'multistep', multistep)
-        self.saveINI()
-
-
-    def saveSymbols(self, symbols):
-        self.c.set('config', 'symbols', symbols)
-        self.saveINI()
-
-    def saveInf_title(self, inf_title):
-        '''保存卷子副标题设置数据'''
-        self.c.set('config', 'inf_title', inf_title)
-        self.saveINI()
-
-    def saveJz_title(self, jz_title):
-        '''保存卷子标题设置数据'''
-        self.c.set('config', 'jz_title', jz_title)
-        self.saveINI()
-
-    def saveLieshu(self, lieshu):
-        '''保存卷子题列数设置数据'''
-        self.c.set('config', 'lieshu', lieshu)
-        self.saveINI()
-
-    def saveJuanzishu(self, juanzishu):
-        '''保存卷子份数设置数据'''
-        self.c.set('config', 'juanzishu', juanzishu)
-        self.saveINI()
-
-    def saveAdd(self, add):
-        '''保存加法设置数据'''
-        self.c.set('addattrs', 'carry', add)
-        self.saveINI()
-
-    def saveSub(self, sub):
-        '''保存减法设置数据'''
-        self.c.set('subattrs', 'abdication', sub)
-        self.saveINI()
-
-    def saveDiv(self, remainder):
-        '''保存除法法设置数据'''
-        self.c.set('divattrs', 'remainder', remainder)
-        self.saveINI()
-
-    def saveSignum(self, signum):
-        '''保存题型设置数据'''
-        self.c.set('config', 'signum', signum)
-        self.saveINI()
-
-    def saveStep(self, step):
-        '''保存口算题步数设置数据'''
-        self.c.set('config', 'step', step)
-        self.saveINI()
-
-    def saveNumber(self, number):
-        '''保存口算题个数设置数据'''
-        self.c.set('config', 'number', number)
-        self.saveINI()
-
-    def saveIs_Result(self, is_result):
-        '''保存口算题是否求结果设置设置数据'''
-        self.c.set('config', 'is_result', is_result)
-        self.saveINI()
-
-    def saveIs_Bracket(self, is_bracket):
-        '''保存口算题是否使用括号设置设置数据'''
-        self.c.set('config', 'is_bracket', is_bracket)
-        self.saveINI()
 
 
 if __name__ == '__main__':
