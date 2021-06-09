@@ -142,7 +142,8 @@ def producePSM(json_data):
     # print(json_data)  # 打印测试
     psm_list = []  # 口算题列表
     psm_title = []  # 标题列表
-    if len(json_data) == 0:
+    print(json_data)
+    if len(json_data[0]) == 0:
         print('还没有添加口算题到列表中哈！')  # 打印测试
         return 0
     else:
