@@ -10,7 +10,7 @@
 
 2.可以简单设置文档标题，小标题。设置生成的口算题文档个数
 
-<font color=red>3. web或终端下一键生成口算题（dev版本中正在调试开发中）</font>
+3. web或终端下一键生成口算题（dev版本中正在调试开发中）
 
 ## 程序的安装
 
@@ -53,6 +53,27 @@
     Werkzeug      1.0.1
     wheel         0.36.2
 
+
+## 终端下快速生成预制口算卷子
+
+进入程序目录后终端下：
+
+![输入图片说明](ys.gif)
+
+具体请查看帮助 `flask go --help`
+
+    (flask_psm) -bash-3.2$ flask go --help
+    Usage: flask go [OPTIONS]
+    
+      命令行快速创建并生成口算题卷子
+    
+    Options:
+      --id TEXT      口算题标识，根据标识可以快速生成口算题卷子
+      --q INTEGER    需要打印的卷子数量
+      --row INTEGER  口算卷子题的列数
+      --tit TEXT     口算题卷子标题设置
+      --st TEXT      口算题标卷子副标题
+      --help         Show this message and exit.
 
 ## 程序界面截图：
 
