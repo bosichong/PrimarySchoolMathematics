@@ -257,5 +257,37 @@ psm_data = {
            'sub': {'abdication': 1}, 'mult': {}, 'div': {'remainder': 2},
            'multistep': [[1, 9], [1, 9], [1, 9], [1, 9], [1, 99]], 'symbols': [[1], [2], [1]]}]]
             },
+    "a04": {"id": "a04", "info": "10以内加减法混合求算数项口算题54道", "data":
+        [[{'signum': 1, 'step': 1, 'number': 27, 'is_result': 1, 'is_bracket': 0, 'add': {'carry': 1},
+           'sub': {'abdication': 1}, 'mult': {}, 'div': {'remainder': 2},
+           'multistep': [[1, 9], [1, 9], [1, 9], [1, 9], [1, 99]], 'symbols': [[1], [2], [1]]},
+          {'signum': 2, 'step': 1, 'number': 27, 'is_result': 1, 'is_bracket': 0, 'add': {'carry': 1},
+           'sub': {'abdication': 1}, 'mult': {}, 'div': {'remainder': 2},
+           'multistep': [[1, 9], [1, 9], [1, 9], [1, 9], [1, 99]], 'symbols': [[1], [2], [1]]}]]
+            },
+    "b05": {"id": "b05", "info": "10以内九九乘法口算", "data":
+        [[{'signum': 3, 'step': 1, 'number': 27, 'is_result': 0, 'is_bracket': 0, 'add': {'carry': 1},
+           'sub': {'abdication': 1}, 'mult': {}, 'div': {'remainder': 2},
+           'multistep': [[1, 9], [1, 9], [1, 9], [1, 9], [1, 99]], 'symbols': [[1], [2], [1]]},
+          {'signum': 3, 'step': 1, 'number': 27, 'is_result': 0, 'is_bracket': 0, 'add': {'carry': 1},
+           'sub': {'abdication': 1}, 'mult': {}, 'div': {'remainder': 2},
+           'multistep': [[1, 9], [1, 9], [1, 9], [1, 9], [1, 99]], 'symbols': [[1], [2], [1]]}]]
+            },
+    "b06": {"id": "b06", "info": "商是9以内的除法口算", "data":
+        [[{'signum': 4, 'step': 1, 'number': 27, 'is_result': 0, 'is_bracket': 0, 'add': {'carry': 1},
+           'sub': {'abdication': 1}, 'mult': {}, 'div': {'remainder': 2},
+           'multistep': [[1, 81], [1, 9], [1, 9], [1, 9], [1, 9]], 'symbols': [[1], [2], [1]]},
+          {'signum': 4, 'step': 1, 'number': 27, 'is_result': 0, 'is_bracket': 0, 'add': {'carry': 1},
+           'sub': {'abdication': 1}, 'mult': {}, 'div': {'remainder': 2},
+           'multistep': [[1, 81], [1, 9], [1, 9], [1, 9], [1, 9]], 'symbols': [[1], [2], [1]]}]]
+            },
+    "b07": {"id": "b07", "info": "九九乘法表相关乘除法口算", "data":
+        [[{'signum': 3, 'step': 1, 'number': 27, 'is_result': 0, 'is_bracket': 0, 'add': {'carry': 1},
+           'sub': {'abdication': 1}, 'mult': {}, 'div': {'remainder': 2},
+           'multistep': [[1, 9], [1, 9], [1, 9], [1, 9], [1, 81]], 'symbols': [[1], [2], [1]]},
+          {'signum': 4, 'step': 1, 'number': 27, 'is_result': 0, 'is_bracket': 0, 'add': {'carry': 1},
+           'sub': {'abdication': 1}, 'mult': {}, 'div': {'remainder': 2},
+           'multistep': [[1, 81], [1, 9], [1, 9], [1, 9], [1, 9]], 'symbols': [[1], [2], [1]]}]]
+            },
 
 }
