@@ -13,5 +13,29 @@ build
 dist
 PrimarySchoolMath.egg-info
 PSM
-config.ini
+webbackend/config.ini
 .idea
+
+
+# dependencies
+/node_modules
+webfrontend/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

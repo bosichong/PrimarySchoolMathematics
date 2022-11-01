@@ -25,9 +25,9 @@ import random
 import click
 from flask import Flask, render_template, jsonify, request
 
-from .APPconfig import AppConfig
-from .PrintPreview import PrintPreview
-from .Psmrcddup import Generator
+from webbackend.APPconfig import AppConfig
+from webbackend.PrintPreview import PrintPreview
+from webbackend.Psmrcddup import Generator
 
 app = Flask('web')
 app.jinja_env.trim_blocks = True

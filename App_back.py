@@ -51,9 +51,9 @@ import wx
 import os
 import shutil
 import random
-from Psmrcddup import Generator
-from PrintPreview import PrintPreview
-from APPconfig import AppConfig
+from webbackend.Psmrcddup import Generator
+from webbackend.PrintPreview import PrintPreview
+from webbackend.APPconfig import AppConfig
 
 
 class MyFrame(wx.Frame):
