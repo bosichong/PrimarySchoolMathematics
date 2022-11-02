@@ -79,13 +79,13 @@ export default function Home() {
         borderTop: '1px solid rgba(0, 0, 0, .125)',
     }));
     // 默认展开panel
-    const [expanded, setExpanded] = React.useState('panel4');
+    const [expanded, setExpanded] = React.useState('panel1');
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
 
     // 运算类型选择
-    // TODO 后续将取消单步的运算选项,直接在运算项和运算类型那里统一设置.
+    // TODO 后续将取消单步的运算选项,直接在运算项和运算类型那里统一设置.后端已经修改完毕，修改前端的设置
     const [signum, setSignum] = useState(1)
     const handleSignumChange = (e) => {
         setSignum(e.target.value)
@@ -123,7 +123,7 @@ export default function Home() {
     }
 
     // 除法法设置
-    const [remainder, setRemainder] = useState(1)
+    const [remainder, setRemainder] = useState(2)
     const handleRemainderChange = (e) => {
         setRemainder(e.target.value)
     }
@@ -289,7 +289,7 @@ export default function Home() {
         console.log(symbols_a1, symbols_a2, symbols_a3, symbols_a4)
         console.log(symbols_b1, symbols_b2, symbols_b3, symbols_b4)
         console.log(symbols_c1, symbols_c2, symbols_c3, symbols_c4)
-        console.log(juanzishu, lieshu, jz_title, inf_title,number,psmtextarea)
+        console.log(juanzishu, lieshu, jz_title, inf_title, number, psmtextarea)
     }
 
     return (
@@ -318,139 +318,51 @@ export default function Home() {
                                         </AccordionSummary>
                                         <AccordionDetails>
 
-                                            <Grid container spacing={2}>
-                                                <Grid item xs={3}>
-                                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                                        <InputLabel id="demo-select-small">几步运算?</InputLabel>
-                                                        <Select
-                                                            labelId="demo-select-small"
-                                                            id="demo-select-small"
-                                                            value={step}
-                                                            label="几步运算?"
-                                                            onChange={handleStepChange}
-                                                        >
-                                                            <MenuItem value={1}>一步运算</MenuItem>
-                                                            <MenuItem value={2}>两步运算</MenuItem>
-                                                            <MenuItem value={3}>三步运算</MenuItem>
-                                                        </Select>
-                                                    </FormControl>
-                                                </Grid>
-                                                <Grid item xs={3}>
-                                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                                        <InputLabel id="demo-signum-small">运算类型</InputLabel>
-                                                        <Select
-                                                            labelId="demo-signum-small"
-                                                            id="demo-signum-small"
-                                                            value={signum}
-                                                            label="运算类型"
-                                                            onChange={handleSignumChange}
-                                                        >
-                                                            <MenuItem value={1}>加法</MenuItem>
-                                                            <MenuItem value={2}>减法</MenuItem>
-                                                            <MenuItem value={3}>乘法</MenuItem>
-                                                            <MenuItem value={4}>除法</MenuItem>
-                                                        </Select>
-                                                    </FormControl>
-                                                </Grid>
-                                                <Grid item xs={3}>
-                                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                                        <InputLabel id="demo-is_result-small">题型设置</InputLabel>
-                                                        <Select
-                                                            labelId="demo-select-small"
-                                                            id="demo-is_result-small"
-                                                            value={is_result}
-                                                            label="题型设置"
-                                                            onChange={handleIsResultChange}
-                                                        >
-                                                            <MenuItem value={1}>求结果</MenuItem>
-                                                            <MenuItem value={2}>求算数项</MenuItem>
-                                                        </Select>
-                                                    </FormControl>
-                                                </Grid>
-                                                <Grid item xs={3}>
-                                                    <FormGroup>
-                                                        <FormControlLabel control={<Switch
-                                                            checked={is_bracket}
-                                                            onChange={handleis_bracketChange}
-                                                        />}
-                                                            labelPlacement="top"
-                                                            label="启用括号"
-                                                        />
-                                                    </FormGroup>
-                                                </Grid>
-                                            </Grid>
-
-                                        </AccordionDetails>
-                                    </Accordion>
-                                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-                                        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-                                            <Typography>加减乘除法设置</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails>
-
-                                            <Grid container spacing={2}>
-                                                <Grid item xs={4}>
-                                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                                        <InputLabel id="demo-carry-small">加法设置</InputLabel>
-                                                        <Select
-                                                            labelId="demo-carry-small"
-                                                            id="demo-carry-small"
-                                                            value={carry}
-                                                            label="加法设置"
-                                                            onChange={handleCarryChange}
-                                                        >
-                                                            <MenuItem value={1}>随机进位</MenuItem>
-                                                            <MenuItem value={2}>加法进位</MenuItem>
-                                                            <MenuItem value={3}>没有进位</MenuItem>
-
-                                                        </Select>
-                                                    </FormControl>
-                                                </Grid>
-                                                <Grid item xs={4}>
-                                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                                        <InputLabel id="demo-sabdication-small">减法设置</InputLabel>
-                                                        <Select
-                                                            labelId="demo-abdication-small"
-                                                            id="demo-abdication-small"
-                                                            value={abdication}
-                                                            label="减法设置"
-                                                            onChange={handleAbdicationChange}
-                                                        >
-                                                            <MenuItem value={1}>随机退位</MenuItem>
-                                                            <MenuItem value={2}>加法退位</MenuItem>
-                                                            <MenuItem value={3}>没有退位</MenuItem>
-
-                                                        </Select>
-                                                    </FormControl>
-                                                </Grid>
-                                                <Grid item xs={4}>
-                                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                                        <InputLabel id="demo-remainder-small">除法设置</InputLabel>
-                                                        <Select
-                                                            labelId="demo-remainder-small"
-                                                            id="demo-remainder-small"
-                                                            value={remainder}
-                                                            label="除法设置"
-                                                            onChange={handleRemainderChange}
-                                                        >
-                                                            <MenuItem value={1}>随机有余数</MenuItem>
-                                                            <MenuItem value={2}>结果整除</MenuItem>
-                                                            <MenuItem value={3}>结果有余数</MenuItem>
-
-                                                        </Select>
-                                                    </FormControl>
-                                                </Grid>
-
-                                            </Grid>
-
-                                        </AccordionDetails>
-                                    </Accordion>
-                                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-                                        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
-                                            <Typography>多步运算的符号和运算数值的范围</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails>
                                             <Grid container spacing={2} sx={{ p: 2, }}>
+                                                <Grid container spacing={2}>
+                                                    <Grid item xs={3}>
+                                                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                                                            <InputLabel id="demo-select-small">几步运算?</InputLabel>
+                                                            <Select
+                                                                labelId="demo-select-small"
+                                                                id="demo-select-small"
+                                                                value={step}
+                                                                label="几步运算?"
+                                                                onChange={handleStepChange}
+                                                            >
+                                                                <MenuItem value={1}>一步运算</MenuItem>
+                                                                <MenuItem value={2}>两步运算</MenuItem>
+                                                                <MenuItem value={3}>三步运算</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                                                            <InputLabel id="demo-is_result-small">题型设置</InputLabel>
+                                                            <Select
+                                                                labelId="demo-select-small"
+                                                                id="demo-is_result-small"
+                                                                value={is_result}
+                                                                label="题型设置"
+                                                                onChange={handleIsResultChange}
+                                                            >
+                                                                <MenuItem value={1}>求结果</MenuItem>
+                                                                <MenuItem value={2}>求算数项</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <FormGroup>
+                                                            <FormControlLabel control={<Switch
+                                                                checked={is_bracket}
+                                                                onChange={handleis_bracketChange}
+                                                            />}
+                                                                labelPlacement="top"
+                                                                label="启用括号"
+                                                            />
+                                                        </FormGroup>
+                                                    </Grid>
+                                                </Grid>
                                                 <Grid item xs={12}>
                                                     <Box
                                                         sx={{
@@ -652,15 +564,78 @@ export default function Home() {
                                                     </Box>
                                                 </Grid>
                                             </Grid>
+
                                         </AccordionDetails>
                                     </Accordion>
-                                    <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
-                                        <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
-                                            <Typography>口算卷子设置</Typography>
+                                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                                        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+                                            <Typography>加减乘除法设置</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails>
 
-                                            <Grid container spacing={2} sx={{ p: 2, }}>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={4}>
+                                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                                                        <InputLabel id="demo-carry-small">加法设置</InputLabel>
+                                                        <Select
+                                                            labelId="demo-carry-small"
+                                                            id="demo-carry-small"
+                                                            value={carry}
+                                                            label="加法设置"
+                                                            onChange={handleCarryChange}
+                                                        >
+                                                            <MenuItem value={1}>随机进位</MenuItem>
+                                                            <MenuItem value={2}>加法进位</MenuItem>
+                                                            <MenuItem value={3}>没有进位</MenuItem>
+
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item xs={4}>
+                                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                                                        <InputLabel id="demo-sabdication-small">减法设置</InputLabel>
+                                                        <Select
+                                                            labelId="demo-abdication-small"
+                                                            id="demo-abdication-small"
+                                                            value={abdication}
+                                                            label="减法设置"
+                                                            onChange={handleAbdicationChange}
+                                                        >
+                                                            <MenuItem value={1}>随机退位</MenuItem>
+                                                            <MenuItem value={2}>加法退位</MenuItem>
+                                                            <MenuItem value={3}>没有退位</MenuItem>
+
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item xs={4}>
+                                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                                                        <InputLabel id="demo-remainder-small">除法设置</InputLabel>
+                                                        <Select
+                                                            labelId="demo-remainder-small"
+                                                            id="demo-remainder-small"
+                                                            value={remainder}
+                                                            label="除法设置"
+                                                            onChange={handleRemainderChange}
+                                                        >
+                                                            <MenuItem value={1}>随机有余数</MenuItem>
+                                                            <MenuItem value={2}>结果整除</MenuItem>
+                                                            <MenuItem value={3}>结果有余数</MenuItem>
+
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+
+                                            </Grid>
+
+                                        </AccordionDetails>
+                                    </Accordion>
+                                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+                                        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+                                            <Typography>口算题卷子设置</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                        <Grid container spacing={2} sx={{ p: 2, }}>
                                                 <Grid item xs={12}>
                                                     <Box
                                                         sx={{
@@ -717,7 +692,6 @@ export default function Home() {
                                                     </Box>
                                                 </Grid>
                                             </Grid>
-
                                         </AccordionDetails>
                                     </Accordion>
                                 </div>
@@ -736,11 +710,11 @@ export default function Home() {
                                     value={number}
                                     onChange={handleNumberChange}
                                 />
-                                
+
                                 <Button variant="contained" size="medium"  >添加口算题</Button>
                                 <Button variant="contained" size="medium"  >清空口算题</Button>
-                                
-                                
+
+
                             </Grid>
                         </Grid>
                         <Grid item xs={12} >
