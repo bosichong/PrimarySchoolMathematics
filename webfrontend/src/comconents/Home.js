@@ -85,7 +85,7 @@ export default function Home() {
     };
 
     // 运算类型选择
-    // todo 后续将取消单步的运算选项,直接在运算项和运算类型那里统一设置.
+    // TODO 后续将取消单步的运算选项,直接在运算项和运算类型那里统一设置.
     const [signum, setSignum] = useState(1)
     const handleSignumChange = (e) => {
         setSignum(e.target.value)

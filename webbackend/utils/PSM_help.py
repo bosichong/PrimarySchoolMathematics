@@ -14,11 +14,11 @@ Author  : andywu1998
 Mail    : 1078539713@qq.com
 '''
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 __all__ = [
 
-    'getPSMstr', 'getMoreStep', 'getOne', 'get_time', 'getRandomNum'
+    'getPSMstr', 'getMoreStep', 'get_time', 'getRandomNum'
 
 ]
 
@@ -80,13 +80,13 @@ def f4(s):
 
 
 def validator(s, result, carry, abdication, remainder):
-    '''
+    """
     算式分解校验器
     Author  : J.sky
     Mail    : bosichong@qq.com
     :param s: 算式
     :return: bool
-    '''
+    """
 
     if isResultOk(s, result):
         if f1(s):
@@ -242,19 +242,7 @@ def isAddSub(s, result, carry, abdication):
             return False
 
 
-def getOne(formulas, signum, result, carry, abdication, remainder, is_result):
-    '''
-    Author  : J.sky
-    Mail    : bosichong@qq.com
-    根据条件生成一道一步算式题
-    :param formulas: 给定的单步加法的两个值
-    :param signum int 加减乘除
-    :param result list 结果范围
-    :param carry: int 加法进位
-    :param is_result: 求结果或求运算项
-    :return: bool or str 成功返回一个符合条件的加法算数题str，失败返回False
-    '''
-    return getMoreStep(formulas, result, [[signum], ], 1, carry, abdication, remainder, 0, is_result)
+
 
 
 def getMoreStep(formulas, result, symbols, step, carry, abdication, remainder, is_bracket, is_result, ):
@@ -275,11 +263,10 @@ def getMoreStep(formulas, result, symbols, step, carry, abdication, remainder, i
     :return: str 一道符合规则的口算运算题
     '''
     f = getRandomNum(formulas, step)
-    str = getPSMstr(f, symbols, step, is_bracket)
-    # print(str)
-    if validator(str, result, carry, abdication, remainder):
-        return getXStepstr(str, is_result)
+    question = getPSMstr(f, symbols, step, is_bracket)
 
+    if validator(question, result, carry, abdication, remainder):
+        return getXStepstr(question, is_result)
     else:
         # print("校验失败")
         return False
@@ -296,6 +283,7 @@ def getPSMstr(formulas, symbols, step, is_bracket):
     :param is_bracket: int  括号
     :return:
     '''
+    # todo 这里的随机一旦遇到难以生成的算式，就会失去随机的效果，后期应该调整添加随机生成算式的判断条件
     ss = ""
     sym = getRandomSymbols(symbols, step)
     for i in range(step):
@@ -426,7 +414,6 @@ def is_addcarry(a, b, ):
     判断加法进位
     :param a: int
     :param b: int
-    :param signum: str
     :return: boolean
     '''
 
@@ -438,7 +425,6 @@ def is_addnocarry(a, b):
     判断加法无进位
     :param a: int
     :param b: int
-    :param signum: str
     :return: boolean
     '''
     return not is_addcarry(a, b)
@@ -452,7 +438,6 @@ def is_abdication(a, b):
     判断减法退位
     :param a: int
     :param b: int
-    :param signum: str
     :return: boolean
     '''
 
@@ -467,7 +452,6 @@ def is_noabdication(a, b):
     判断减法无退位
     :param a: int
     :param b: int
-    :param signum: str
     :return: boolean
     '''
     return not is_abdication(a, b)
@@ -481,7 +465,6 @@ def is_multcarry(a, b):
     判断乘法和乘法是否存在进位
     :param a: int
     :param b: int
-    :param signum: str
     :return: boolean
     '''
 

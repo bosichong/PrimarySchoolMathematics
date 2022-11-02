@@ -13,7 +13,7 @@
 #            vscode
 
 
-'''
+"""
 孩子上小学一年级了，加减乘除的口算就要开始练习了，估计老题肯定会让家长出题，所以提前准备一下.
 
 利用Python开发了一套自动生成小学生口算题的小应用。而且今天是程序员节，撸200行代码庆祝一下。：）
@@ -39,39 +39,24 @@ Mail    : 410093793@qq.com
 Author  : andywu1998
 Mail    : 1078539713@qq.com
 
-'''
+"""
 
 import random
 import re
 
 from utils.PSM_help import *
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 class Generator(object):
-    '''
+    """
     口算题生器核心类，负责生成完整的口算题
-    '''
-    #######加减乘除相关设置#####
-    addattrs = None
-    subattrs = None
-    multattrs = None
-    divattrs = None
-    #####算式种类及算式题个数设置
-    signum = None
-    step = None
-    is_result = None
-    is_bracket = None
-    number = None
-    ########多步算式题选项设置######
-    multistep = None
-    symbols = None
-    data_list = None  # 生成的口算题
+    """
 
-    def __init__(self, addattrs, subattrs, multattrs, divattrs, signum, step, number, is_result, is_bracket, multistep,
+    def __init__(self, addattrs, subattrs, multattrs, divattrs, step, number, is_result, is_bracket, multistep,
                  symbols):
-        '''
+        """
         :param addattrs: dict 加法设置属性，
        进位随机选择项单选，随机1，进位2，不进位3
         {"carry":1,}
@@ -88,12 +73,10 @@ class Generator(object):
         退位随机选择项单选，随机1，整除2，有余数3
         {"remainder":2,}
 
-
-        :param signum: list 包含题型需要的 1+ 2- 3* 4/
         :param step: int 生成几步运算, 默认: 1 取值范围 1-3
         :param is_result :int 0求结果，1求运算项
         :param is_bracket: int 是否需要括号 0不需要 1需要
-        :param num: int 需要生成的题数
+        :param number: int 需要生成的题数
 
 
         :param multistep =None: list 运算项及结果范围设置属性，
@@ -105,7 +88,7 @@ class Generator(object):
         2+3-5  symbols = [[1,2],[1,]]  第一个运算符可以为+或-，第二个运算符只能为+
 
 
-        '''
+        """
 
         if step is None:
             raise Exception("required param signum is missing or signum is None")
@@ -116,49 +99,42 @@ class Generator(object):
         self.subattrs = subattrs
         self.multattrs = multattrs
         self.divattrs = divattrs
-
-        self.signum = signum
         self.step = step
         self.is_result = is_result
         self.is_bracket = is_bracket
         self.number = number
-
         self.multistep = multistep
-
         self.symbols = symbols
-
         self.__data_list = []  # 生成的口算题
 
-    def __getFormula(self):
-        '''
+    def __getformula(self):
+        """
         根据给出的属性返回一道合法的口算题
-        '''
+        return : 一道合法的口算题
+        """
 
-        f = self.get_formulas()
-        if self.step == 1:
-            # 返回一步口算题
-            return getOne(f, self.signum, self.multistep[4], self.addattrs["carry"],
-                          self.subattrs["abdication"], self.divattrs["remainder"],self.is_result)
-        elif self.step >1:
-            return getMoreStep(f, self.multistep[4], self.symbols,self.step, self.addattrs["carry"],
-                          self.subattrs["abdication"], self.divattrs["remainder"],self.is_bracket, self.is_result)
+        f = self.__get_formulas()
+        return getMoreStep(f, self.multistep[4], self.symbols, self.step, self.addattrs["carry"],
+                           self.subattrs["abdication"], self.divattrs["remainder"], self.is_bracket, self.is_result)
 
-    def get_formulas(self):
-        '''
+    def __get_formulas(self):
+        """
         return 口算题算数项的取值范围list
-        '''
+        """
         f = []
-        for i in range(self.step+1):
+        for i in range(self.step + 1):
             f.append(self.multistep[i])
         return f
 
     def generate_data(self):
-        '''根据条件生成所需口算题'''
+        """根据条件生成所需口算题
+        Return: 一组口算题
+        """
 
         slist = []
         # k = 0
         while True:
-            formula = self.__getFormula()  # 生成一道算式题
+            formula = self.__getformula()  # 生成一道算式题
             if formula:
                 slist.append(formula)
                 # k += 1  # 成功添加一道
@@ -171,15 +147,11 @@ class Generator(object):
         return self.__data_list
 
     def produce(self):
-        '''打印预览预留接口'''
-        pass
-
-    def test(self):
-        '''测试使用'''
+        """打印预览预留接口"""
         pass
 
     def get_answer(self):
-        '''生成口算题答案'''
+        """生成口算题答案"""
         answer_list = []
         for item in self.__data_list:
             answer = item.replace("x", "*").replace("÷", "/").replace("=", "")
@@ -196,20 +168,19 @@ class Generator(object):
 def main():
     add = {"carry": 1, }  # 加法设置
     sub = {"abdication": 1, }  # 减法设置
-    mult = { }  # 乘法设置
-    div = { }  # 除法设置
+    mult = {}  # 乘法设置
+    div = {"remainder":2}  # 除法设置
 
-    signum = 4
-    step = 2
+    step = 1
     is_result = 0
-    number = 20
-    is_bracket = 1
+    number = 145
+    is_bracket = 0
 
-    multistep = [[1, 99], [1, 99], [1, 9], [1, 9], [0, 9], ]
+    multistep = [[1, 99], [1, 99], [1, 999], [1, 999], [0, 999], ]
 
-    symbols = [[1, 2], [4], [2, ]]
+    symbols = [[1,2, ], [1,2], [1, 2]]
 
-    g = Generator(add, sub, mult, div, signum, step, number, is_result, is_bracket, multistep, symbols)
+    g = Generator(add, sub, mult, div, step, number, is_result, is_bracket, multistep, symbols)
 
     datalist = g.generate_data()
     print(datalist)
