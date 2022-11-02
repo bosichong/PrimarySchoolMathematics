@@ -36,6 +36,7 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import Stack from '@mui/material/Stack';
 
 
 export default function Home() {
@@ -77,14 +78,14 @@ export default function Home() {
         padding: theme.spacing(2),
         borderTop: '1px solid rgba(0, 0, 0, .125)',
     }));
-    // 默认展开panel1
-    const [expanded, setExpanded] = React.useState('panel3');
+    // 默认展开panel
+    const [expanded, setExpanded] = React.useState('panel4');
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
 
     // 运算类型选择
-
+    // todo 后续将取消单步的运算选项,直接在运算项和运算类型那里统一设置.
     const [signum, setSignum] = useState(1)
     const handleSignumChange = (e) => {
         setSignum(e.target.value)
@@ -248,6 +249,36 @@ export default function Home() {
     }
 
 
+    // ----------------------------------------
+    const [juanzishu, setJuanzishu] = useState("3")
+    const handleJuanzishuChange = (e) => {
+        setJuanzishu(e.target.value)
+    }
+
+    const [lieshu, setLieshu] = useState("4")
+    const handleLieshuChange = (e) => {
+        setLieshu(e.target.value)
+    }
+
+    const [jz_title, setJz_title] = useState("小学生口算题")
+    const handleJz_titleChange = (e) => {
+        setJz_title(e.target.value)
+    }
+
+    const [inf_title, setInf_title] = useState("姓名：__________ 日期：____月____日 时间：________ 对题：____道")
+    const handleInf_titleChange = (e) => {
+        setInf_title(e.target.value)
+    }
+
+    const [number, setNumber] = useState("3")
+    const handleNumberChange = (e) => {
+        setNumber(e.target.value)
+    }
+
+    const [psmtextarea, setPsmtextarea] = useState("")
+    const handlePsmtextareaChange = (e) => {
+        setPsmtextarea(e.target.value)
+    }
 
     // 数据测试
     const handlTest = (e) => {
@@ -258,6 +289,7 @@ export default function Home() {
         console.log(symbols_a1, symbols_a2, symbols_a3, symbols_a4)
         console.log(symbols_b1, symbols_b2, symbols_b3, symbols_b4)
         console.log(symbols_c1, symbols_c2, symbols_c3, symbols_c4)
+        console.log(juanzishu, lieshu, jz_title, inf_title,number,psmtextarea)
     }
 
     return (
@@ -624,14 +656,67 @@ export default function Home() {
                                     </Accordion>
                                     <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
                                         <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
-                                            <Typography>Collapsible Group Item #4</Typography>
+                                            <Typography>口算卷子设置</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails>
 
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                                            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
-                                            sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                            sit amet blandit leo lobortis eget.
+                                            <Grid container spacing={2} sx={{ p: 2, }}>
+                                                <Grid item xs={12}>
+                                                    <Box
+                                                        sx={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            '& > :not(style)': { m: 1 },
+                                                            maxWidth: 622
+                                                        }}
+                                                    >
+                                                        <TextField
+
+                                                            id="demo-helper-text-aligned"
+                                                            label="生成的卷子数量"
+                                                            size="small"
+                                                            value={juanzishu}
+                                                            onChange={handleJuanzishuChange}
+                                                        />
+
+                                                        <TextField
+
+                                                            id="demo-helper-text-aligned-no-helper"
+                                                            label="口算题列数"
+                                                            size="small"
+                                                            value={lieshu}
+                                                            onChange={handleLieshuChange}
+                                                        />
+                                                        <TextField
+
+                                                            id="demo-helper-text-aligned-no-helper"
+                                                            label="卷子标题"
+                                                            size="small"
+                                                            value={jz_title}
+                                                            onChange={handleJz_titleChange}
+                                                        />
+                                                    </Box>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Box
+                                                        sx={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            '& > :not(style)': { m: 1 },
+                                                            maxWidth: 622
+                                                        }}
+                                                    >
+                                                        <TextField
+                                                            fullWidth
+                                                            id="demo-helper-text-aligned-no-helper"
+                                                            label="卷子副标题"
+                                                            size="small"
+                                                            value={inf_title}
+                                                            onChange={handleInf_titleChange}
+                                                        />
+                                                    </Box>
+                                                </Grid>
+                                            </Grid>
 
                                         </AccordionDetails>
                                     </Accordion>
@@ -641,7 +726,37 @@ export default function Home() {
                     </Box>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" onClick={handlTest} >测试数据</Button>
+                    <Box sx={{ flexGrow: 1, my: 1, '& button': { ml: 0.5, mt: 0.2 } }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} >
+                                <TextField
+                                    id="demo-helper-text-aligned-no-helper"
+                                    label="口算题数量"
+                                    size="small"
+                                    value={number}
+                                    onChange={handleNumberChange}
+                                />
+                                
+                                <Button variant="contained" size="medium"  >添加口算题</Button>
+                                <Button variant="contained" size="medium"  >清空口算题</Button>
+                                
+                                
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12} >
+                            <TextField
+                                fullWidth
+                                id="outlined-multiline-static"
+                                label="当前口算题包含内容"
+                                multiline
+                                rows={2}
+                                value={psmtextarea}
+                                onChange={handlePsmtextareaChange}
+                            />
+                            <Stack spacing={2}><Button variant="contained" size="medium"  >点此生成口算题</Button></Stack>
+                            <Button size="small" onClick={handlTest} >测试数据</Button>
+                        </Grid>
+                    </Box>
                 </CardActions>
             </Card>
         </Container>
