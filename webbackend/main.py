@@ -19,6 +19,7 @@ sys.path.append(BASE_DIR)
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware  # 解决跨域
 import uvicorn as uvicorn
+from pydantic import BaseModel
 
 from APPconfig import AppConfig
 from PrintPreview import PrintPreview
@@ -79,8 +80,8 @@ appConfig = AppConfig()
 
 
 @app.get("/test")
-def test(s: str):
-    return s
+def test(data: str):
+    return data
 
 
 @app.post("/get_config_json")
@@ -93,14 +94,15 @@ def getConfigJson():
     return rs
 
 
-@app.get('/api_createPSM')
+@app.get('/api_createpsm')
 def createPSM(json_data: str):
     """创建一组口算题的配置,接收前端送来的一组口算题配置，判断配置是否合法。"""
     jsondata = json.loads(json_data)
-    rs = {"info": isZeroA(jsondata["step"], jsondata["signum"],
+    # print(jsondata)
+    rs = {"info": isZeroA(jsondata["step"],
                           jsondata["multistep"], jsondata["symbols"], jsondata["number"], jsondata["div"]["remainder"],
                           jsondata["is_result"])}
-    return jsondata
+    return rs
 
 
 @app.post('/api_producePSM')
@@ -126,41 +128,26 @@ def getRstr(isok):
     return rs
 
 
-def isZeroA(step, signum, multistep, symbols, number, remainder, is_result):
+def isZeroA(step, multistep, symbols, number, remainder, is_result):
     '''
     运算中除数<=0的判断,及除法结果有余数是不能是用求算数项
     '''
-
-    if step == 1 and signum == 4:
-        if multistep[1][0] <= 0:
-            return 0  # 除数不能为0
-        if remainder != 2 and is_result == 1:
-            return 0  # 求算数项是不能有余数
-
-    # 多步运算时除法余数为零判断
-    if step > 1:
-        if (4 in symbols[0] and multistep[1][0] <= 0) or (
-                4 in symbols[1] and multistep[2][0] <= 0) or (
-                4 in symbols[2] and multistep[3][0] <= 0):
-            return 0
-        if (remainder != 2 and is_result == 1) or (remainder != 2 and step > 1):
-            return 0  # 求算数项是不能有余数，多步的运算的时候不能有余数
+    # TODO 请添加运算符号为空的错误提示
+    # 运算时除法余数为零判断
+    print(multistep, multistep[1][0])
+    if (4 in symbols[0] and multistep[1][1] <= 0) or (
+            4 in symbols[1] and multistep[2][1] <= 0) or (
+            4 in symbols[2] and multistep[3][1] <= 0) :
+        return 0
+    if (remainder != 2 and is_result == 1) or (remainder != 2 and step > 0):
+        return 0  # 求算数项是不能有余数，多步的运算的时候不能有余数
 
     str_number = str(number)
     if step == 1:
-        if signum == 1:
-            return "加法口算题" + str_number + "道|||"
-        elif signum == 2:
-            return "减法口算题" + str_number + "道|||"
-        elif signum == 3:
-            return "乘法口算题" + str_number + "道|||"
-        elif signum == 4:
-            return "除法口算题" + str_number + "道|||"
-        else:
-            raise Exception("没有这个题型哦")
+        # todo 后续修改为反馈详细的添加信息，例如 X步计算加、减口算题XX道
+        return "一步计算口算题" + str_number + "道|||"
     elif step == 2:
         return "两步计算口算题" + str_number + "道|||"
-
     elif step == 3:
         return "三步计算口算题" + str_number + "道|||"
 

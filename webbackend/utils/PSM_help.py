@@ -163,9 +163,6 @@ def isResultOk(str, result):
 
     Author  : J.sky
     Mail    : bosichong@qq.com
-
-
-
     :param str: 一道算式题
     :param list 结果范围
     :return: bool
@@ -184,6 +181,7 @@ def isMultDivOk(s, result, remainder):
     :param result list 结果范围
     :return: bool
     '''
+    # TODO 除法有余数的算式验证又问题,稍后修改
     if re.search("/", s):
         divs = re.split("/", s)
         if int(divs[1]) == 0:
@@ -402,6 +400,7 @@ def getRandomSymbols(symbols, step):
     newList = []
     for i in range(step):
         index = random.randint(0, len(symbols[i]) - 1)
+        # print(index)
         newList.append(symbols[i][index])
     return newList
 

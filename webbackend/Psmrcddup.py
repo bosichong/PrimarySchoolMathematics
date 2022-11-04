@@ -173,12 +173,12 @@ def main():
 
     step = 1
     is_result = 0
-    number = 145
+    number = 14
     is_bracket = 0
 
     multistep = [[1, 99], [1, 99], [1, 999], [1, 999], [0, 999], ]
 
-    symbols = [[1,2, ], [1,2], [1, 2]]
+    symbols = [[1,2], [1,2], [1, 2]]
 
     g = Generator(add, sub, mult, div, step, number, is_result, is_bracket, multistep, symbols)
 
