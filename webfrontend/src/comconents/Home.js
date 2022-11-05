@@ -986,20 +986,19 @@ export default function Home() {
 
                 <CardContent>
                     <Typography gutterBottom variant="body2" component="div">
-                        <img alt="AUR license" src="https://img.shields.io/badge/Python-3.8.8-green?logo=python" />
-                        <img alt="AUR license" src="https://img.shields.io/badge/fastAPI-0.85.1-green" />
-                        <img alt="AUR license" src="https://img.shields.io/badge/React-18.2.0-blue" />
-                        <img alt="AUR license" src="https://img.shields.io/badge/Material UI-5.10.11-blue" />
-
-                        <img alt="AUR license" src="https://img.shields.io/badge/license-Apache--2.0-green" />
+                        <img alt="python-3.8.8" src="https://img.shields.io/badge/Python-3.8.8-green?logo=python" />
+                        <img alt="fastAPI-0.85.1" src="https://img.shields.io/badge/fastAPI-0.85.1-green" />
+                        <img alt="React-18.2.0" src="https://img.shields.io/badge/React-18.2.0-blue" />
+                        <img alt="Material UI-5.10.11" src="https://img.shields.io/badge/Material UI-5.10.11-blue" />
+                        <img alt="license-Apache--2.0" src="https://img.shields.io/badge/license-Apache--2.0-green" />
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         <Link href="https://gitee.com/J_Sky/PrimarySchoolMathematics" color="inherit">
-                            <img alt="AUR license" src="https://img.shields.io/badge/Gitee--PrimarySchoolMathematics-red?logo=gitee" />
+                            <img alt="" src="https://img.shields.io/badge/Gitee--PrimarySchoolMathematics-red?logo=gitee" />
                         </Link>
 
                         <Link href="https://github.com/bosichong/PrimarySchoolMathematics" color="inherit">
-                            <img alt="AUR license" src="https://img.shields.io/badge/Github--PrimarySchoolMathematics-green?logo=github" />
+                            <img alt="" src="https://img.shields.io/badge/Github--PrimarySchoolMathematics-green?logo=github" />
                         </Link>
                     </Typography>
                 </CardContent>

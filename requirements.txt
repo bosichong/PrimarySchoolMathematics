@@ -1,4 +1,0 @@
-uvicorn==0.16.0
-fastapi==0.85.1
-python-dotenv==0.17.1
-python-docx==0.8.10

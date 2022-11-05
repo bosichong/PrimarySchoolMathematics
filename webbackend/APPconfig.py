@@ -85,7 +85,7 @@ class AppConfig:
 
         self.c.set('config', 'number', '30')  # 需要生成的题数
         self.c.set('config', 'juanzishu', '3')  # 需要打印的卷子数
-        self.c.set('config', 'lieshu', '4')  # 需要打印的卷子题列数
+        self.c.set('config', 'lieshu', '3')  # 需要打印的卷子题列数
         self.c.set('config', 'jz_title', '小学生口算题')  # 需要打印的卷子题列数
         self.c.set('config', 'inf_title',
                    '姓名：__________ 日期：____月____日 时间：________ 对题：____道')  # 需要打印的卷子题列数
