@@ -4,9 +4,9 @@
 # @Time    : 2018-11-02
 # @Author  : J.sky
 # @Mail    : bosichong@qq.com
-# @Site    : www.2vv.net
+# @Site    : https://bosichong.github.io/suiyan/blog/
 # @Title   : 基于Python开发的小学生口算题生成器
-# @Url     : http://2vv.net/blog/83.html
+# @Url     : https://bosichong.github.io/suiyan/blog/83.html
 # @Details : Python实现小学生加减乘除速算考试题卷。
 # @Other   : OS X 10.11.6
 #            Python 3.6.1
@@ -14,20 +14,6 @@
 
 
 '''
-孩子上小学一年级了，加减乘除的口算就要开始练习了，估计老题肯定会让家长出题，所以提前准备一下.
-
-利用Python开发了一套自动生成小学生口算题的小应用。而且今天是程序员节，撸200行代码庆祝一下。：）
-
-程序核心功能：
-
-    1.根据条件生成相关的口算题.
-
-    2.保存为.docx用来打印.
-
-
-开心Python Django 学习交流q群：217840699
-
-
 Author  : J.sky
 Mail    : bosichong@qq.com
 
@@ -61,7 +47,7 @@ class PrintPreview:
 
     def __init__(self, l, tit, subtitle, col=3, tsize=26, subsize=11, csize=16,
                 # 默认输出文件地址为项目根目录 
-                docxpath=os.path.join(os.path.dirname(os.path.abspath(__file__)),"")):
+                docxpath=os.path.join(os.path.dirname(os.path.abspath(__file__)),"docx"+os.sep)):
         '''
         :param l: list 需要打印的口算题列表
         :param tit: list 口算页标题
@@ -112,7 +98,7 @@ class PrintPreview:
         else:
             rs = len(l) // self.p_column +1
 
-        # print(rs)
+       
 
         # 将口算题添加到docx表格中
         k = 0  # 计数器
@@ -131,6 +117,7 @@ class PrintPreview:
         table.style.font.color.rgb = RGBColor(54, 0, 0)  # 颜色设置，这里是用RGB颜色
         table.style.font.size = Pt(self.p_content_siae)  # 字体大小设置，和word里面的字号相对应
         print(self.docxpath+'{}.docx'.format(docxname))
+        self.createDir(self.docxpath)#判断目录是否存在并创建
         p_docx.save(self.docxpath+'{}.docx'.format(docxname))  # 输出docx
 
     def produce(self):
@@ -138,6 +125,16 @@ class PrintPreview:
         for l, t in zip(self.p_list, self.p_title):
             self.create_psmdocx(l, t, t + str(k))
             k = k + 1
+
+    def createDir(self,path):
+        '''
+        若目录不存在则，创建一个目录
+        :param path: 路径地址 请传入目录的绝对地址
+        path = os.path.dirname(os.path.abspath(__file__))
+        IMAGES_PATH = os.path.join(path,"chinaztu")
+        '''
+        if not os.path.exists(path):
+            os.makedirs(path)
 
 
 

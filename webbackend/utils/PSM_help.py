@@ -14,11 +14,11 @@ Author  : andywu1998
 Mail    : 1078539713@qq.com
 '''
 
-__version__ = "1.0.0"
+__version__ = "1.1.1"
 
 __all__ = [
 
-    'getPSMstr', 'getMoreStep', 'getOne','get_time','getRandomNum'
+    'getPSMstr', 'getMoreStep', 'get_time', 'getRandomNum'
 
 ]
 
@@ -79,32 +79,32 @@ def f4(s):
         return ss.group(0)
 
 
-def validator(s, result, carry, abdication):
-    '''
+def validator(s, result, carry, abdication, remainder):
+    """
     算式分解校验器
     Author  : J.sky
     Mail    : bosichong@qq.com
     :param s: 算式
     :return: bool
-    '''
+    """
 
     if isResultOk(s, result):
         if f1(s):
 
-            s = validator1(s, result, carry, abdication)
+            s = validator1(s, result, carry, abdication, remainder)
 
             if s:
-                return validator2(s, result, carry, abdication)
+                return validator2(s, result, carry, abdication, remainder)
             else:
                 return False
 
-        else:#校验无括号算式
-            return validator2(s, result, carry, abdication)
+        else:  # 校验无括号算式
+            return validator2(s, result, carry, abdication, remainder)
     else:
         return False
 
 
-def validator1(s, result, carry, abdication):
+def validator1(s, result, carry, abdication, remainder):
     '''
     算式分解校验器提取括号内算式，然后递归给validator2进行算式验证
     本方法可以递归提取括号嵌套算式
@@ -116,7 +116,7 @@ def validator1(s, result, carry, abdication):
     while f1(s):
         fa = f1(s)
         fb = f4(f1(s))
-        r = validator2(fb, result, carry, abdication)
+        r = validator2(fb, result, carry, abdication, remainder)
         if r:
             s = s.replace(fa, "{}".format(int(float(r))))
         else:
@@ -124,7 +124,7 @@ def validator1(s, result, carry, abdication):
     return s
 
 
-def validator2(s, result, carry, abdication):
+def validator2(s, result, carry, abdication, remainder):
     '''
     分解乘除加减法计算结果并校验
         Author  : J.sky
@@ -136,7 +136,7 @@ def validator2(s, result, carry, abdication):
     # 乘除法验证
     while f2(s):
         f = f2(s)
-        if isMultDivOk(f, result):
+        if isMultDivOk(f, result, remainder):
             r = eval(f)
             s = s.replace(f, str(int(float(r))))
             # print(r,s)
@@ -163,9 +163,6 @@ def isResultOk(str, result):
 
     Author  : J.sky
     Mail    : bosichong@qq.com
-
-
-
     :param str: 一道算式题
     :param list 结果范围
     :return: bool
@@ -177,23 +174,35 @@ def isResultOk(str, result):
         return False
 
 
-
-def isMultDivOk(s, result):
+def isMultDivOk(s, result, remainder):
     '''
     判断乘除法正确性
     :param str: 算式
     :param result list 结果范围
     :return: bool
     '''
+    # TODO 除法有余数的算式验证又问题,稍后修改
     if re.search("/", s):
         divs = re.split("/", s)
         if int(divs[1]) == 0:
             return False
-        else:
-            if isResultOk(s, result) and ((int(divs[0]) % int(divs[1])) == 0) and eval(s) > 0 : # 除法，除数不能为0，并且结果在范围内,并且整除无余数
-                return True
-            else:
-                return False
+        else:  # 除法，除数不能为0，并且结果在范围内,并且整除无余数
+            if remainder == 2:
+                if isResultOk(s, result) and ((int(divs[0]) % int(divs[1])) == 0) and eval(s) > 0:
+                    return True
+                else:
+                    return False
+            if remainder == 3:
+                if isResultOk(s, result) and ((int(divs[0]) % int(divs[1])) > 0) and eval(s) > 0:
+                    return True
+                else:
+                    return False
+            elif remainder == 1:
+                if isResultOk(s, result) and eval(s) > 0:
+                    return True
+                else:
+                    return False
+
     if re.search("\*", s):
         return isResultOk(s, result)  # 乘法结果在范围内
 
@@ -231,22 +240,10 @@ def isAddSub(s, result, carry, abdication):
             return False
 
 
-def getOne(formulas, signum, result, carry, abdication, is_result):
-    '''
-    Author  : J.sky
-    Mail    : bosichong@qq.com
-    根据条件生成一道一步算式题
-    :param formulas: 给定的单步加法的两个值
-    :param signum int 加减乘除
-    :param result list 结果范围
-    :param carry: int 加法进位
-    :param is_result: 求结果或求运算项
-    :return: bool or str 成功返回一个符合条件的加法算数题str，失败返回False
-    '''
-    return getMoreStep(formulas, result, [[signum], ], 1, carry, abdication, 0, is_result)
 
 
-def getMoreStep(formulas, result, symbols, step, carry, abdication, is_bracket, is_result, ):
+
+def getMoreStep(formulas, result, symbols, step, carry, abdication, remainder, is_bracket, is_result, ):
     '''
 
 
@@ -264,11 +261,11 @@ def getMoreStep(formulas, result, symbols, step, carry, abdication, is_bracket, 
     :return: str 一道符合规则的口算运算题
     '''
     f = getRandomNum(formulas, step)
-    str = getPSMstr(f, symbols, step, is_bracket)
-    # print(str)
-    if validator(str, result, carry, abdication):
-        return getXStepstr(str, is_result)
+    question = getPSMstr(f, symbols, step, is_bracket)
 
+    if validator(question, result, carry, abdication, remainder):
+        # print(is_result)·
+        return getXStepstr(question, is_result)
     else:
         # print("校验失败")
         return False
@@ -285,6 +282,7 @@ def getPSMstr(formulas, symbols, step, is_bracket):
     :param is_bracket: int  括号
     :return:
     '''
+    # todo 这里的随机一旦遇到难以生成的算式，就会失去随机的效果，后期应该调整添加随机生成算式的判断条件
     ss = ""
     sym = getRandomSymbols(symbols, step)
     for i in range(step):
@@ -330,6 +328,7 @@ def getXStepstr(src, is_result):
     :param is_result: 0or1
     :return: str
     '''
+    
     if is_result == 0:
         return repSymStr(src) + "="
     elif is_result == 1:
@@ -402,7 +401,9 @@ def getRandomSymbols(symbols, step):
     '''
     newList = []
     for i in range(step):
+        
         index = random.randint(0, len(symbols[i]) - 1)
+        # print(index)
         newList.append(symbols[i][index])
     return newList
 
@@ -415,7 +416,6 @@ def is_addcarry(a, b, ):
     判断加法进位
     :param a: int
     :param b: int
-    :param signum: str
     :return: boolean
     '''
 
@@ -427,7 +427,6 @@ def is_addnocarry(a, b):
     判断加法无进位
     :param a: int
     :param b: int
-    :param signum: str
     :return: boolean
     '''
     return not is_addcarry(a, b)
@@ -441,7 +440,6 @@ def is_abdication(a, b):
     判断减法退位
     :param a: int
     :param b: int
-    :param signum: str
     :return: boolean
     '''
 
@@ -456,7 +454,6 @@ def is_noabdication(a, b):
     判断减法无退位
     :param a: int
     :param b: int
-    :param signum: str
     :return: boolean
     '''
     return not is_abdication(a, b)
@@ -470,7 +467,6 @@ def is_multcarry(a, b):
     判断乘法和乘法是否存在进位
     :param a: int
     :param b: int
-    :param signum: str
     :return: boolean
     '''
 
@@ -521,7 +517,6 @@ def getRandomNum(list, step):
     newList = []
     for i in range(0, step + 1):
         newList.append(random.randint(list[i][0], list[i][1]))
-
     return newList
 
 
@@ -558,9 +553,12 @@ def main():
     # 生成算式测试
     # print(getPSMstr([5,8,9,9,8],[[1,2],[1,],[2],[1,]],4,1))
 
-    print(getMoreStep([[1, 55], [1, 99], [1, 99], [1, 9]], [1, 99], [[1, 3], [4], [4]], 2, 1, 1, 1, 0))
+    # print(getMoreStep([[1, 55], [1, 99], [1, 99], [1, 9]], [1, 99], [[1, 3], [4], [4]], 2, 1, 1, 1, 0))
 
     # print(isMultDivOk('18/9',[1,99]))
+    # 除法测试 整除
+    print(getMoreStep([[10, 100], [1, 20], [1, 99], [1, 9]],
+          [1, 99], [[4], [4], [4]], 1, 1, 1, 2, 0, 0))
 
 
 if __name__ == '__main__':
