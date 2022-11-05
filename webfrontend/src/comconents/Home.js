@@ -370,10 +370,10 @@ export default function Home() {
         psm_b.docx = psmdocx
         psm_b.jz_title = jz_title
         psm_b.inf_title = inf_title
-        console.log(psm_a_data)
+        // console.log(psm_a_data)
         const psm_data = [psm_a_data, psm_b]
         const psmjson_data = JSON.stringify(psm_data)
-        console.log(psm_data)
+        // console.log(psm_data)
         axios.get(baseURL + '/api_producepsm', {
             params: {
                 json_data: psmjson_data
@@ -392,6 +392,7 @@ export default function Home() {
 
     }
     useEffect(() => {
+        console.log('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
         // 界面初始化
         // 完成了部分初始化,目前多步运算加载的时候无法正常渲染组件
         axios.get(baseURL + '/api_getconfigjson',).then(function (res) {

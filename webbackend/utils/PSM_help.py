@@ -264,7 +264,7 @@ def getMoreStep(formulas, result, symbols, step, carry, abdication, remainder, i
     question = getPSMstr(f, symbols, step, is_bracket)
 
     if validator(question, result, carry, abdication, remainder):
-        # print(is_result)
+        # print(is_result)·
         return getXStepstr(question, is_result)
     else:
         # print("校验失败")

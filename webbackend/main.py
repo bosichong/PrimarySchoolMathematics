@@ -177,9 +177,9 @@ def produce_PSM(json_data):
             psm_title.append(json_data[1]["jz_title"])
         # print(self.psm_title)
         subtit = json_data[1]["inf_title"]
-
+        print(json_data[1]["docx"])
         pp = PrintPreview(psm_list, psm_title,
-                          subtit, col=json_data[1]["lieshu"], )
+                          subtit, col=json_data[1]["lieshu"], docxpath=json_data[1]["docx"])
         pp.produce()  # 生成docx
         psm_list.clear()  # 清空打印列表。
         # print(type(json_data))
