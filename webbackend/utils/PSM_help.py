@@ -264,6 +264,7 @@ def getMoreStep(formulas, result, symbols, step, carry, abdication, remainder, i
     question = getPSMstr(f, symbols, step, is_bracket)
 
     if validator(question, result, carry, abdication, remainder):
+        # print(is_result)
         return getXStepstr(question, is_result)
     else:
         # print("校验失败")
@@ -327,6 +328,7 @@ def getXStepstr(src, is_result):
     :param is_result: 0or1
     :return: str
     '''
+    
     if is_result == 0:
         return repSymStr(src) + "="
     elif is_result == 1:
@@ -399,6 +401,7 @@ def getRandomSymbols(symbols, step):
     '''
     newList = []
     for i in range(step):
+        
         index = random.randint(0, len(symbols[i]) - 1)
         # print(index)
         newList.append(symbols[i][index])
@@ -514,7 +517,6 @@ def getRandomNum(list, step):
     newList = []
     for i in range(0, step + 1):
         newList.append(random.randint(list[i][0], list[i][1]))
-
     return newList
 
 

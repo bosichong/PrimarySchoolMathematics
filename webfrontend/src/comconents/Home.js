@@ -45,7 +45,15 @@ export default function Home() {
 
     const baseURL = 'http://localhost:8000'
     const psm_a = [] //最后需要生成的口算题参数数组
+    const psm_b = {} // 其他口算卷子的剩余参数
+    const [psm_a_data, setpsm_a_data] = useState([]);
     const [psm_info, setpsm_info] = useState('');
+
+
+
+    // 定义一些用来隐藏基本设置中运算符号和算数项的css display变量,根据几步运算来现实或隐藏.
+    const [syb, setSyb] = useState('none') //第2步运算符号
+    const [syc, setSyc] = useState('none') //第3步运算符号
 
     // 弹出信息图是窗口
     const [psmalert, setPsmalert] = useState(false);
@@ -64,18 +72,19 @@ export default function Home() {
 
     // 几步运算
     const [step, setStep] = useState(1)
+
     const handleStepChange = (e) => {
         let k = e.target.value
         setStep(k)
         // 多步运算时ui组件的展示与隐藏
-        if (k == 1) {
+        if (k === 1) {
             setSyb("none")
             setSyc("none")
         }
-        else if (k == 2) {
+        else if (k === 2) {
             setSyc("none")
             setSyb("flex")
-        } else if (k == 3) {
+        } else if (k === 3) {
             setSyc("flex")
             setSyb("flex")
         }
@@ -170,7 +179,7 @@ export default function Home() {
     // 多步运算时的符号选择
 
     // 第1步运算符号
-    const [symbols_a1, setSymbols_a1] = useState(true)
+    const [symbols_a1, setSymbols_a1] = useState(false)
     const handleSymbols_a1Change = (e) => {
         setSymbols_a1(e.target.checked)
     }
@@ -191,7 +200,7 @@ export default function Home() {
     }
 
     // 第2步运算符号
-    const [symbols_b1, setSymbols_b1] = useState(true)
+    const [symbols_b1, setSymbols_b1] = useState(false)
     const handleSymbols_b1Change = (e) => {
         setSymbols_b1(e.target.checked)
     }
@@ -212,7 +221,7 @@ export default function Home() {
     }
 
     // 第3步运算符号
-    const [symbols_c1, setSymbols_c1] = useState(true)
+    const [symbols_c1, setSymbols_c1] = useState(false)
     const handleSymbols_c1Change = (e) => {
         setSymbols_c1(e.target.checked)
     }
@@ -234,6 +243,9 @@ export default function Home() {
 
 
     // ----------------------------------------
+
+
+    const [psmdocx, setpsmdocx] = useState('')
     const [juanzishu, setJuanzishu] = useState("3")
     const handleJuanzishuChange = (e) => {
         setJuanzishu(e.target.value)
@@ -265,17 +277,15 @@ export default function Home() {
     }
 
     // ----------------------
-    // 定义一些用来隐藏基本设置中运算符号和算数项的css display变量,根据几步运算来现实或隐藏.
-    const [syb, setSyb] = useState("none") //第2步运算符号
-    const [syc, setSyc] = useState("none") //第3步运算符号
+
 
     const handleCreatePSM = () => {
         /**
          * 创建一组口算题的配置（为当前口算题添加内容）
          */
         let psm_tmp = {}
-        psm_tmp.step = step
-        psm_tmp.number = number
+        psm_tmp.step = parseInt(step)
+        psm_tmp.number = parseInt(number)
         psm_tmp.is_result = is_result
         if (is_bracket) {
             psm_tmp.is_bracket = 1
@@ -284,14 +294,14 @@ export default function Home() {
         }
 
         psm_tmp.add = {
-            "carry": carry
+            "carry": parseInt(carry)
         }
         psm_tmp.sub = {
-            "abdication": abdication
+            "abdication": parseInt(abdication)
         }
         psm_tmp.mult = {}
         psm_tmp.div = {
-            "remainder": remainder
+            "remainder": parseInt(remainder)
         }
 
         // 算数项
@@ -311,7 +321,6 @@ export default function Home() {
         symadd(ss_c, symbols_c1, 1); symadd(ss_c, symbols_c2, 2); symadd(ss_c, symbols_c3, 3); symadd(ss_c, symbols_c4, 4);
         psm_tmp.symbols = [ss_a, ss_b, ss_c]
         const json_data = JSON.stringify(psm_tmp)
-        const tempdata = "dfsdfsdfdsf"
         // console.log(json_data)
         axios.get(baseURL + '/api_createpsm', {
             params: {
@@ -319,54 +328,171 @@ export default function Home() {
             }
         },//{ headers: { 'Content-Type': 'application/json' } },
         ).then(function (res) {
-            if (res.data.info != '0') {
+            if (res.data.info !== 0) {
                 // console.log(res.data.info)
                 let temptext = psmtextarea
                 temptext += res.data.info
                 psm_a.push(json_data)
+                setpsm_a_data(psm_a)
                 setPsmtextarea(temptext)
             } else {
                 // console.log("口算题配置错误!")
-                setpsm_info("口算题配置错误!") 
+                setpsm_info("口算题配置错误!添加失败")
                 setPsmalert(true)
             }
         }).catch(function (error) {
+            setpsm_info("程序错误!添加失败")
+            setPsmalert(true)
             console.log(error)
         })
 
     }
-
+    // 算数符号数组添加方法
     const symadd = (arr, sym, int) => {
         if (sym) {
             arr.push(int)
         }
     }
 
+    // 清空所有口算题参数和提示窗口
     const cleartext = () => {
-        // 清空所有口算题参数和提示窗口
+
         setPsmtextarea("")
         psm_a.length = 0
+        setpsm_a_data([])
     }
 
+    const handleproducePSM = () => {
+        // 生成口算题卷子并保存到/docx目录下
+        //拼装剩余参数
+        psm_b.juanzishu = parseInt(juanzishu)
+        psm_b.lieshu = parseInt(lieshu)
+        psm_b.docx = psmdocx
+        psm_b.jz_title = jz_title
+        psm_b.inf_title = inf_title
+        console.log(psm_a_data)
+        const psm_data = [psm_a_data, psm_b]
+        const psmjson_data = JSON.stringify(psm_data)
+        console.log(psm_data)
+        axios.get(baseURL + '/api_producepsm', {
+            params: {
+                json_data: psmjson_data
+            }
+        },).then(function (res) {
+            if (res.data.info) {
+                setpsm_info(res.data.info)
+                setPsmalert(true)
+            } else {
 
+            }
+
+        }).catch(function (error) {
+
+        })
+
+    }
     useEffect(() => {
         // 界面初始化
-        // TODO 加载组件初始化的数据
+        // 完成了部分初始化,目前多步运算加载的时候无法正常渲染组件
+        axios.get(baseURL + '/api_getconfigjson',).then(function (res) {
+            // console.log(res.data.config)
+            // 一些参数初始化
+            let config = res.data.config
+
+            setStep(config.step)
+            setis_result(config.is_result)
+            if (config.is_bracket > 0) {
+                setIs_bracket(true)
+            } else {
+                setIs_bracket(false)
+            }
+            setpsmdocx(config.docx)
+            setNumber(config.number)
+            setJuanzishu(config.juanzishu)
+            setLieshu(config.lieshu)
+            setJz_title(config.jz_title)
+            setInf_title(config.inf_title)
+
+
+            // 算数项取值范围初始化
+            setMultistep_a1(config.multistep[0][0])
+            setMultistep_a2(config.multistep[0][1])
+            setMultistep_b1(config.multistep[1][0])
+            setMultistep_b2(config.multistep[1][1])
+            setMultistep_c1(config.multistep[2][0])
+            setMultistep_c2(config.multistep[2][1])
+            setMultistep_d1(config.multistep[3][0])
+            setMultistep_d2(config.multistep[3][1])
+            setMultistep_e1(config.multistep[4][0])
+            setMultistep_e2(config.multistep[4][1])
+
+            // 运算符号初始化
+            getsymbols('a', config.symbols[0])
+            getsymbols('b', config.symbols[1])
+            getsymbols('c', config.symbols[2])
+
+            // 加减乘除法的规则设置
+            setCarry(config.add.carry)
+            setAbdication(config.sub.abdication)
+            setRemainder(config.div.remainder)
+
+
+        })
+
 
     }, [])
+    // 根据配置文件更新算数符号
+    const getsymbols = (s, array) => {
+        for (let index = 0; index < array.length; index++) {
+            const element = array[index];
+            // console.log(element)
+            if (s === 'a' && element === 1) {
+                setSymbols_a1(true)
+            } else if (s === 'a' && element === 2) {
+                setSymbols_a2(true)
+            } else if (s === 'a' && element === 3) {
+                setSymbols_a3(true)
+            } else if (s === 'a' && element === 4) {
+                setSymbols_a4(true)
+            }else if (s === 'b' && element === 1) {
+                setSymbols_b1(true)
+            } else if (s === 'b' && element === 2) {
+                setSymbols_b2(true)
+            } else if (s === 'b' && element === 3) {
+                setSymbols_b3(true)
+            } else if (s === 'b' && element === 4) {
+                setSymbols_b4(true)
+            }else if (s === 'c' && element === 1) {
+                setSymbols_c1(true)
+            } else if (s === 'c' && element === 2) {
+                setSymbols_c2(true)
+            } else if (s === 'c' && element === 3) {
+                setSymbols_c3(true)
+            } else if (s === 'c' && element === 4) {
+                setSymbols_c4(true)
+            }
+        }
+
+
+    }
+
+
+
+
+
 
     // 数据测试
-    const handlTest = (e) => {
-        // console.log(step, is_result, is_bracket)
-        // console.log(carry, abdication, remainder)
-        // console.log(multistep_a1, multistep_a2, multistep_b1, multistep_b2, multistep_c1, multistep_c2, multistep_d1, multistep_d2,
-        //     multistep_e1, multistep_e2)
-        // console.log(symbols_a1, symbols_a2, symbols_a3, symbols_a4)
-        // console.log(symbols_b1, symbols_b2, symbols_b3, symbols_b4)
-        // console.log(symbols_c1, symbols_c2, symbols_c3, symbols_c4)
-        // console.log(juanzishu, lieshu, jz_title, inf_title, number, psmtextarea)
-        // console.log(handleCreatePSM())
-    }
+    // const handlTest = (e) => {
+    //     console.log(step, is_result, is_bracket)
+    //     console.log(carry, abdication, remainder)
+    //     console.log(multistep_a1, multistep_a2, multistep_b1, multistep_b2, multistep_c1, multistep_c2, multistep_d1, multistep_d2,
+    //         multistep_e1, multistep_e2)
+    //     console.log(symbols_a1, symbols_a2, symbols_a3, symbols_a4)
+    //     console.log(symbols_b1, symbols_b2, symbols_b3, symbols_b4)
+    //     console.log(symbols_c1, symbols_c2, symbols_c3, symbols_c4)
+    //     console.log(juanzishu, lieshu, jz_title, inf_title, number, psmtextarea)
+    //     console.log(handleCreatePSM())
+    // }
 
     return (
         <Container component="main" >
@@ -557,7 +683,7 @@ export default function Home() {
                                         }}
                                     >
                                         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                            <FormLabel component="legend">第3处运算符号</FormLabel>
+                                            <FormLabel component="legend">第3步运算符号</FormLabel>
                                             <FormGroup aria-label="position" row>
                                                 <FormControlLabel control={<Checkbox checked={symbols_c1} onChange={handleSymbols_c1Change} />} label="+(加法)" />
                                                 <FormControlLabel control={<Checkbox checked={symbols_c2} onChange={handleSymbols_c2Change} />} label="-(减法)" />
@@ -656,7 +782,7 @@ export default function Home() {
                                 value={psmtextarea}
                                 onChange={handlePsmtextareaChange}
                             />
-                            <Stack spacing={2}><Button variant="contained" size="medium"  >点此生成口算题</Button></Stack>
+                            <Stack spacing={2}><Button variant="contained" size="medium" onClick={handleproducePSM}  >点此生成口算题</Button></Stack>
                             {/* <Button size="small" onClick={handlTest} >测试数据</Button> */}
                         </Grid>
                     </Box>
@@ -692,8 +818,8 @@ export default function Home() {
                                         label="题型设置"
                                         onChange={handleIsResultChange}
                                     >
-                                        <MenuItem value={1}>求结果</MenuItem>
-                                        <MenuItem value={2}>求算数项</MenuItem>
+                                        <MenuItem value={0}>求结果</MenuItem>
+                                        <MenuItem value={1}>求算数项</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormGroup>
@@ -830,6 +956,8 @@ export default function Home() {
 
             {/* 消息警告提示 */}
             <Dialog
+                fullWidth
+                maxWidth={'xs'}
                 open={psmalert}
                 onClose={handlepsmalertClose}
                 aria-labelledby="alert-dialog-title"
@@ -844,45 +972,40 @@ export default function Home() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    
+
                     <Button onClick={handlepsmalertClose} autoFocus>
                         确认关闭
                     </Button>
                 </DialogActions>
             </Dialog>
 
-            <Box
-                sx={{
-                    alignItems: 'center',
-                    width: '100%',
-                    mx: "auto", my: 1, maxWidth: 600
-                }}
-            >
-                <Typography variant="body2" gutterBottom display="block">
-                    孩子上小学一年级了，加减乘除的口算就要开始练习了，估计老师肯定会让家长出题，所以提前准备一下，利用Python开发了一套自动生成小学生口算题的小应用。
-                    为了让程序员老爹解放抄题的双手，让你拥有更多的时间去写代码而不用去手写几道口算题而伤神伤脑。
-                    所以有或没有娃子的程序员爹爹加入一起来继续优化这个开源小程序的？有什么点子，发现什么BUG，欢迎提出issue。
-                    仅以此软件，献给那些热爱Python、热爱生活、热爱孩子的程序员老爹们！
-                </Typography>
-
-                <Typography variant="overline" display="block" gutterBottom>
-                    本程序源码仓库:
-
-                </Typography>
-                <Typography variant="overline" display="block" gutterBottom>
-                    <Link href="https://gitee.com/J_Sky/PrimarySchoolMathematics" color="inherit">
-                        国内码云
-                    </Link>
-                </Typography>
-                <Typography variant="overline" display="block" gutterBottom>
-                    <Link href="https://github.com/bosichong/PrimarySchoolMathematics" color="inherit">
-                        Github
-                    </Link>
-                </Typography>
 
 
-            </Box>
-        </Container>
+            <Card sx={{ mx: "auto", my: 2, maxWidth: 600 }}>
+
+                <CardContent>
+                    <Typography gutterBottom variant="body2" component="div">
+                        <img alt="AUR license" src="https://img.shields.io/badge/Python-3.8.8-green?logo=python" />
+                        <img alt="AUR license" src="https://img.shields.io/badge/fastAPI-0.85.1-green" />
+                        <img alt="AUR license" src="https://img.shields.io/badge/React-18.2.0-blue" />
+                        <img alt="AUR license" src="https://img.shields.io/badge/Material UI-5.10.11-blue" />
+
+                        <img alt="AUR license" src="https://img.shields.io/badge/license-Apache--2.0-green" />
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        <Link href="https://gitee.com/J_Sky/PrimarySchoolMathematics" color="inherit">
+                            <img alt="AUR license" src="https://img.shields.io/badge/Gitee--PrimarySchoolMathematics-red?logo=gitee" />
+                        </Link>
+
+                        <Link href="https://github.com/bosichong/PrimarySchoolMathematics" color="inherit">
+                            <img alt="AUR license" src="https://img.shields.io/badge/Github--PrimarySchoolMathematics-green?logo=github" />
+                        </Link>
+                    </Typography>
+                </CardContent>
+
+            </Card>
+
+        </Container >
     );
 }
 

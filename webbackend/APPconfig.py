@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding=utf-8 -*-
-
+import json
 # @Time    : 2018-11-02
 # @Author  : J.sky
 # @Mail    : bosichong@qq.com
@@ -13,7 +13,7 @@
 #            vscode
 
 
-import os
+import os,json
 from configparser import ConfigParser
 
 __version__ = "0.1.0"
@@ -64,7 +64,7 @@ class AppConfig:
 
         self.c.set('config', 'docx', self.DOCX)  # 设置文件默认保存目录
 
-        self.c.set('config', 'signum', '1')  # 包含题型需要的 1+ 2- 3* 4/
+
         self.c.set('config', 'step', '1')  # 生成几步运算, 默认: 1 取值范围 1-3
         self.c.set('config', 'is_result', '0')  # int 0求结果，1求运算项
         self.c.set('config', 'is_bracket', '0')  # int 是否需要括号 0不需要 1需要
@@ -113,7 +113,6 @@ class AppConfig:
         div = {"remainder":  int(self.c.get(
             'divattrs', 'remainder')), }  # 除法设置
 
-        signum = int(self.c.get('config', 'signum'))
         step = int(self.c.get('config', 'step'))
         number = int(self.c.get('config', 'number'))
         is_result = int(self.c.get('config', 'is_result'))
@@ -134,7 +133,7 @@ class AppConfig:
         jz_title = self.c.get("config", "jz_title")
         inf_title = self.c.get("config", "inf_title")
         docx = self.c.get('config', 'docx')
-        tempconfig = {"add": add, "sub": sub, "mult": mult, "div": div, "signum": signum, "step": step, "number": number,
+        tempconfig = {"add": add, "sub": sub, "mult": mult, "div": div, "step": step, "number": number,
                       "is_result": is_result, "is_bracket": is_bracket, "multistep": multistep, "symbols": symbols,
                       "juanzishu": juanzishu, "lieshu": lieshu, "jz_title": jz_title, "inf_title": inf_title, "docx": docx,
                       }
@@ -147,10 +146,9 @@ class AppConfig:
         
         '''
         # 分解数据，用来保存INI
-        l1 = data[0][-1]
+        l1 = json.loads(data[0][-1])
         l2 = data[1]
         self.c.set('config', 'docx', l2["docx"])
-        self.c.set('config', 'signum', str(l1["signum"]))
         self.c.set('config', 'step', str(l1["step"]))
         self.c.set('config', 'is_result', str(l1["is_result"]))
         self.c.set('config', 'is_bracket', str(l1["is_bracket"]))

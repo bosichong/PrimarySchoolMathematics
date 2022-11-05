@@ -9,7 +9,7 @@
 @time     :2022/10/31
 """
 import os, sys, json
-from random import random
+import random
 
 from PrintPreview import PrintPreview
 
@@ -84,7 +84,7 @@ def test(data: str):
     return data
 
 
-@app.post("/get_config_json")
+@app.get("/api_getconfigjson")
 def getConfigJson():
     """
     打开程序首页后加载程序的默认配置
@@ -95,7 +95,7 @@ def getConfigJson():
 
 
 @app.get('/api_createpsm')
-def createPSM(json_data: str):
+def createpsm(json_data: str):
     """创建一组口算题的配置,接收前端送来的一组口算题配置，判断配置是否合法。"""
     jsondata = json.loads(json_data)
     # print(jsondata)
@@ -105,11 +105,12 @@ def createPSM(json_data: str):
     return rs
 
 
-@app.post('/api_producePSM')
-def producePSM(jsondata: str):
+@app.get('/api_producepsm')
+def producepsm(json_data: str):
     '''
     接受前端发来的口算题配置生成口算题并保存到文件
     '''
+    jsondata = json.loads(json_data)
     isok = produce_PSM(jsondata)
     rs = getRstr(isok)
     return rs
@@ -124,7 +125,7 @@ def getRstr(isok):
     if isok:
         rs = {"info": "口算题生成完毕！"}
     else:
-        rs = {"info": "口算题生成失败！"}
+        rs = {"info": "程序运行失败！是不是还没有添加口算题就点了生成按钮？"}
     return rs
 
 
@@ -132,14 +133,17 @@ def isZeroA(step, multistep, symbols, number, remainder, is_result):
     '''
     运算中除数<=0的判断,及除法结果有余数是不能是用求算数项
     '''
-    # TODO 请添加运算符号为空的错误提示
-    # 运算时除法余数为零判断
-    print(multistep, multistep[1][0])
+    # TODO 
+    # 请添加运算符号为空的错误提示,当运算符号没有选择的时候程序运行会出错
+    # 还有算数项最小数值大于最大数值的时候程序会出错，也要判断以下。一步运算的时候开启括号会添加括号
+    # 
+    # print(multistep, multistep[1][0])
     if (4 in symbols[0] and multistep[1][1] <= 0) or (
             4 in symbols[1] and multistep[2][1] <= 0) or (
             4 in symbols[2] and multistep[3][1] <= 0) :
         return 0
-    if (remainder != 2 and is_result == 1) or (remainder != 2 and step > 0):
+    # print(remainder,is_result)
+    if (remainder != 2 and is_result == 1) or (remainder != 2 and step > 1):
         return 0  # 求算数项是不能有余数，多步的运算的时候不能有余数
 
     str_number = str(number)
@@ -156,7 +160,7 @@ def produce_PSM(json_data):
     '''发布口算题保存.docx文件'''
     psm_list = []  # 口算题列表
     psm_title = []  # 标题列表
-    print(json_data)
+
     if len(json_data[0]) == 0:
         print('还没有添加口算题到列表中哈！')  # 打印测试
         return 0
@@ -178,6 +182,7 @@ def produce_PSM(json_data):
                           subtit, col=json_data[1]["lieshu"], )
         pp.produce()  # 生成docx
         psm_list.clear()  # 清空打印列表。
+        # print(type(json_data))
         appConfig.saveAll(json_data)  # 保存所有配置项
         # self.movdocx()
         return 1
@@ -191,10 +196,10 @@ def getPsmList(json_data):
     '''
     templist = []
     for j in json_data[0]:
-        # print(j)
+        j = json.loads(j)
         g = Generator(addattrs=j["add"], subattrs=j["sub"], multattrs=j["mult"], divattrs=j["div"],
                       symbols=j["symbols"], multistep=j[
-                "multistep"], number=j["number"], signum=j["signum"], step=j["step"],
+                "multistep"], number=j["number"], step=j["step"],
                       is_result=j["is_result"], is_bracket=j["is_bracket"], )
         templist = templist + g.generate_data()
     return templist
