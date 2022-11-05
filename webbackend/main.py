@@ -46,6 +46,8 @@ description = """
 PrimarySchoolMath一套自动生成小学生口算题的小应用. 🚀
 """
 
+
+
 app = FastAPI(
     title="PrimarySchoolMath",
     description=description,
@@ -177,7 +179,7 @@ def produce_PSM(json_data):
             psm_title.append(json_data[1]["jz_title"])
         # print(self.psm_title)
         subtit = json_data[1]["inf_title"]
-        print(json_data[1]["docx"])
+        # print(psm_list)
         pp = PrintPreview(psm_list, psm_title,
                           subtit, col=json_data[1]["lieshu"], docxpath=json_data[1]["docx"])
         pp.produce()  # 生成docx
@@ -218,7 +220,8 @@ def q_PSM(json_data):
         psm_list.append(templist)  # 添加到list 准备后期打印
         # 为生成的文件起名r
         # psm_title.clear()
-
+    
+    
     for i in range(json_data[1]["juanzishu"]):
         psm_title.append(json_data[1]["jz_title"])
 
@@ -231,4 +234,6 @@ def q_PSM(json_data):
 
 
 if __name__ == '__main__':
+    print('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
     uvicorn.run(app='main:app', host="127.0.0.1", port=8000, reload=True, )
+    

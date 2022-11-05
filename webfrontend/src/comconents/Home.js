@@ -40,11 +40,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+const psm_a = [] //最后需要生成的口算题参数数组
 
 export default function Home() {
 
     const baseURL = 'http://localhost:8000'
-    const psm_a = [] //最后需要生成的口算题参数数组
+    
     const psm_b = {} // 其他口算卷子的剩余参数
     const [psm_a_data, setpsm_a_data] = useState([]);
     const [psm_info, setpsm_info] = useState('');
@@ -332,6 +333,7 @@ export default function Home() {
                 // console.log(res.data.info)
                 let temptext = psmtextarea
                 temptext += res.data.info
+                // psm_a 不是全局变量,每次添加的数据都会丢失
                 psm_a.push(json_data)
                 setpsm_a_data(psm_a)
                 setPsmtextarea(temptext)

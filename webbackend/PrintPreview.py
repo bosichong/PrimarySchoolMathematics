@@ -98,7 +98,7 @@ class PrintPreview:
         else:
             rs = len(l) // self.p_column +1
 
-        # print(rs)
+       
 
         # 将口算题添加到docx表格中
         k = 0  # 计数器
