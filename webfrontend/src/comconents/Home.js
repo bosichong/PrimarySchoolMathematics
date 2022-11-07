@@ -2,6 +2,7 @@ import img_01 from '../img_01.jpeg'
 import React from 'react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -22,30 +23,22 @@ import Select from '@mui/material/Select';
 
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import FormLabel from '@mui/material/FormLabel';
-
-import Link from '@mui/material/Link';
-
-
-
 import Stack from '@mui/material/Stack';
 
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import InfoDialog from './InfoDialog';
+import Footer from './Footer';
+import OtherParameters from './OtherParameters';
 
 const psm_a = [] //最后需要生成的口算题参数数组
 
 export default function Home() {
 
     const baseURL = 'http://localhost:8000'
-    
+
     const psm_b = {} // 其他口算卷子的剩余参数
     const [psm_a_data, setpsm_a_data] = useState([]);
     const [psm_info, setpsm_info] = useState('');
@@ -56,7 +49,7 @@ export default function Home() {
     const [syb, setSyb] = useState('none') //第2步运算符号
     const [syc, setSyc] = useState('none') //第3步运算符号
 
-    // 弹出信息图是窗口
+    // 弹出信息提示窗口
     const [psmalert, setPsmalert] = useState(false);
     const handlepsmalertClose = () => {
         setPsmalert(false);
@@ -84,10 +77,10 @@ export default function Home() {
         }
         else if (k === 2) {
             setSyc("none")
-            setSyb("flex")
+            setSyb("fle")
         } else if (k === 3) {
             setSyc("flex")
-            setSyb("flex")
+            setSyb("fle")
         }
     }
 
@@ -403,6 +396,12 @@ export default function Home() {
             let config = res.data.config
 
             setStep(config.step)
+            if (config.step === 2) {
+                setSyb(true)
+            } else if (config.step === 3) {
+                setSyb(true)
+                setSyc(true)
+            }
             setis_result(config.is_result)
             if (config.is_bracket > 0) {
                 setIs_bracket(true)
@@ -444,6 +443,8 @@ export default function Home() {
 
 
     }, [])
+
+
     // 根据配置文件更新算数符号
     const getsymbols = (s, array) => {
         for (let index = 0; index < array.length; index++) {
@@ -457,7 +458,7 @@ export default function Home() {
                 setSymbols_a3(true)
             } else if (s === 'a' && element === 4) {
                 setSymbols_a4(true)
-            }else if (s === 'b' && element === 1) {
+            } else if (s === 'b' && element === 1) {
                 setSymbols_b1(true)
             } else if (s === 'b' && element === 2) {
                 setSymbols_b2(true)
@@ -465,7 +466,7 @@ export default function Home() {
                 setSymbols_b3(true)
             } else if (s === 'b' && element === 4) {
                 setSymbols_b4(true)
-            }else if (s === 'c' && element === 1) {
+            } else if (s === 'c' && element === 1) {
                 setSymbols_c1(true)
             } else if (s === 'c' && element === 2) {
                 setSymbols_c2(true)
@@ -479,23 +480,6 @@ export default function Home() {
 
     }
 
-
-
-
-
-
-    // 数据测试
-    // const handlTest = (e) => {
-    //     console.log(step, is_result, is_bracket)
-    //     console.log(carry, abdication, remainder)
-    //     console.log(multistep_a1, multistep_a2, multistep_b1, multistep_b2, multistep_c1, multistep_c2, multistep_d1, multistep_d2,
-    //         multistep_e1, multistep_e2)
-    //     console.log(symbols_a1, symbols_a2, symbols_a3, symbols_a4)
-    //     console.log(symbols_b1, symbols_b2, symbols_b3, symbols_b4)
-    //     console.log(symbols_c1, symbols_c2, symbols_c3, symbols_c4)
-    //     console.log(juanzishu, lieshu, jz_title, inf_title, number, psmtextarea)
-    //     console.log(handleCreatePSM())
-    // }
 
     return (
         <Container component="main" >
@@ -792,220 +776,35 @@ export default function Home() {
                 </CardActions>
             </Card>
 
-            <Dialog
-                open={psmopen}
-                keepMounted
-                onClose={handlepsmClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle>{"其它程序参数设置"}</DialogTitle>
-                <DialogContent>
+            <OtherParameters
+                psmopen={psmopen}
+                handlepsmClose={handlepsmClose}
+                is_result={is_result}
+                handleIsResultChange={handleIsResultChange}
+                is_bracket={is_bracket}
+                handleis_bracketChange={handleis_bracketChange}
+                carry={carry}
+                handleCarryChange={handleCarryChange}
+                abdication={abdication}
+                handleAbdicationChange={handleAbdicationChange}
+                remainder={remainder}
+                handleRemainderChange={handleRemainderChange}
+                juanzishu={juanzishu}
+                handleJuanzishuChange={handleJuanzishuChange}
+                lieshu={lieshu}
+                handleLieshuChange={handleLieshuChange}
+                jz_title={jz_title}
+                handleJz_titleChange={handleJz_titleChange}
+                inf_title={inf_title}
+                handleInf_titleChange={handleInf_titleChange}
+            />
 
-                    <Grid container spacing={2} sx={{ p: 2, }} >
-                        <Grid item xs={6}>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    '& > :not(style)': { m: 1 },
-                                    maxWidth: 660
-                                }}
-                            >
-                                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                    <InputLabel id="demo-is_result-small">题型设置</InputLabel>
-                                    <Select
-                                        labelId="demo-select-small"
-                                        id="demo-is_result-small"
-                                        value={is_result}
-                                        label="题型设置"
-                                        onChange={handleIsResultChange}
-                                    >
-                                        <MenuItem value={0}>求结果</MenuItem>
-                                        <MenuItem value={1}>求算数项</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <FormGroup>
-                                    <FormControlLabel control={<Switch
-                                        checked={is_bracket}
-                                        onChange={handleis_bracketChange}
-                                    />}
-                                        labelPlacement="end"
-                                        label="启用括号( )"
-                                        sx={{ m: 1, minWidth: 240 }}
-                                    />
-                                </FormGroup>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={2} sx={{ p: 2, }}>
-                        <Grid item xs={4}>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                <InputLabel id="demo-carry-small">加法设置</InputLabel>
-                                <Select
-                                    labelId="demo-carry-small"
-                                    id="demo-carry-small"
-                                    value={carry}
-                                    label="加法设置"
-                                    onChange={handleCarryChange}
-                                >
-                                    <MenuItem value={1}>随机进位</MenuItem>
-                                    <MenuItem value={2}>加法进位</MenuItem>
-                                    <MenuItem value={3}>没有进位</MenuItem>
-
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                <InputLabel id="demo-sabdication-small">减法设置</InputLabel>
-                                <Select
-                                    labelId="demo-abdication-small"
-                                    id="demo-abdication-small"
-                                    value={abdication}
-                                    label="减法设置"
-                                    onChange={handleAbdicationChange}
-                                >
-                                    <MenuItem value={1}>随机退位</MenuItem>
-                                    <MenuItem value={2}>加法退位</MenuItem>
-                                    <MenuItem value={3}>没有退位</MenuItem>
-
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                <InputLabel id="demo-remainder-small">除法设置</InputLabel>
-                                <Select
-                                    labelId="demo-remainder-small"
-                                    id="demo-remainder-small"
-                                    value={remainder}
-                                    label="除法设置"
-                                    onChange={handleRemainderChange}
-                                >
-                                    <MenuItem value={1}>随机有余数</MenuItem>
-                                    <MenuItem value={2}>结果整除</MenuItem>
-                                    <MenuItem value={3}>结果有余数</MenuItem>
-
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                    </Grid>
-                    <Grid container spacing={2} sx={{ p: 2, }}>
-                        <Grid item xs={12}>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    '& > :not(style)': { m: 1 },
-                                    maxWidth: 622
-                                }}
-                            >
-                                <TextField
-
-                                    id="demo-helper-text-aligned"
-                                    label="生成的卷子数量"
-                                    size="small"
-                                    value={juanzishu}
-                                    onChange={handleJuanzishuChange}
-                                />
-
-                                <TextField
-
-                                    id="demo-helper-text-aligned-no-helper"
-                                    label="口算题列数"
-                                    size="small"
-                                    value={lieshu}
-                                    onChange={handleLieshuChange}
-                                />
-                                <TextField
-
-                                    id="demo-helper-text-aligned-no-helper"
-                                    label="卷子标题"
-                                    size="small"
-                                    value={jz_title}
-                                    onChange={handleJz_titleChange}
-                                />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    '& > :not(style)': { m: 1 },
-                                    maxWidth: 622
-                                }}
-                            >
-                                <TextField
-                                    fullWidth
-                                    id="demo-helper-text-aligned-no-helper"
-                                    label="卷子副标题"
-                                    size="small"
-                                    value={inf_title}
-                                    onChange={handleInf_titleChange}
-                                />
-                            </Box>
-                        </Grid>
-                    </Grid>
-
-                </DialogContent>
-                <DialogActions>
-
-                    <Button onClick={handlepsmClose}>完成</Button>
-                </DialogActions>
-            </Dialog>
-
-            {/* 消息警告提示 */}
-            <Dialog
-                fullWidth
-                maxWidth={'xs'}
-                open={psmalert}
-                onClose={handlepsmalertClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    {"提示信息"}
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        {psm_info}
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-
-                    <Button onClick={handlepsmalertClose} autoFocus>
-                        确认关闭
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            {/* 信息提示框 */}
+            <InfoDialog psmalert={psmalert} handlepsmalertClose={handlepsmalertClose} psm_info={psm_info} />
 
 
 
-            <Card sx={{ mx: "auto", my: 2, maxWidth: 600 }}>
-
-                <CardContent>
-                    <Typography gutterBottom variant="body2" component="div">
-                        <img alt="python-3.8.8" src="https://img.shields.io/badge/Python-3.8.8-green?logo=python" />
-                        <img alt="fastAPI-0.85.1" src="https://img.shields.io/badge/fastAPI-0.85.1-green" />
-                        <img alt="React-18.2.0" src="https://img.shields.io/badge/React-18.2.0-blue" />
-                        <img alt="Material UI-5.10.11" src="https://img.shields.io/badge/Material UI-5.10.11-blue" />
-                        <img alt="license-Apache--2.0" src="https://img.shields.io/badge/license-Apache--2.0-green" />
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        <Link href="https://gitee.com/J_Sky/PrimarySchoolMathematics" color="inherit">
-                            <img alt="" src="https://img.shields.io/badge/Gitee--PrimarySchoolMathematics-red?logo=gitee" />
-                        </Link>
-
-                        <Link href="https://github.com/bosichong/PrimarySchoolMathematics" color="inherit">
-                            <img alt="" src="https://img.shields.io/badge/Github--PrimarySchoolMathematics-green?logo=github" />
-                        </Link>
-                    </Typography>
-                </CardContent>
-
-            </Card>
+            <Footer />
 
         </Container >
     );
