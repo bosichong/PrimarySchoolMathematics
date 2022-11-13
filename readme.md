@@ -49,17 +49,17 @@ Git克隆或是下载压缩包。
 
 2. `/webbackend`目录终端下运行`python main.py`,或者使用`vscode`打开`/webbackend/main.py`,运行当前文件即可.
 3. 打开浏览器在地址栏中输入`http://127.0.0.1:8000/docs`,看到下图就是环境搭建成功了.
-![](imgs/back01.png)
+![](imgs/01.png)
 
 ## 前端环境搭建
 
 1.  进入`./vue3_webfrontend` 终端输入: `cd vue3_webfrontend`,如果你使用的是vscode,可以使用分屏新建终端,这样前后端的服务器启动可以一目了然.
-![](imgs/back02.png)
+![](imgs/02.png)
 
 2. 终端输入:`npm install`更新下载前端的依赖,如果速度太慢,建议临时使用镜像服务器下载依赖:`npm install --registry https://registry.npm.taobao.org`.
 3. 终端输入:`npm run dev` 启动前端服务器.正常的话打开网址`http://127.0.0.1:5173/`你会看到下图:
    
-![](imgs/back03.png)
+![](imgs/03.png)
 
 **最近发现有些朋友下载代码后不能使用请看这里**
 
@@ -80,18 +80,18 @@ Git克隆或是下载压缩包。
 
 终端显示下图即是后端启动完毕.
 
-![](imgs/back04.png)
+![](imgs/04.png)
 
 再开一个终端,如果是`vscode`拆分终端,进入到`./vue3_webfrontend`,输入`npm ruv dev` 终端显示如下就说明启动成功了.
 
 
-![](imgs/back05.png)
+![](imgs/05.png)
 
 ### 程序的使用
 
 1. 例:生成10以内加法口算题60道,设置好算数项的取值范围和运算符号,设置好口算题数目之后点添加口算题,最后点击生成口算题即可!
 
-![](imgs/jc01.png)
+![](imgs/06.png)
 
 2. 口算题卷子保存在`./docx`目录下,用软件打开后连接打印机就可以打印了.
 3. 一些复杂的口算题都是先从添加口算题开始,比如我要打印60道100以内的加减法混合口算题,结果不大于70.
