@@ -3,8 +3,8 @@
 
 ![输入图片说明](https://img.shields.io/badge/Python-3.8.8-green?logo=python)
 ![输入图片说明](https://img.shields.io/badge/fastAPI-0.85.1-green)
-![输入图片说明](https://img.shields.io/badge/React-18.2.0-blue)
-![输入图片说明](https://img.shields.io/badge/MaterialUI-5.10.11-blue)
+![输入图片说明](https://img.shields.io/badge/Vue-3.2.41-blue)
+![输入图片说明](https://img.shields.io/badge/AntDesignofVue-3.2.14-blue)
 ![输入图片说明](https://img.shields.io/badge/license-Apache--2.0-green)
 ![输入图片说明](https://img.shields.io/badge/Github--PrimarySchoolMathematics-green?logo=github)
 
@@ -17,7 +17,9 @@
 
 ## 程序更新
 
-2022-11-05 由于之前代码所用的框架是比较久远的版本,很多新人需要折腾很长时间才能运行起来,鉴于此种情况,全面更换了前后端的框架,使程序的运行环境搭建更为方便了.重构期间修复了一些bug和逻辑,后续将更新一些新功能.比如一键生成预制的常见类型的口算题等.
+2022-11-13 更换了前端框架为vue3,后续将更新一些新功能.比如一键生成预制的常见类型的口算题,口算题小游戏等.
+
+2022-11-05 由于之前代码所用的框架是比较久远的版本,很多新人需要折腾很长时间才能运行起来,鉴于此种情况,全面更换了前后端的框架,使程序的运行环境搭建更为方便了.重构期间修复了一些bug和逻辑.
 
 ## 程序核心功能：
 
@@ -25,7 +27,7 @@
 
 2.可以简单设置文档标题，小标题。设置生成的口算题文档个数
 
-3.一键生成常见类型口算题（dev版本中正在调试开发中）
+3.一键生成常见类型口算题和口算题小游戏（正在调试开发中）
 
 ## 程序的安装
 
@@ -42,17 +44,20 @@ Git克隆或是下载压缩包。
     cd webbackend
     pip install -r requirements.txt
 
+如果pip更新依赖缓慢,请使用下边的代码试试:
+    pip install -r requirements.txt -i http://pypi.douban.com/simple
+
 2. `/webbackend`目录终端下运行`python main.py`,或者使用`vscode`打开`/webbackend/main.py`,运行当前文件即可.
 3. 打开浏览器在地址栏中输入`http://127.0.0.1:8000/docs`,看到下图就是环境搭建成功了.
 ![](imgs/back01.png)
 
 ## 前端环境搭建
 
-1.  进入`./webfrontend` 终端输入: `cd webfrontend`,如果你使用的是vscode,可以使用分屏新建终端,这样前后端的服务器启动可以一目了然.
+1.  进入`./vue3_webfrontend` 终端输入: `cd vue3_webfrontend`,如果你使用的是vscode,可以使用分屏新建终端,这样前后端的服务器启动可以一目了然.
 ![](imgs/back02.png)
 
-2. 终端输入:`npm install`更新下载前端的依赖,如果速度太慢,建议搜索使用镜像服务器下载依赖.
-3. 终端输入:`npm start` 启动前端服务器.正常的话你会看到下图:
+2. 终端输入:`npm install`更新下载前端的依赖,如果速度太慢,建议临时使用镜像服务器下载依赖:`npm install --registry https://registry.npm.taobao.org`.
+3. 终端输入:`npm run dev` 启动前端服务器.正常的话打开网址`http://127.0.0.1:5173/`你会看到下图:
    
 ![](imgs/back03.png)
 
@@ -77,7 +82,7 @@ Git克隆或是下载压缩包。
 
 ![](imgs/back04.png)
 
-再开一个终端,如果是`vscode`拆分终端,进入到`./webfrontend`,输入`npm start` 终端显示如下就说明启动成功了.
+再开一个终端,如果是`vscode`拆分终端,进入到`./vue3_webfrontend`,输入`npm ruv dev` 终端显示如下就说明启动成功了.
 
 
 ![](imgs/back05.png)
@@ -103,9 +108,7 @@ Git克隆或是下载压缩包。
 ![](imgs/214240_e946434d_125848.png)
 
 ## 一些想法
-重构程序界面的时候发现自己的能力有限，所以界面ui的处理很让人头疼，希望有时间有能力的前端后端全栈的牛逼大佬来贡献一沓代码，共同完善这个小程序，为更多宝贝的程序员老爹老妈省下更多的时间！
-
-后端主要是一些简单的算法，后续还想添加的功能有：小数的口算题，整十百千的口算，分数口算题（这个完全没有思路）。
+重构程序界面的时候发现自己的能力有限，所以界面ui的处理很让人头疼，希望有时间有能力的前端后端全栈的牛逼大佬来贡献一沓代码，共同完善这个小程序，为更多宝贝的程序员老爹老妈省下更多的时间！后端主要是一些简单的算法，后续还想添加的功能有：小数的口算题，整十百千的口算，分数口算题（这个完全没有思路）。
 
 最后感谢曾经贡献过代码的同学，再次谢谢你们！
 
