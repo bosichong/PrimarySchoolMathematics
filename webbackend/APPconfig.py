@@ -146,7 +146,7 @@ class AppConfig:
         
         '''
         # 分解数据，用来保存INI
-        l1 = json.loads(data[0][-1])
+        l1 = data[0][-1]
         l2 = data[1]
         self.c.set('config', 'docx', l2["docx"])
         self.c.set('config', 'step', str(l1["step"]))

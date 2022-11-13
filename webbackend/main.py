@@ -62,10 +62,8 @@ app = FastAPI(
 # 配置允许域名
 origins = [
     "http://localhost",
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://localhost:3002",
-    "http://localhost:3003",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 
 ]
 # 配置允许域名列表、允许方法、请求头、cookie等
@@ -79,6 +77,8 @@ app.add_middleware(
 
 # APP配置文件对象
 appConfig = AppConfig()
+
+
 
 
 @app.get("/test")
@@ -95,24 +95,33 @@ def getConfigJson():
     rs = {'config': appConfig.loadINI(), }
     return rs
 
+class Psm_A(BaseModel):
+    '''
+    验证口算题的模型
+    '''
+    data:dict
 
-@app.get('/api_createpsm')
-def createpsm(json_data: str):
+@app.post('/api_createpsm')
+def createpsm(data: Psm_A):
     """创建一组口算题的配置,接收前端送来的一组口算题配置，判断配置是否合法。"""
-    jsondata = json.loads(json_data)
+    jsondata = data.data
     # print(jsondata)
     rs = {"info": isZeroA(jsondata["step"],
                           jsondata["multistep"], jsondata["symbols"], jsondata["number"], jsondata["div"]["remainder"],
                           jsondata["is_result"])}
     return rs
 
+class Psm_Data(BaseModel):
+    data:str
 
-@app.get('/api_producepsm')
-def producepsm(json_data: str):
+@app.post('/api_producepsm')
+def producepsm(data: Psm_Data):
     '''
     接受前端发来的口算题配置生成口算题并保存到文件
     '''
-    jsondata = json.loads(json_data)
+    
+    jsondata = json.loads(data.data)
+    print(type(jsondata[1]))
     isok = produce_PSM(jsondata)
     rs = getRstr(isok)
     return rs
@@ -163,6 +172,7 @@ def produce_PSM(json_data):
     psm_list = []  # 口算题列表
     psm_title = []  # 标题列表
 
+    # print(data[0])
     if len(json_data[0]) == 0:
         print('还没有添加口算题到列表中哈！')  # 打印测试
         return 0
@@ -198,7 +208,7 @@ def getPsmList(json_data):
     '''
     templist = []
     for j in json_data[0]:
-        j = json.loads(j)
+        # j = json.loads(j)
         g = Generator(addattrs=j["add"], subattrs=j["sub"], multattrs=j["mult"], divattrs=j["div"],
                       symbols=j["symbols"], multistep=j[
                 "multistep"], number=j["number"], step=j["step"],
