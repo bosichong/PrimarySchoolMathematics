@@ -1,16 +1,12 @@
-#!/usr/bin/env python3
-# -*- coding=utf-8 -*-
+'''
+Author: J.sky bosichong@qq.com
+Date: 2022-11-15 08:18:31
+LastEditors: J.sky bosichong@qq.com
+LastEditTime: 2022-11-15 21:33:52
+FilePath: /PrimarySchoolMath/webbackend/PrintPreview.py
+'''
 
-# @Time    : 2018-11-02
-# @Author  : J.sky
-# @Mail    : bosichong@qq.com
-# @Site    : https://bosichong.github.io/suiyan/blog/
-# @Title   : 基于Python开发的小学生口算题生成器
-# @Url     : https://bosichong.github.io/suiyan/blog/83.html
-# @Details : Python实现小学生加减乘除速算考试题卷。
-# @Other   : OS X 10.11.6
-#            Python 3.6.1
-#            vscode
+
 
 
 '''
@@ -26,7 +22,14 @@ from docx.shared import RGBColor
 from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-__version__ = "1.0.1"
+from utils import delfiles,copyfiletopath,zipDir, VUE_DOCX_PATH,DOCX_ZIP
+
+__version__ = "1.0.2"
+
+
+
+
+
 
 
 class PrintPreview:
@@ -135,6 +138,19 @@ class PrintPreview:
         '''
         if not os.path.exists(path):
             os.makedirs(path)
+
+    def delpath(self):
+        '''删除当前目录和前端目录下的所有docx归档文件'''
+        # print('删除旧的口算题卷子')
+        delfiles(self.docxpath)
+        delfiles(VUE_DOCX_PATH)
+
+    def filetovuepublicdocx(self):
+        copyfiletopath(self.docxpath,VUE_DOCX_PATH)
+    
+    def docxtozip(self):
+        zipDir(self.docxpath,DOCX_ZIP)
+
 
 
 

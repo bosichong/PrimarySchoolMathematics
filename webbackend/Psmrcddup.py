@@ -1,41 +1,17 @@
-#!/usr/bin/env python3
-# -*- coding=utf-8 -*-
-
-# @Time    : 2018-11-02
-# @Author  : J.sky
-# @Mail    : bosichong@qq.com
-# @Site    : https://bosichong.github.io/suiyan/blog/
-# @Title   : 基于Python开发的小学生口算题生成器
-# @Url     : https://bosichong.github.io/suiyan/blog/83.html
-# @Details : Python实现小学生加减乘除速算考试题卷。
-# @Other   : OS X 10.11.6
-#            Python 3.6.1
-#            vscode
-
+'''
+Author: J.sky bosichong@qq.com
+Date: 2022-11-15 08:18:31
+LastEditors: J.sky bosichong@qq.com
+LastEditTime: 2022-11-15 21:35:06
+FilePath: /PrimarySchoolMath/webbackend/Psmrcddup.py
+'''
 
 """
-孩子上小学一年级了，加减乘除的口算就要开始练习了，估计老题肯定会让家长出题，所以提前准备一下.
-
-利用Python开发了一套自动生成小学生口算题的小应用。而且今天是程序员节，撸200行代码庆祝一下。：）
-
-程序核心功能：
-
-    1.根据条件生成相关的口算题.
-
-    2.提供一个程序界面供用户设置相关参数
-
-    3.保存为.docx用来打印.
-
-
-开心Python Flask Django 学习交流q群：217840699
-
-
+开心Python Flask Django fastapi 学习交流q群：217840699
 Author  : J.sky
 Mail    : bosichong@qq.com
-
 Author  : rcddup
 Mail    : 410093793@qq.com
-
 Author  : andywu1998
 Mail    : 1078539713@qq.com
 
@@ -44,7 +20,7 @@ Mail    : 1078539713@qq.com
 import random
 import re
 
-from utils.PSM_help import *
+from webbackend.utils import *
 
 __version__ = "1.0.1"
 

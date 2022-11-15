@@ -16,6 +16,12 @@
           </router-link>
         </a-menu-item>
         <a-menu-item key="3">
+          <router-link to="/show">
+          <user-outlined />
+          <span class="nav-text">下载口算题</span>
+        </router-link>
+        </a-menu-item>
+        <a-menu-item key="4">
           <router-link to="/about">
           <user-outlined />
           <span class="nav-text">About</span>

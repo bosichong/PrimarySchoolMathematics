@@ -22,9 +22,18 @@ __all__ = [
 
 ]
 
+import os
 import random
+import shutil
 import time
 import re
+import zipfile
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # app根目录 PrimarySchoolMath/
+VUE_DOCX_PATH = os.path.join(BASE_DIR, 'vue3_webfrontend/public/docx'+os.sep)# 前端docx文件夹
+BACK_DOCX_PATH = os.path.join(BASE_DIR,"docx"+os.sep)
+DOCX_ZIP = os.path.join(VUE_DOCX_PATH,'docs.zip') # zip打包位置
 
 
 def f1(s):
@@ -240,9 +249,6 @@ def isAddSub(s, result, carry, abdication):
             return False
 
 
-
-
-
 def getMoreStep(formulas, result, symbols, step, carry, abdication, remainder, is_bracket, is_result, ):
     '''
 
@@ -328,7 +334,7 @@ def getXStepstr(src, is_result):
     :param is_result: 0or1
     :return: str
     '''
-    
+
     if is_result == 0:
         return repSymStr(src) + "="
     elif is_result == 1:
@@ -401,7 +407,6 @@ def getRandomSymbols(symbols, step):
     '''
     newList = []
     for i in range(step):
-        
         index = random.randint(0, len(symbols[i]) - 1)
         # print(index)
         newList.append(symbols[i][index])
@@ -520,16 +525,6 @@ def getRandomNum(list, step):
     return newList
 
 
-# def get_timert(func):
-#     '''定义一个程序运行时间计算装饰器有返回结果'''
-#     def wrapper(*args, **kwargs):
-#         start = time.time()#起始时间
-#         res = func(*args, **kwargs)#要执行的函数
-#         end = time.time()#结束时间
-#         print('程序运行时间:{:.2f}ms'.format((end-start)*1000))
-#         return res
-#     return wrapper
-
 def get_time(func):
     '''定义一个程序运行时间计算装饰器无返回结果'''
 
@@ -541,6 +536,55 @@ def get_time(func):
         return func
 
     return wrapper
+
+def make_docx_dirs():
+    '''
+    description: 预创建系统需要存放文件的目录
+    return {*}
+    '''    
+    if(not os.path.exists(BACK_DOCX_PATH)):
+        os.mkdir(BACK_DOCX_PATH)
+    if(not os.path.exists(VUE_DOCX_PATH)):
+        os.mkdir(VUE_DOCX_PATH)
+
+
+def delfiles(docxpath):
+    '''递归删除当前目录下所有文件'''
+    docxpath = os.path.join(docxpath)
+    if(os.path.exists(docxpath)):
+        for file in os.listdir(docxpath):
+            file_path = os.path.join(docxpath, file)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+            else:
+                shutil.rmtree(file_path)
+
+
+def copyfiletopath(path1, path2):
+    '''将路径下的文件复制到新的目录下'''
+    path1 = os.path.join(path1)
+    path2 = os.path.join(path2)
+    for file in os.listdir(path1):
+        file_path = os.path.join(path1, file)
+        if os.path.isfile(file_path):
+            shutil.copy(file_path, path2)
+
+
+def zipDir(dirpath, outFullName):
+    """
+    压缩指定文件夹
+    :param dirpath: 目标文件夹路径
+    :param outFullName: 压缩文件保存路径+xxxx.zip
+    :return: 无
+    """
+    zip = zipfile.ZipFile(outFullName, "w", zipfile.ZIP_DEFLATED)
+    for path, dirnames, filenames in os.walk(dirpath):
+        # 去掉目标根路径，只对目标文件夹下边的文件及文件夹进行压缩
+        fpath = path.replace(dirpath, '')
+        for filename in filenames:
+            zip.write(os.path.join(path, filename), os.path.join(fpath, filename))
+
+
 
 
 def main():
@@ -558,7 +602,7 @@ def main():
     # print(isMultDivOk('18/9',[1,99]))
     # 除法测试 整除
     print(getMoreStep([[10, 100], [1, 20], [1, 99], [1, 9]],
-          [1, 99], [[4], [4], [4]], 1, 1, 1, 2, 0, 0))
+                      [1, 99], [[4], [4], [4]], 1, 1, 1, 2, 0, 0))
 
 
 if __name__ == '__main__':

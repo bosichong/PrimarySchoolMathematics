@@ -1,17 +1,24 @@
-# -*- coding: UTF-8 -*-
+'''
+Author: J.sky bosichong@qq.com
+Date: 2022-11-15 08:18:31
+LastEditors: J.sky bosichong@qq.com
+LastEditTime: 2022-11-15 21:27:51
+FilePath: /PrimarySchoolMath/webbackend/main.py
+开心Python Flask Django 学习交流q群：217840699
+Author  : J.sky
+Mail    : bosichong@qq.com
+特别感谢以下二位大佬的鼎力支持！
+Author  : rcddup
+Mail    : 410093793@qq.com
+Author  : andywu1998
+Mail    : 1078539713@qq.com
+'''
 
-"""
-@Author   : J.sky
-@Mail     : bosichong@qq.com
-@Site     : www.2vv.net
-@QQ交流群  : flask交流学习群号:217840699
-@file      :main.py.py
-@time     :2022/10/31
-"""
+
+
 import os, sys, json
 import random
 
-from PrintPreview import PrintPreview
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
@@ -25,20 +32,7 @@ from APPconfig import AppConfig
 from PrintPreview import PrintPreview
 from Psmrcddup import Generator
 
-"""
-开心Python Flask Django 学习交流q群：217840699
-
-
-Author  : J.sky
-Mail    : bosichong@qq.com
-
-特别感谢以下二位大佬的鼎力支持！
-
-Author  : rcddup
-Mail    : 410093793@qq.com
-
-Author  : andywu1998
-Mail    : 1078539713@qq.com"""
+from utils import make_docx_dirs
 
 __version__ = "1.2.0"
 
@@ -121,10 +115,18 @@ def producepsm(data: Psm_Data):
     '''
     
     jsondata = json.loads(data.data)
-    print(type(jsondata[1]))
+    # print(type(jsondata[1]))
     isok = produce_PSM(jsondata)
     rs = getRstr(isok)
     return rs
+    
+@app.get('/getpsmlist')
+def getpsmlist():
+    basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    docxpath = os.path.join(basedir, 'vue3_webfrontend/public/docx')# 前端docx文件夹
+    docxs = getpathfile(docxpath)
+    # print(docxs)
+    return docxs
 
 
 def getRstr(isok):
@@ -133,11 +135,15 @@ def getRstr(isok):
     :param isok bool
     :return bool
     """
+
+    
     if isok:
         rs = {"info": "口算题生成完毕！"}
     else:
         rs = {"info": "程序运行失败！是不是还没有添加口算题就点了生成按钮？"}
     return rs
+
+
 
 
 def isZeroA(step, multistep, symbols, number, remainder, is_result):
@@ -192,7 +198,10 @@ def produce_PSM(json_data):
         # print(psm_list)
         pp = PrintPreview(psm_list, psm_title,
                           subtit, col=json_data[1]["lieshu"], docxpath=json_data[1]["docx"])
+        pp.delpath() # 删除之前的口算题
         pp.produce()  # 生成docx
+        pp.filetovuepublicdocx()  # 复制新的口算题到前端目录
+        pp.docxtozip() #打包zip到vue 目录下变提供下载
         psm_list.clear()  # 清空打印列表。
         # print(type(json_data))
         appConfig.saveAll(json_data)  # 保存所有配置项
@@ -238,12 +247,27 @@ def q_PSM(json_data):
     subtit = json_data[1]["inf_title"]  # 小标题
     pp = PrintPreview(psm_list, psm_title,
                       subtit, col=json_data[1]["lieshu"], )
+    
     pp.produce()  # 生成docx
     psm_list.clear()  # 清空打印列表。
     return 1
 
 
+
+def getpathfile(path):
+    '''返回当前目录下的文件名称'''
+    path_list = []
+    for root, dirs, files in os.walk(path):
+        for f in files:
+            if f.endswith(".docx"):
+                path_list.append(f)
+    return path_list
+
+
+
+
 if __name__ == '__main__':
     print('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
+    make_docx_dirs()
     uvicorn.run(app='main:app', host="127.0.0.1", port=8000, reload=True, )
     
