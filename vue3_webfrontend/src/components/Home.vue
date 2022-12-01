@@ -234,7 +234,6 @@ import axios from 'axios';
 
 const psm_a = [] //最后需要生成的口算题参数数组,包含所有口算题的参数设置数组
 const psm_b = {} // 其他口算卷子的剩余参数,一些固定的参数.
-const baseURL = 'http://localhost:8000'
 
 
 
@@ -242,7 +241,7 @@ const baseURL = 'http://localhost:8000'
 console.log('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
 
 // 加载上次使用的配置项参数
-axios.get(baseURL + '/api_getconfigjson').then(function (res) {
+axios.get('api_getconfigjson').then(function (res) {
   let config = res.data.config
   // console.log(config)
   step.value = config.step.toString()
@@ -396,7 +395,7 @@ const handleCreatePSM = () => {
 
 
   // console.log(psm_tmp)
-  axios.post(baseURL + '/api_createpsm', {
+  axios.post('api_createpsm', {
     data: psm_tmp
   },).then(function (res) {
     // console.log(res.data)
@@ -453,7 +452,7 @@ const handleproducePSM = () => {
   const psm_data = [psm_a, psm_b]
   // console.log(psm_data)
   const psmjson_data = JSON.stringify(psm_data)
-  axios.post(baseURL + '/api_producepsm', {
+  axios.post('api_producepsm', {
     data: psmjson_data
   },).then(function (res) {
     if (res.data.info) {

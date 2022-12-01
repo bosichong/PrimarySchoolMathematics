@@ -2,7 +2,7 @@
 Author: J.sky bosichong@qq.com
 Date: 2022-11-15 08:18:31
 LastEditors: J.sky bosichong@qq.com
-LastEditTime: 2022-11-15 21:27:51
+LastEditTime: 2022-12-01 23:56:49
 FilePath: /PrimarySchoolMath/webbackend/main.py
 开心Python Flask Django 学习交流q群：217840699
 Author  : J.sky
@@ -25,6 +25,7 @@ sys.path.append(BASE_DIR)
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware  # 解决跨域
+from fastapi.responses import HTMLResponse # 导出html
 import uvicorn as uvicorn
 from pydantic import BaseModel
 
@@ -58,6 +59,8 @@ origins = [
     "http://localhost",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "http://127.0.0.1:8000"
+    "http://localhost:8000",
 
 ]
 # 配置允许域名列表、允许方法、请求头、cookie等
@@ -69,9 +72,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from fastapi.staticfiles import StaticFiles
+
+app.mount("/dist", StaticFiles(directory=os.path.join(BASE_DIR, 'webbackend/dist')), name="dist")
+app.mount("/assets", StaticFiles(directory=os.path.join(BASE_DIR, 'webbackend/dist/assets')), name="assets")
+
+
+
+
 # APP配置文件对象
 appConfig = AppConfig()
 
+
+@app.get("/")
+def main():
+    html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'dist','index.html')
+    html_content = ''
+    with open(html_path) as f:
+        html_content = f.read()
+    
+    return HTMLResponse(content=html_content, status_code=200)
 
 
 
@@ -123,7 +143,7 @@ def producepsm(data: Psm_Data):
 @app.get('/getpsmlist')
 def getpsmlist():
     basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    docxpath = os.path.join(basedir, 'vue3_webfrontend/public/docx')# 前端docx文件夹
+    docxpath = os.path.join(basedir, 'webbackend/dist/docx')# 前端docx文件夹
     docxs = getpathfile(docxpath)
     # print(docxs)
     return docxs

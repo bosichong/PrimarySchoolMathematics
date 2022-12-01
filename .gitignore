@@ -10,7 +10,6 @@ layout
 setup.py
 bestpkg
 build
-dist
 PrimarySchoolMath.egg-info
 PSM
 webbackend/config.ini
@@ -51,8 +50,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
-dist-ssr
 *.local
 
 # Editor directories and files

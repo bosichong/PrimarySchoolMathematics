@@ -31,7 +31,7 @@ import zipfile
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # app根目录 PrimarySchoolMath/
-VUE_DOCX_PATH = os.path.join(BASE_DIR, 'vue3_webfrontend/public/docx'+os.sep)# 前端docx文件夹
+VUE_DOCX_PATH = os.path.join(BASE_DIR, 'webbackend/dist/docx'+os.sep)# 前端docx文件夹
 BACK_DOCX_PATH = os.path.join(BASE_DIR,"docx"+os.sep)
 DOCX_ZIP = os.path.join(VUE_DOCX_PATH,'docs.zip') # zip打包位置
 

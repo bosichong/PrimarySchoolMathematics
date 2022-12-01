@@ -2,7 +2,7 @@
  * @Author: J.sky bosichong@qq.com
  * @Date: 2022-11-15 12:32:07
  * @LastEditors: J.sky bosichong@qq.com
- * @LastEditTime: 2022-11-15 21:32:10
+ * @LastEditTime: 2022-12-01 23:49:54
  * @FilePath: /PrimarySchoolMath/vue3_webfrontend/src/components/Show.vue
 -->
 <template lang="">
@@ -29,12 +29,11 @@
 <script setup>
 import {ref} from 'vue'
 import axios from 'axios'
-const baseURL = 'http://localhost:8000'
 const psmlist = ref('')
-const psmlink = ref('../../../public/docx/')
-const psmzip = ref('../../../public/docx/docs.zip')
+const psmlink = ref('dist/docx/')
+const psmzip = ref('dist/docx/docs.zip')
 
-axios.get(baseURL + '/getpsmlist').then(function (res) {
+axios.get('getpsmlist').then(function (res) {
     
     psmlist.value = res.data
 })
