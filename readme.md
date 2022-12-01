@@ -17,6 +17,8 @@
 
 ## 程序更新
 
+2022-12-02 把前端页面打包集成到了fastapi,可以不用在启动前端的环境来使用本程序了.
+
 2022-11-13 更换了前端框架为vue3,后续将更新一些新功能.比如一键生成预制的常见类型的口算题,口算题小游戏等.
 
 2022-11-05 由于之前代码所用的框架是比较久远的版本,很多新人需要折腾很长时间才能运行起来,鉴于此种情况,全面更换了前后端的框架,使程序的运行环境搭建更为方便了.重构期间修复了一些bug和逻辑.
@@ -45,13 +47,17 @@ Git克隆或是下载压缩包。
     pip install -r requirements.txt
 
 如果pip更新依赖缓慢,请使用下边的代码试试:
+
     pip install -r requirements.txt -i http://pypi.douban.com/simple
 
-2. `/webbackend`目录终端下运行`python main.py`,或者使用`vscode`打开`/webbackend/main.py`,运行当前文件即可.
-3. 打开浏览器在地址栏中输入`http://127.0.0.1:8000/docs`,看到下图就是环境搭建成功了.
-![](imgs/01.png)
+2. `/webbackend`目录终端下运行`python main.py`,或使用`vscode`、`pycharm`打开`/webbackend/main.py`,运行当前文件即可.
+3. 打开浏览器在地址栏中输入`http://127.0.0.1:8000/`,看到下图就是启动成功了.
+4. 程序启动之后就可以正常使用了!
+![](imgs/03.png)
 
-## 前端环境搭建
+## 前端环境搭建 
+
+如果你只是使用本程序,可以跳过前端环境搭建直接查看使用教程,后端已经集成了打包的前端页面.
 
 1.  进入`./vue3_webfrontend` 终端输入: `cd vue3_webfrontend`,如果你使用的是vscode,可以使用分屏新建终端,这样前后端的服务器启动可以一目了然.
 ![](imgs/02.png)
@@ -78,14 +84,9 @@ Git克隆或是下载压缩包。
 (fastAPI_psm) bash-3.2$ python main.py
 ```
 
-终端显示下图即是后端启动完毕.
+终端显示下图即是程序启动完毕.
 
 ![](imgs/04.png)
-
-再开一个终端,如果是`vscode`拆分终端,进入到`./vue3_webfrontend`,输入`npm ruv dev` 终端显示如下就说明启动成功了.
-
-
-![](imgs/05.png)
 
 ### 程序的使用
 
