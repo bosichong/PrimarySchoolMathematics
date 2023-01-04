@@ -14,18 +14,15 @@ Author  : andywu1998
 Mail    : 1078539713@qq.com
 '''
 
-
-
 import os, sys, json
 import random
-
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware  # 解决跨域
-from fastapi.responses import HTMLResponse # 导出html
+from fastapi.responses import HTMLResponse  # 导出html
 import uvicorn as uvicorn
 from pydantic import BaseModel
 
@@ -40,8 +37,6 @@ __version__ = "1.2.0"
 description = """
 PrimarySchoolMath一套自动生成小学生口算题的小应用. 🚀
 """
-
-
 
 app = FastAPI(
     title="PrimarySchoolMath",
@@ -77,22 +72,18 @@ from fastapi.staticfiles import StaticFiles
 app.mount("/dist", StaticFiles(directory=os.path.join(BASE_DIR, 'webbackend/dist')), name="dist")
 app.mount("/assets", StaticFiles(directory=os.path.join(BASE_DIR, 'webbackend/dist/assets')), name="assets")
 
-
-
-
 # APP配置文件对象
 appConfig = AppConfig()
 
 
 @app.get("/")
 def main():
-    html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'dist','index.html')
+    html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dist', 'index.html')
     html_content = ''
-    with open(html_path) as f:
+    with open(html_path, encoding="utf-8") as f:
         html_content = f.read()
-    
-    return HTMLResponse(content=html_content, status_code=200)
 
+    return HTMLResponse(content=html_content, status_code=200)
 
 
 @app.get("/test")
@@ -109,11 +100,13 @@ def getConfigJson():
     rs = {'config': appConfig.loadINI(), }
     return rs
 
+
 class Psm_A(BaseModel):
     '''
     验证口算题的模型
     '''
-    data:dict
+    data: dict
+
 
 @app.post('/api_createpsm')
 def createpsm(data: Psm_A):
@@ -125,25 +118,28 @@ def createpsm(data: Psm_A):
                           jsondata["is_result"])}
     return rs
 
+
 class Psm_Data(BaseModel):
-    data:str
+    data: str
+
 
 @app.post('/api_producepsm')
 def producepsm(data: Psm_Data):
     '''
     接受前端发来的口算题配置生成口算题并保存到文件
     '''
-    
+
     jsondata = json.loads(data.data)
     # print(type(jsondata[1]))
     isok = produce_PSM(jsondata)
     rs = getRstr(isok)
     return rs
-    
+
+
 @app.get('/getpsmlist')
 def getpsmlist():
     basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    docxpath = os.path.join(basedir, 'webbackend/dist/docx')# 前端docx文件夹
+    docxpath = os.path.join(basedir, 'webbackend/dist/docx')  # 前端docx文件夹
     docxs = getpathfile(docxpath)
     # print(docxs)
     return docxs
@@ -156,14 +152,11 @@ def getRstr(isok):
     :return bool
     """
 
-    
     if isok:
         rs = {"info": "口算题生成完毕！"}
     else:
         rs = {"info": "程序运行失败！是不是还没有添加口算题就点了生成按钮？"}
     return rs
-
-
 
 
 def isZeroA(step, multistep, symbols, number, remainder, is_result):
@@ -177,7 +170,7 @@ def isZeroA(step, multistep, symbols, number, remainder, is_result):
     # print(multistep, multistep[1][0])
     if (4 in symbols[0] and multistep[1][1] <= 0) or (
             4 in symbols[1] and multistep[2][1] <= 0) or (
-            4 in symbols[2] and multistep[3][1] <= 0) :
+            4 in symbols[2] and multistep[3][1] <= 0):
         return 0
     # print(remainder,is_result)
     if (remainder != 2 and is_result == 1) or (remainder != 2 and step > 1):
@@ -218,10 +211,10 @@ def produce_PSM(json_data):
         # print(psm_list)
         pp = PrintPreview(psm_list, psm_title,
                           subtit, col=json_data[1]["lieshu"], docxpath=json_data[1]["docx"])
-        pp.delpath() # 删除之前的口算题
+        pp.delpath()  # 删除之前的口算题
         pp.produce()  # 生成docx
         pp.filetovuepublicdocx()  # 复制新的口算题到前端目录
-        pp.docxtozip() #打包zip到vue 目录下变提供下载
+        pp.docxtozip()  # 打包zip到vue 目录下变提供下载
         psm_list.clear()  # 清空打印列表。
         # print(type(json_data))
         appConfig.saveAll(json_data)  # 保存所有配置项
@@ -259,19 +252,17 @@ def q_PSM(json_data):
         psm_list.append(templist)  # 添加到list 准备后期打印
         # 为生成的文件起名r
         # psm_title.clear()
-    
-    
+
     for i in range(json_data[1]["juanzishu"]):
         psm_title.append(json_data[1]["jz_title"])
 
     subtit = json_data[1]["inf_title"]  # 小标题
     pp = PrintPreview(psm_list, psm_title,
                       subtit, col=json_data[1]["lieshu"], )
-    
+
     pp.produce()  # 生成docx
     psm_list.clear()  # 清空打印列表。
     return 1
-
 
 
 def getpathfile(path):
@@ -284,10 +275,7 @@ def getpathfile(path):
     return path_list
 
 
-
-
 if __name__ == '__main__':
     print('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
     make_docx_dirs()
     uvicorn.run(app='main:app', host="127.0.0.1", port=8000, reload=True, )
-    
