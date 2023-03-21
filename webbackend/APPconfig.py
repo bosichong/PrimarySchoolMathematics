@@ -13,7 +13,8 @@ import json
 #            vscode
 
 
-import os,json
+import os
+import json
 from configparser import ConfigParser
 
 __version__ = "0.1.0"
@@ -34,7 +35,8 @@ class AppConfig:
     # INI文件地址
     INI_PATH = os.path.join(BASE_DIR, 'config.ini')
     # DOCX 默认的目录地址，存放在项目目录根目录docx/
-    DOCX = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"docx"+os.sep)
+    DOCX = os.path.join(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))), "docx"+os.sep)
 
     def __init__(self):
         # print(self.BASE_DIR)
@@ -49,10 +51,9 @@ class AppConfig:
 
     def isINI(self):
         # 若没有配置文件，则创建。
-        if(not os.path.isfile(self.INI_PATH)):
+        if (not os.path.isfile(self.INI_PATH)):
             # print("ini文件不存在，开始创建！")
             self.create_ini()
-
 
     def create_ini(self):
         '''
@@ -64,7 +65,6 @@ class AppConfig:
 
         self.c.set('config', 'docx', self.DOCX)  # 设置文件默认保存目录
 
-
         self.c.set('config', 'step', '1')  # 生成几步运算, 默认: 1 取值范围 1-3
         self.c.set('config', 'is_result', '0')  # int 0求结果，1求运算项
         self.c.set('config', 'is_bracket', '0')  # int 是否需要括号 0不需要 1需要
@@ -74,6 +74,7 @@ class AppConfig:
         # 包括 四个运算项及结果数值范围设置。
         self.c.set('config', 'symbols',
                    '[[1, 0, 0, 0], [0, 2, 0, 0], [1, 0, 0, 0]]')
+        self.c.set('config', 'solution', '0') # 解题方式: 用口算来解题0, 用竖式来解题1
 
         self.c.add_section('addattrs')
         self.c.set('addattrs', 'carry', '1')  # 进位随机选择项单选，随机1，进位2，不进位3
@@ -133,17 +134,20 @@ class AppConfig:
         jz_title = self.c.get("config", "jz_title")
         inf_title = self.c.get("config", "inf_title")
         docx = self.c.get('config', 'docx')
+        solution = self.c.get('config', 'solution')
+
         tempconfig = {"add": add, "sub": sub, "mult": mult, "div": div, "step": step, "number": number,
                       "is_result": is_result, "is_bracket": is_bracket, "multistep": multistep, "symbols": symbols,
                       "juanzishu": juanzishu, "lieshu": lieshu, "jz_title": jz_title, "inf_title": inf_title, "docx": docx,
+                      "solution": solution
                       }
         # print(tmp_type)
         return tempconfig  # 返回一个字典 包含程序配置数据。
 
-    def saveAll(self,data):
+    def saveAll(self, data):
         '''
         保存所有配置文件数据到INI
-        
+
         '''
         # 分解数据，用来保存INI
         l1 = data[0][-1]
@@ -162,9 +166,7 @@ class AppConfig:
         self.c.set('addattrs', 'carry', str(l1["add"]["carry"]))
         self.c.set('subattrs', 'abdication', str(l1["sub"]["abdication"]))
         self.c.set('divattrs', 'remainder', str(l1["div"]["remainder"]))
-        self.saveINI()#保存所有配置项
-
-
+        self.saveINI()  # 保存所有配置项
 
 
 if __name__ == '__main__':

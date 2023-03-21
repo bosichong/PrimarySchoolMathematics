@@ -163,10 +163,10 @@ def isZeroA(step, multistep, symbols, number, remainder, is_result):
     '''
     运算中除数<=0的判断,及除法结果有余数是不能是用求算数项
     '''
-    # TODO 
+    # TODO
     # 请添加运算符号为空的错误提示,当运算符号没有选择的时候程序运行会出错
     # 还有算数项最小数值大于最大数值的时候程序会出错，也要判断以下。一步运算的时候开启括号会添加括号
-    # 
+    #
     # print(multistep, multistep[1][0])
     if (4 in symbols[0] and multistep[1][1] <= 0) or (
             4 in symbols[1] and multistep[2][1] <= 0) or (
@@ -208,9 +208,15 @@ def produce_PSM(json_data):
             psm_title.append(json_data[1]["jz_title"])
         # print(self.psm_title)
         subtit = json_data[1]["inf_title"]
+
+        solution = None
+        if json_data[1]['solution'] == '1':
+            solution = 7.3
+
         # print(psm_list)
+        # todo
         pp = PrintPreview(psm_list, psm_title,
-                          subtit, col=json_data[1]["lieshu"], docxpath=json_data[1]["docx"])
+                          subtit, col=json_data[1]["lieshu"], docxpath=json_data[1]["docx"], tableRowHeight=solution)
         pp.delpath()  # 删除之前的口算题
         pp.produce()  # 生成docx
         pp.filetovuepublicdocx()  # 复制新的口算题到前端目录
@@ -233,8 +239,8 @@ def getPsmList(json_data):
         # j = json.loads(j)
         g = Generator(addattrs=j["add"], subattrs=j["sub"], multattrs=j["mult"], divattrs=j["div"],
                       symbols=j["symbols"], multistep=j[
-                "multistep"], number=j["number"], step=j["step"],
-                      is_result=j["is_result"], is_bracket=j["is_bracket"], )
+            "multistep"], number=j["number"], step=j["step"],
+            is_result=j["is_result"], is_bracket=j["is_bracket"], )
         templist = templist + g.generate_data()
     return templist
 
