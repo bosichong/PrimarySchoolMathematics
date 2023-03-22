@@ -145,7 +145,7 @@
   </a-layout-content>
 
   <a-drawer title="其他程序参数设置" :width="550" :visible="visible" :body-style="{ paddingBottom: '80px' }"
-    footer-style="{ textAlign: 'right' }" @close="onClose">
+     @close="onClose">
     <a-space align="end">
       <a-form-item label="题型设置 ">
         <a-radio-group v-model:value="is_result">

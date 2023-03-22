@@ -159,6 +159,7 @@ class AppConfig:
         self.c.set('config', 'multistep', str(l1["multistep"]))
         self.c.set('config', 'symbols', str(l1["symbols"]))
         self.c.set('config', 'number', str(l1["number"]))
+        self.c.set('config', 'solution', l2["solution"])
         self.c.set('config', 'juanzishu', str(l2["juanzishu"]))
         self.c.set('config', 'lieshu', str(l2["lieshu"]))
         self.c.set('config', 'jz_title', l2["jz_title"])
