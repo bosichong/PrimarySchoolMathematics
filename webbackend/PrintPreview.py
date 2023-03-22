@@ -20,6 +20,7 @@ import os
 from docx import Document  # 引入docx类生成docx文档
 from docx.shared import RGBColor
 from docx.shared import Pt
+from docx.shared import Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 from utils import delfiles,copyfiletopath,zipDir, VUE_DOCX_PATH,DOCX_ZIP
@@ -47,10 +48,10 @@ class PrintPreview:
 
     '''
 
-
     def __init__(self, l, tit, subtitle, col=3, tsize=26, subsize=11, csize=16,
                 # 默认输出文件地址为项目根目录 
-                docxpath=os.path.join(os.path.dirname(os.path.abspath(__file__)),"docx"+os.sep)):
+                docxpath=os.path.join(os.path.dirname(os.path.abspath(__file__)),"docx"+os.sep),
+                tableRowHeight=None):
         '''
         :param l: list 需要打印的口算题列表
         :param tit: list 口算页标题
@@ -69,6 +70,7 @@ class PrintPreview:
         self.p_subtitle_size = subsize
         self.p_content_siae = csize
         self.docxpath = docxpath
+        self.tableRowHeight = tableRowHeight
 
     def create_psmdocx(self, l, title, docxname):
         '''
@@ -109,6 +111,9 @@ class PrintPreview:
 
         for i in range(rs):
             if i >0:
+                if not self.tableRowHeight is None:
+                    table.rows[i].height = Cm(self.tableRowHeight)
+
                 row_cells = table.rows[i].cells
                 for j in range(self.p_column):
                     if (k > len(l) - 1):
