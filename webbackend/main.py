@@ -32,7 +32,7 @@ from Psmrcddup import Generator
 
 from utils import make_docx_dirs
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 description = """
 PrimarySchoolMath一套自动生成小学生口算题的小应用. 🚀
