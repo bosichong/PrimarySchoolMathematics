@@ -5,34 +5,22 @@
  * @LastEditTime: 2022-12-01 23:24:16
  * @FilePath: /PrimarySchoolMath/vue3_webfrontend/src/router/index.js
  */
-import { createRouter,createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
-import Home from '../components/Home.vue'
-import About from '../components/About.vue'
-import Show from '../components/Show.vue'
-
-const routes =[
+export const routes = [
     {
-        path:'/',
-        name:'home',
-        component:Home
+        path: '/',
+        redirect: '/home'
     },
     {
-        path:'/show',
-        name:'show',
-        component:Show
-    },
-    {
-        path:'/about',
-        name:'about',
-        component:About,
-    },
+        path: '/home',
+        name: 'home',
+        component: () => import('../views/Home.vue'),
+    }
 ];
 
 
-const router = createRouter({
-    history:createWebHistory(),
+export const router = createRouter({
+    history: createWebHistory(),
     routes,
 });
-
-export default router
