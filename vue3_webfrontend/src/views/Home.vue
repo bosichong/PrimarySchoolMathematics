@@ -12,7 +12,8 @@
       </ElFormItem>
 
       <template v-for="item, index in formData.formulaList">
-        <ElFormItem v-if="item.operators" :label="`第${index}步运算符号选择`">
+        <ElFormItem v-if="item.operators" :label="`第${index}步运算符号选择`" :prop="`formulaList.${index}.operators`"
+          :rules="requiredRule">
           <el-checkbox-group v-model="item.operators">
             <el-checkbox v-for="o in operatorOptions" :label="o.key">{{ o.label }}</el-checkbox>
           </el-checkbox-group>
@@ -21,14 +22,18 @@
         <ElFormItem :label="`算数项${index + 1}`">
           <ElRow :gutter="8">
             <ElCol :span="8">
-              <ElInput v-model="item.min">
-                <template #prepend>最小值</template>
-              </ElInput>
+              <ElFormItem :prop="`formulaList.${index}.min`" :rules="requiredNumberRule">
+                <ElInput v-model="item.min">
+                  <template #prepend>最小值</template>
+                </ElInput>
+              </ElFormItem>
             </ElCol>
             <ElCol :span="8">
-              <ElInput v-model="item.max">
-                <template #prepend>最大值</template>
-              </ElInput>
+              <ElFormItem :prop="`formulaList.${index}.max`" :rules="requiredNumberRule">
+                <ElInput v-model="item.max">
+                  <template #prepend>最大值</template>
+                </ElInput>
+              </ElFormItem>
             </ElCol>
           </ElRow>
         </ElFormItem>
@@ -130,10 +135,16 @@ const formData = ref({
 })
 
 const formRules = ref({
-  resultMinValue: [{ required: true, message: '请填写运算结果最小值' },{ type: 'number', message: '请填写数字' }],
-  resultMaxValue: [{ required: true, message: '请填写运算结果最大值' },{ type: 'number', message: '请填写数字' }],
+  resultMinValue: [{ required: true, message: '请填写运算结果最小值' }, { type: 'number', message: '请填写数字' }],
+  resultMaxValue: [{ required: true, message: '请填写运算结果最大值' }, { type: 'number', message: '请填写数字' }],
   numberOfFormulas: [{ required: true, message: '请填写口算题数量' }]
 })
+const requiredRule = [
+  { required: true, message: '此项为必填项' }
+]
+const requiredNumberRule = [
+  { required: true, message: '此项为必填项' }, { type: 'number', message: '此项必须为数字' }
+]
 
 
 const changeStep = (val) => {
