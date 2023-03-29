@@ -2,9 +2,9 @@ import request from '@/utils/request'
 
 
 /**
- * 
- * @param {Object} options 
- * @param {Array} paperList 
+ * 生成试卷
+ * @param {Object} options 生成试卷的配置参数
+ * @param {Array} paperList 需要生成的题型组
  * @returns 
  */
 export function generatePaper(options, paperList) {
@@ -47,26 +47,32 @@ export function generatePaper(options, paperList) {
     "solution": options.solution
   }
 
-  console.log([postPaperList, postOptions]);
-
   return request.post(
     'api_producepsm', { data: JSON.stringify([postPaperList, postOptions]) })
 }
 
 /**
- * 
+ * 获取试卷下载链接
  * @returns 
  */
 export function getDownloadLinksOfPapers() {
   return request.get('getpsmlist')
 }
 
+/**
+ * 加载用户持久化的配置
+ * @returns 
+ */
 export async function loadConfiguration() {
   const { data: { config } } = await getConfiguration()
   const { docx: downloadPath } = config
   return { downloadPath }
 }
 
+/**
+ * 获取用户持久化的试卷配置参数
+ * @returns 
+ */
 export function getConfiguration() {
   return request.get('api_getconfigjson')
 }

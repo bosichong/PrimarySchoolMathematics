@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page-container">
     <ElForm ref="refForm" :model="formData" :rules="formRules" label-position="top">
       <ElFormItem label="几步运算?">
         <el-radio-group v-model="formData.step" @change="changeStep">
@@ -74,17 +74,19 @@
         </ElRow>
       </ElFormItem>
 
+      <template v-if="paperDescriptionList && paperDescriptionList.length">
+        <ElFormItem label="当前口算题包含的内容">
+          <div v-for="p in paperDescriptionList">
+            <ElTag style="margin-right: 8px;">{{ p }}</ElTag>
+          </div>
+        </ElFormItem>
+      </template>
     </ElForm>
 
-    <template v-if="paperDescriptionList && paperDescriptionList.length">
-      <p>当前口算题包含的内容</p>
-      <div v-for="p in paperDescriptionList">
-        <ElTag>{{ p }}</ElTag>
-      </div>
-    </template>
 
     <el-button :disabled="!paperList.length" type="primary" :loading="buttonLoading"
       @click="generate">点此生成口算题卷子</el-button>
+    <p class="p-under">提示:配置读取功能正在升级中,暂时不能用</p>
 
     <OptionsDrawer v-model:visible="optionsDrawerVisible" v-model:formulasFormData="formData" />
 
@@ -208,4 +210,13 @@ const generate = async () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.page-container {
+  min-height: calc(100vh - 64px - 20px - 20px - 100px);
+}
+
+.p-under {
+  color: #00000073;
+  font-size: 12px;
+}
+</style>

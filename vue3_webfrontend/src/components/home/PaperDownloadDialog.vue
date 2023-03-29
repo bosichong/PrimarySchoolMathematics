@@ -1,11 +1,22 @@
 <template>
-  <el-dialog v-model="currentVisible" title="口算题文件下载" append-to-body :close-on-click-modal="false" @open="open" @closed="closed">
+  <el-dialog v-model="currentVisible" title="口算题文件下载" append-to-body :close-on-click-modal="false" @open="open"
+    @closed="closed">
     <el-row :gutter="10">
       <el-col :span="12">
-        <a :href="zipUrl" target="_blank" download="下载">所有口算题打包zip下载</a>
+        <div class="link">
+          <el-icon>
+            <Document />
+          </el-icon>
+          <a :href="zipUrl" target="_blank" download="下载">全部下载</a>
+        </div>
       </el-col>
       <el-col :span="12" v-for="file in files">
-        <a :href="fileUrl + file" target="_blank" :download="file">{{ file }}</a>
+        <div class="link">
+          <el-icon>
+            <Document />
+          </el-icon>
+          <a :href="fileUrl + file" target="_blank" :download="file">{{ file }}</a>
+        </div>
       </el-col>
     </el-row>
     <template #footer>
@@ -39,7 +50,6 @@ const files = ref([])
 const fileUrl = ref('dist/docx/')
 const zipUrl = ref('dist/docx/docs.zip')
 const open = async () => {
-  // 调用接口获取试卷下载地址
   const { data } = await getDownloadLinksOfPapers()
   files.value = data
 }
@@ -49,4 +59,26 @@ const closed = () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+$primary: #409EFF;
+
+.link {
+  display: flex;
+  align-items: center;
+
+  a {
+    color: $primary;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  i {
+    color: $primary;
+    font-size: 16px;
+    margin-right: 2px;
+  }
+}
+</style>
