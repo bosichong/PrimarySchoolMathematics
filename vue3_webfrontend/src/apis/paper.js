@@ -41,7 +41,6 @@ export function generatePaper(options, paperList) {
   const postOptions = {
     "juanzishu": options.numberOfPapers,
     "lieshu": options.numberOfPagerColumns,
-    "docx": options.downloadPath,
     "jz_title": options.paperTitle,
     "inf_title": options.paperSubTitle,
     "solution": options.solution
@@ -57,16 +56,6 @@ export function generatePaper(options, paperList) {
  */
 export function getDownloadLinksOfPapers() {
   return request.get('getpsmlist')
-}
-
-/**
- * 加载用户持久化的配置
- * @returns 
- */
-export async function loadConfiguration() {
-  const { data: { config } } = await getConfiguration()
-  const { docx: downloadPath } = config
-  return { downloadPath }
 }
 
 /**

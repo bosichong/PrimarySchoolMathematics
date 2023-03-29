@@ -83,10 +83,8 @@
       </template>
     </ElForm>
 
-
     <el-button :disabled="!paperList.length" type="primary" :loading="buttonLoading"
       @click="generate">点此生成口算题卷子</el-button>
-    <p class="p-under">提示:配置读取功能正在升级中,暂时不能用</p>
 
     <OptionsDrawer v-model:visible="optionsDrawerVisible" v-model:formulasFormData="formData" />
 
@@ -98,7 +96,8 @@
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
 import OptionsDrawer from "@/components/home/OptionsDrawer.vue";
 import PaperDownloadDialog from "@/components/home/PaperDownloadDialog.vue";
-import { generatePaper, loadConfiguration } from '@/apis/paper';
+import { loadConfiguration, saveConfiguration } from "@/utils/configurationUtil";
+import { generatePaper } from '@/apis/paper';
 
 const { proxy } = getCurrentInstance()
 
@@ -133,7 +132,6 @@ const formData = ref({
   ],
   resultMinValue: 1, // 试题运行结果最小值
   resultMaxValue: 9, // 试题运行结果最大值
-  downloadPath: ''
 })
 
 const formRules = ref({
@@ -166,9 +164,22 @@ const changeStep = (val) => {
 onMounted(async () => {
   console.log('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
 
-  // todo 调用api获取用户保存的配置
-  const { downloadPath } = await loadConfiguration()
-  formData.value.downloadPath = downloadPath
+  const config = loadConfiguration()
+  formData.value.step = config.step
+  formData.value.numberOfFormulas = config.numberOfFormulas
+  formData.value.whereIsResult = config.whereIsResult
+  formData.value.enableBrackets = config.enableBrackets
+  formData.value.carry = config.carry
+  formData.value.abdication = config.abdication
+  formData.value.remainder = config.remainder
+  formData.value.solution = config.solution
+  formData.value.numberOfPapers = config.numberOfPapers
+  formData.value.numberOfPagerColumns = config.numberOfPagerColumns
+  formData.value.paperTitle = config.paperTitle
+  formData.value.paperSubTitle = config.paperSubTitle
+  formData.value.formulaList = config.formulaList
+  formData.value.resultMinValue = config.resultMinValue
+  formData.value.resultMaxValue = config.resultMaxValue
 })
 
 const optionsDrawerVisible = ref(false)
@@ -201,6 +212,7 @@ const generate = async () => {
   try {
     buttonLoading.value = true
     const { data: { info } } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
+    saveConfiguration(toRaw(unref(formData)))
     proxy.$message.success(info)
 
     paperDownloadDialogVisible.value = true
@@ -213,10 +225,5 @@ const generate = async () => {
 <style lang="scss" scoped>
 .page-container {
   min-height: calc(100vh - 64px - 20px - 20px - 100px);
-}
-
-.p-under {
-  color: #00000073;
-  font-size: 12px;
 }
 </style>
