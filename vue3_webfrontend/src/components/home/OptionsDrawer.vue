@@ -105,7 +105,7 @@ const formData = computed({
     return props.formulasFormData
   },
   set(val) {
-    emit('update:formulasForm', val)
+    emit('update:formulasFormData', val)
   }
 })
 
