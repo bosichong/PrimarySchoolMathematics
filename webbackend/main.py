@@ -20,9 +20,10 @@ import random
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware  # 解决跨域
 from fastapi.responses import HTMLResponse  # 导出html
+from starlette.responses import Response
 import uvicorn as uvicorn
 from pydantic import BaseModel
 
@@ -123,17 +124,25 @@ class Psm_Data(BaseModel):
     data: str
 
 
-@app.post('/api_producepsm')
-def producepsm(data: Psm_Data):
+@app.post('/api/psm')
+def generate_psm(data: Psm_Data):
     '''
     接受前端发来的口算题配置生成口算题并保存到文件
     '''
+    jsonData = json.loads(data.data)
 
-    jsondata = json.loads(data.data)
-    # print(type(jsondata[1]))
-    isok = produce_PSM(jsondata)
-    rs = getRstr(isok)
-    return rs
+     # 验证
+    if len(jsonData[0]) == 0:
+        raise HTTPException(status_code=400,detail='还没有添加口算题到列表中哈！')
+
+    # 生成试卷
+    produce_PSM(jsonData)
+
+    # 获取试卷地址以供下载
+    baseDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    docxPath = os.path.join(baseDir, 'webbackend/dist/docx')  # 前端docx文件夹
+    docxList = getpathfile(docxPath)
+    return docxList
 
 
 @app.get('/getpsmlist')
@@ -190,41 +199,44 @@ def produce_PSM(json_data):
     '''发布口算题保存.docx文件'''
     psm_list = []  # 口算题列表
     psm_title = []  # 标题列表
-
-    # print(data[0])
-    if len(json_data[0]) == 0:
-        print('还没有添加口算题到列表中哈！')  # 打印测试
-        return 0
-    else:
-        # 循环生成每套题
-        for i in range(json_data[1]["juanzishu"]):
-            templist = getPsmList(json_data)  # 生成一页口算题
-            random.shuffle(templist)  # 随机打乱
-            psm_list.append(templist)  # 添加到list 准备后期打印
-            # 为生成的文件起名r
-            # psm_title.clear()
-
-        for i in range(json_data[1]["juanzishu"]):
-            psm_title.append(json_data[1]["jz_title"])
-        # print(self.psm_title)
-        subtit = json_data[1]["inf_title"]
-
-        solution = None
-        if json_data[1]['solution'] == '1':
-            solution = 7.3
-
-        # print(psm_list)
+ 
+    # 循环生成每套题
+    for i in range(json_data[1]["juanzishu"]):
+        paper = getPsmList(json_data)  # 生成一页口算题
         
-        pp = PrintPreview(psm_list, psm_title, subtit, col=json_data[1]["lieshu"], tableRowHeight=solution)
-        pp.delpath()  # 删除之前的口算题
-        pp.produce()  # 生成docx
-        pp.filetovuepublicdocx()  # 复制新的口算题到前端目录
-        pp.docxtozip()  # 打包zip到vue 目录下变提供下载
-        psm_list.clear()  # 清空打印列表。
-        # print(type(json_data))
-        # appConfig.saveAll(json_data)  # 保存所有配置项
-        # self.movdocx()
-        return 1
+        # 处理自定义题目,如果有自定义题目也加入到试卷中
+        if(json_data[2]): # 约定数组的第三项是自定义题目配置
+            customFormulaOptions = json_data[2]
+            for option in customFormulaOptions:
+                for c in option["customFormulaList"]:
+                    paper.append(c["formula"])
+        
+        print('生成的试卷',paper)
+        random.shuffle(paper)  # 随机打乱
+        psm_list.append(paper)  # 添加到list 准备后期打印
+        # 为生成的文件起名r
+        # psm_title.clear()
+
+    for i in range(json_data[1]["juanzishu"]):
+        psm_title.append(json_data[1]["jz_title"])
+    # print(self.psm_title)
+    subtit = json_data[1]["inf_title"]
+
+    solution = None
+    if json_data[1]['solution'] == '1':
+        solution = 7.3
+
+    # print(psm_list)
+    
+    pp = PrintPreview(psm_list, psm_title, subtit, col=json_data[1]["lieshu"], tableRowHeight=solution)
+    pp.delpath()  # 删除之前的口算题
+    pp.produce()  # 生成docx
+    pp.filetovuepublicdocx()  # 复制新的口算题到前端目录
+    pp.docxtozip()  # 打包zip到vue 目录下变提供下载
+    psm_list.clear()  # 清空打印列表。
+    # print(type(json_data))
+    # appConfig.saveAll(json_data)  # 保存所有配置项
+    # self.movdocx()
 
 
 def getPsmList(json_data):

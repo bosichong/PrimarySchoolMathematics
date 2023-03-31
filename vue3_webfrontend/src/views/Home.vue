@@ -28,7 +28,7 @@
     <el-button :disabled="!paperList.length" type="primary" :loading="buttonLoading"
       @click="generate">点此生成口算题卷子</el-button>
 
-    <PaperDownloadDialog v-model:visible="paperDownloadDialogVisible" />
+    <PaperDownloadDialog v-model:visible="paperDownloadDialogVisible" :source="paperDownloadDialogSource"/>
   </div>
 </template>
 
@@ -106,14 +106,16 @@ const paperDescriptionList = computed(() => {
 
 const buttonLoading = ref(false)
 const paperDownloadDialogVisible = ref(false)
+const paperDownloadDialogSource = ref([])
 const generate = async () => {
   try {
     buttonLoading.value = true
-    const { data: { info } } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
+    const { data } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
     saveConfiguration(toRaw(unref(formData)))
-    proxy.$message.success(info)
+    proxy.$message.success('口算题生成完毕！')
 
     paperDownloadDialogVisible.value = true
+    paperDownloadDialogSource.value = data
   } finally {
     buttonLoading.value = false
   }

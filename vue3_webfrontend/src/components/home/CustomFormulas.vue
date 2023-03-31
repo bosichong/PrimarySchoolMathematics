@@ -4,9 +4,9 @@
       <ElTag size="small">*</ElTag> 和 <ElTag size="small">/</ElTag> 代替,程序会自动替换。不需要填写等号。
     </p>
     <ElFormItem v-for="item, index in formData.customFormulaList" :prop="`customFormulaList.${index}.formula`"
-      :rules="{ required: true }">
+      :rules="requiredRule">
       <div class="formula">
-        <ElInput v-model="item.formula" placeholder="例: 20 * 10" />
+        <ElInput v-model="item.formula" placeholder="例: 20 * 10"/>
         <el-icon v-show="formData.customFormulaList.length == (index + 1)" @click="add">
           <CirclePlusFilled />
         </el-icon>
@@ -49,6 +49,10 @@ const formData = computed({
   }
 })
 
+const requiredRule = [
+  { required: true, message: '此项为必填项' }
+]
+
 const paperList = computed({
   get() {
     return props.papers
@@ -59,7 +63,6 @@ const paperList = computed({
 })
 
 const add = () => {
-  // todo validate
   props.refForm?.validate((valid) => {
     if (!valid) return
     formData.value.customFormulaList.push({ formula: '' })
@@ -71,9 +74,15 @@ const remove = (index) => {
 }
 
 const append = () => {
-  // todo replace
+  const customFormulaList = formData.value.customFormulaList.reduce((prev, cur) => {
+    if (cur.formula) {
+      const formula = cur.formula.replace('*', 'x').replace('/', '÷').trim() + ' ='
+      prev.push({ formula })
+    }
+    return prev
+  }, [])
 
-  paperList.value.push({ customFormulaList: formData.value.customFormulaList, numberOfFormulas: formData.value.customFormulaList.length })
+  paperList.value.push({ customFormulaList, numberOfFormulas: customFormulaList.length })
 }
 
 const clear = () => {

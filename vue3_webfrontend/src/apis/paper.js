@@ -8,7 +8,8 @@ import request from '@/utils/request'
  * @returns 
  */
 export function generatePaper(options, paperList) {
-  const postPaperList = paperList.map(p => {
+  // 组装需要自动生成的题型组
+  const postAutoGeneratePaperList = paperList.filter(p => !p.customFormulaList).map(p => {
 
     const multiSteps = p.formulaList.map(j => [parseInt(j.min), parseInt(j.max)])
     multiSteps.push([p.resultMinValue, p.resultMaxValue])
@@ -34,8 +35,13 @@ export function generatePaper(options, paperList) {
       mult: {},
       div: { remainder: parseInt(options.remainder) },
       multistep: multiSteps,
-      symbols
+      symbols,
     }
+  })
+
+  // 组装手动加入的题目
+  const postCustomPaperList = paperList.filter(p => p.customFormulaList && p.customFormulaList.length).map(p => {
+    return { ...p }
   })
 
   const postOptions = {
@@ -46,22 +52,8 @@ export function generatePaper(options, paperList) {
     "solution": options.solution
   }
 
+  console.debug([postAutoGeneratePaperList, postOptions, postCustomPaperList])
+
   return request.post(
-    'api_producepsm', { data: JSON.stringify([postPaperList, postOptions]) })
-}
-
-/**
- * 获取试卷下载链接
- * @returns 
- */
-export function getDownloadLinksOfPapers() {
-  return request.get('getpsmlist')
-}
-
-/**
- * 获取用户持久化的试卷配置参数
- * @returns 
- */
-export function getConfiguration() {
-  return request.get('api_getconfigjson')
+    'api/psm', { data: JSON.stringify([postAutoGeneratePaperList, postOptions, postCustomPaperList]) })
 }

@@ -27,12 +27,14 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { getDownloadLinksOfPapers } from '@/apis/paper';
 
 const props = defineProps({
   visible: {
     type: Boolean
   },
+  source: {
+    type: Object
+  }
 })
 
 const emit = defineEmits(['update:visible'])
@@ -50,8 +52,7 @@ const files = ref([])
 const fileUrl = ref('dist/docx/')
 const zipUrl = ref('dist/docx/docs.zip')
 const open = async () => {
-  const { data } = await getDownloadLinksOfPapers()
-  files.value = data
+  files.value = props.source
 }
 
 const closed = () => {
