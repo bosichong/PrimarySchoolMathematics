@@ -7,30 +7,22 @@ FilePath: /PrimarySchoolMath/webbackend/PrintPreview.py
 '''
 
 
-
-
 '''
 Author  : J.sky
 Mail    : bosichong@qq.com
 
 
 '''
-import os
 
+
+import os
 from docx import Document  # 引入docx类生成docx文档
 from docx.shared import RGBColor
 from docx.shared import Pt
 from docx.shared import Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-
-from utils import delfiles,copyfiletopath,zipDir, VUE_DOCX_PATH,DOCX_ZIP
-
+from utils import delfiles, copyfiletopath, zipDir, VUE_DOCX_PATH, DOCX_ZIP
 __version__ = "1.0.2"
-
-
-
-
-
 
 
 class PrintPreview:
@@ -59,10 +51,10 @@ class PrintPreview:
         :param docxpath str 保存路径
 
         '''
-        
 
-        dirPath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docx"+os.sep)
-        print('dir path',dirPath)
+        dirPath = os.path.join(os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__))), "docx"+os.sep)
+        print('dir path', dirPath)
 
         self.p_list = l
         self.p_title = tit
@@ -103,16 +95,14 @@ class PrintPreview:
         if (len(l) % self.p_column):
             rs = len(l) // self.p_column + 2
         else:
-            rs = len(l) // self.p_column +1
-
-       
+            rs = len(l) // self.p_column + 1
 
         # 将口算题添加到docx表格中
         k = 0  # 计数器
         table = p_docx.add_table(rows=rs, cols=self.p_column)
 
         for i in range(rs):
-            if i >0:
+            if i > 0:
                 if not self.tableRowHeight is None:
                     table.rows[i].height = Cm(self.tableRowHeight)
 
@@ -127,7 +117,7 @@ class PrintPreview:
         table.style.font.color.rgb = RGBColor(54, 0, 0)  # 颜色设置，这里是用RGB颜色
         table.style.font.size = Pt(self.p_content_siae)  # 字体大小设置，和word里面的字号相对应
         print(self.docxpath+'{}.docx'.format(docxname))
-        self.createDir(self.docxpath)#判断目录是否存在并创建
+        self.createDir(self.docxpath)  # 判断目录是否存在并创建
         p_docx.save(self.docxpath+'{}.docx'.format(docxname))  # 输出docx
 
     def produce(self):
@@ -136,7 +126,7 @@ class PrintPreview:
             self.create_psmdocx(l, t, t + str(k))
             k = k + 1
 
-    def createDir(self,path):
+    def createDir(self, path):
         '''
         若目录不存在则，创建一个目录
         :param path: 路径地址 请传入目录的绝对地址
@@ -153,19 +143,18 @@ class PrintPreview:
         delfiles(VUE_DOCX_PATH)
 
     def filetovuepublicdocx(self):
-        copyfiletopath(self.docxpath,VUE_DOCX_PATH)
-    
+        copyfiletopath(self.docxpath, VUE_DOCX_PATH)
+
     def docxtozip(self):
-        zipDir(self.docxpath,DOCX_ZIP)
-
-
+        zipDir(self.docxpath, DOCX_ZIP)
 
 
 if __name__ == '__main__':
     l = [['1-17=', '3-4=', '13-6=', '15-5=', '2-4=', '15-9=', '12-13=', '15-12=', '14-16=', '4-11=', '18-16=', '12-14=',
           ],
          ['1-17=', '3-4=', '13-6=', '15-5=', '2-4=', '15-9=', '12-13=', '15-12=', '14-16=', '4-11=', '18-16=', '12-14=',
-          '14-7=', '7-17=', '16-19=',  ]]
+          '14-7=', '7-17=', '16-19=',]]
     t = ['小学生口算题', '小学生口算题']
-    pp = PrintPreview(l, t,"姓名：__________ 日期：____月____日 时间：________ 对题：____道",)
+    pp = PrintPreview(
+        l, t, "姓名：__________ 日期：____月____日 时间：________ 对题：____道",)
     pp.produce()
