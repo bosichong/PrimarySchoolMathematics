@@ -45,11 +45,12 @@ export function generatePaper(options, paperList) {
   })
 
   const postOptions = {
-    "juanzishu": options.numberOfPapers,
-    "lieshu": options.numberOfPagerColumns,
+    "juanzishu": parseInt(options.numberOfPapers),
+    "lieshu": parseInt(options.numberOfPagerColumns),
     "jz_title": options.paperTitle,
     "inf_title": options.paperSubTitle,
-    "solution": options.solution
+    "solution": options.solution,
+    fileNameGeneratedRule: options.fileNameGeneratedRule
   }
 
   console.debug([postAutoGeneratePaperList, postOptions, postCustomPaperList])

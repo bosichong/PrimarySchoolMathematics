@@ -28,7 +28,7 @@
     <el-button :disabled="!paperList.length" type="primary" :loading="buttonLoading"
       @click="generate">点此生成口算题卷子</el-button>
 
-    <PaperDownloadDialog v-model:visible="paperDownloadDialogVisible" :source="paperDownloadDialogSource"/>
+    <PaperDownloadDialog v-model:visible="paperDownloadDialogVisible" :source="paperDownloadDialogSource" />
   </div>
 </template>
 
@@ -67,7 +67,8 @@ const formData = ref({
   generateMode: '1',
   customFormulaList: [
     { formula: '' }
-  ]
+  ],
+  fileNameGeneratedRule: "baseOnTitleAndIndex"
 })
 
 const formRules = ref({

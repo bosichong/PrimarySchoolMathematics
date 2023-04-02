@@ -58,6 +58,12 @@
         </el-row>
       </el-form-item>
 
+      <el-form-item label="文件名生成规则" prop="fileNameGeneratedRule">
+        <el-radio-group v-model="formData.fileNameGeneratedRule">
+          <el-radio-button v-for="o in fileNameGeneratedRuleOptions" :label="o.key">{{ o.label }}</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+
       <el-form-item prop="paperTitle">
         <el-row :gutter="8">
           <el-col :span="24">
@@ -79,6 +85,11 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+
+const fileNameGeneratedRuleOptions = [
+  { key: 'baseOnTitleAndIndex', label: '卷子标题+序号' },
+  { key: 'baseOnIndexOnly', label: '仅序号' },
+]
 
 const props = defineProps({
   visible: {
