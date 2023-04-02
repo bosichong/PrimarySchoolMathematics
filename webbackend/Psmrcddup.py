@@ -20,7 +20,7 @@ Mail    : 1078539713@qq.com
 import random
 import re
 
-from webbackend.utils import *
+from utils import *
 
 __version__ = "1.0.1"
 

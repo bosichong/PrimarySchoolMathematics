@@ -14,24 +14,24 @@ Author  : andywu1998
 Mail    : 1078539713@qq.com
 '''
 
-import os, sys, json
+import json
+import sys
+import os
+from fastapi.staticfiles import StaticFiles
+from utils import make_docx_dirs
+from Psmrcddup import Generator
+from PrintPreview import PrintPreview
+from APPconfig import AppConfig
+from pydantic import BaseModel
+import uvicorn as uvicorn
+from starlette.responses import Response
+from fastapi.responses import HTMLResponse  # 导出html
+from fastapi.middleware.cors import CORSMiddleware  # 解决跨域
+from fastapi import FastAPI, HTTPException
 import random
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(BASE_DIR)
-
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware  # 解决跨域
-from fastapi.responses import HTMLResponse  # 导出html
-from starlette.responses import Response
-import uvicorn as uvicorn
-from pydantic import BaseModel
-
-from APPconfig import AppConfig
-from PrintPreview import PrintPreview
-from Psmrcddup import Generator
-
-from utils import make_docx_dirs
 
 __version__ = "1.2.1"
 
@@ -68,10 +68,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from fastapi.staticfiles import StaticFiles
 
-app.mount("/dist", StaticFiles(directory=os.path.join(BASE_DIR, 'webbackend/dist')), name="dist")
-app.mount("/assets", StaticFiles(directory=os.path.join(BASE_DIR, 'webbackend/dist/assets')), name="assets")
+app.mount("/dist", StaticFiles(directory=os.path.join(BASE_DIR,
+          'webbackend/dist')), name="dist")
+app.mount("/assets", StaticFiles(directory=os.path.join(BASE_DIR,
+          'webbackend/dist/assets')), name="assets")
 
 # APP配置文件对象
 appConfig = AppConfig()
@@ -79,7 +80,8 @@ appConfig = AppConfig()
 
 @app.get("/")
 def main():
-    html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dist', 'index.html')
+    html_path = os.path.join(os.path.dirname(
+        os.path.abspath(__file__)), 'dist', 'index.html')
     html_content = ''
     with open(html_path, encoding="utf-8") as f:
         html_content = f.read()
@@ -131,9 +133,9 @@ def generate_psm(data: Psm_Data):
     '''
     jsonData = json.loads(data.data)
 
-     # 验证
+    # 验证
     if len(jsonData[0]) == 0:
-        raise HTTPException(status_code=400,detail='还没有添加口算题到列表中哈！')
+        raise HTTPException(status_code=400, detail='还没有添加口算题到列表中哈！')
 
     # 生成试卷
     produce_PSM(jsonData)
@@ -199,19 +201,19 @@ def produce_PSM(json_data):
     '''发布口算题保存.docx文件'''
     psm_list = []  # 口算题列表
     psm_title = []  # 标题列表
- 
+
     # 循环生成每套题
     for i in range(json_data[1]["juanzishu"]):
         paper = getPsmList(json_data)  # 生成一页口算题
-        
+
         # 处理自定义题目,如果有自定义题目也加入到试卷中
-        if(json_data[2]): # 约定数组的第三项是自定义题目配置
+        if (json_data[2]):  # 约定数组的第三项是自定义题目配置
             customFormulaOptions = json_data[2]
             for option in customFormulaOptions:
                 for c in option["customFormulaList"]:
                     paper.append(c["formula"])
-        
-        print('生成的试卷',paper)
+
+        print('生成的试卷', paper)
         random.shuffle(paper)  # 随机打乱
         psm_list.append(paper)  # 添加到list 准备后期打印
         # 为生成的文件起名r
@@ -227,8 +229,9 @@ def produce_PSM(json_data):
         solution = 7.3
 
     # print(psm_list)
-    
-    pp = PrintPreview(psm_list, psm_title, subtit, col=json_data[1]["lieshu"], tableRowHeight=solution)
+
+    pp = PrintPreview(psm_list, psm_title, subtit,
+                      col=json_data[1]["lieshu"], tableRowHeight=solution)
     pp.delpath()  # 删除之前的口算题
     pp.produce()  # 生成docx
     pp.filetovuepublicdocx()  # 复制新的口算题到前端目录
