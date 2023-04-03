@@ -46,14 +46,18 @@
       <el-form-item>
         <el-row :gutter="20">
           <el-col :span="9">
-            <el-input v-model="formData.numberOfPapers">
-              <template #prepend>生成的卷子数量</template>
-            </el-input>
+            <ElFormItem prop="numberOfPapers">
+              <el-input v-model.number="formData.numberOfPapers">
+                <template #prepend>生成的卷子数量</template>
+              </el-input>
+            </ElFormItem>
           </el-col>
           <el-col :span="8">
-            <el-input v-model="formData.numberOfPagerColumns">
-              <template #prepend>口算题列数</template>
-            </el-input>
+            <ElFormItem prop="numberOfPagerColumns">
+              <el-input v-model.number="formData.numberOfPagerColumns">
+                <template #prepend>口算题列数</template>
+              </el-input>
+            </ElFormItem>
           </el-col>
         </el-row>
       </el-form-item>
@@ -110,8 +114,14 @@ const formData = computed({
 })
 
 const formRules = ref({
-  numberOfPapers: [{ required: true, message: '请填写卷子数量' }, { type: 'number', message: '请填写数字' }],
-  numberOfPagerColumns: [{ required: true, message: '请填写卷子列数' }],
+  numberOfPapers: [
+    { required: true, message: '请填写卷子数量' },
+    { type: 'number', message: '请填写数字' }
+  ],
+  numberOfPagerColumns: [
+    { required: true, message: '请填写卷子列数' },
+    { type: 'number', message: '请填写数字' }
+  ],
   paperTitle: [
     { required: true, message: '请填写卷子标题' }
   ],

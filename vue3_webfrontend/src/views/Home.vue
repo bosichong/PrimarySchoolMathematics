@@ -23,14 +23,14 @@
           <ElRow :gutter="8">
             <ElCol :span="8">
               <ElFormItem :prop="`formulaList.${index}.min`" :rules="requiredNumberRule">
-                <ElInput v-model="item.min">
+                <ElInput v-model.number="item.min">
                   <template #prepend>最小值</template>
                 </ElInput>
               </ElFormItem>
             </ElCol>
             <ElCol :span="8">
               <ElFormItem :prop="`formulaList.${index}.max`" :rules="requiredNumberRule">
-                <ElInput v-model="item.max">
+                <ElInput v-model.number="item.max">
                   <template #prepend>最大值</template>
                 </ElInput>
               </ElFormItem>
@@ -43,14 +43,14 @@
         <ElRow :gutter="8">
           <ElCol :span="8">
             <ElFormItem prop="resultMinValue">
-              <ElInput v-model="formData.resultMinValue">
+              <ElInput v-model.number="formData.resultMinValue">
                 <template #prepend>最小值</template>
               </ElInput>
             </ElFormItem>
           </ElCol>
           <ElCol :span="8">
             <ElFormItem prop="resultMaxValue">
-              <ElInput v-model="formData.resultMaxValue">
+              <ElInput v-model.number="formData.resultMaxValue">
                 <template #prepend>最大值</template>
               </ElInput>
             </ElFormItem>
@@ -61,7 +61,7 @@
       <ElFormItem prop="numberOfFormulas">
         <ElRow :gutter="20">
           <ElCol :span="11">
-            <ElInput v-model="formData.numberOfFormulas">
+            <ElInput v-model.number="formData.numberOfFormulas">
               <template #prepend>口算题数量</template>
             </ElInput>
           </ElCol>
@@ -137,7 +137,7 @@ const formData = ref({
 const formRules = ref({
   resultMinValue: [{ required: true, message: '请填写运算结果最小值' }, { type: 'number', message: '请填写数字' }],
   resultMaxValue: [{ required: true, message: '请填写运算结果最大值' }, { type: 'number', message: '请填写数字' }],
-  numberOfFormulas: [{ required: true, message: '请填写口算题数量' }]
+  numberOfFormulas: [{ required: true, message: '请填写口算题数量' }, { type: 'number', message: '请填写数字' }]
 })
 const requiredRule = [
   { required: true, message: '此项为必填项' }
