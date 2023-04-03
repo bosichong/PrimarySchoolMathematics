@@ -208,10 +208,11 @@ def produce_PSM(json_data):
             psm_title.append(json_data[1]["jz_title"])
         # print(self.psm_title)
         subtit = json_data[1]["inf_title"]
-
+        
+        # 如果解题方式选择了用竖式解题,在每一行的题目下面需要留白
         solution = None
         if json_data[1]['solution'] == '1':
-            solution = 7.3
+            solution = 4.6
 
         # print(psm_list)
         # todo
