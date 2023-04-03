@@ -3,8 +3,8 @@
     <ElForm ref="refForm" :model="formData" :rules="formRules">
       <ElFormItem label="题型设置">
         <el-radio-group v-model="formData.whereIsResult">
-          <el-radio-button label="0">求结果</el-radio-button>
-          <el-radio-button label="1">求算数项</el-radio-button>
+          <el-radio-button v-for="o in whereIsResultOptions" :label="o.key" :disabled="o.disabled">{{ o.label
+          }}</el-radio-button>
         </el-radio-group>
       </ElFormItem>
 
@@ -30,9 +30,8 @@
 
       <el-form-item label="除法设置">
         <el-radio-group v-model="formData.remainder">
-          <el-radio-button label="1">随机余数</el-radio-button>
-          <el-radio-button label="2">结果整除</el-radio-button>
-          <el-radio-button label="3">结果余数</el-radio-button>
+          <el-radio-button v-for="o in remainderOptions" :label="o.key" :disabled="o.disabled">{{ o.label
+          }}</el-radio-button>
         </el-radio-group>
       </el-form-item>
 
@@ -131,6 +130,27 @@ const formRules = ref({
 })
 
 const refForm = ref(null)
+
+const whereIsResultOptions = computed(() => {
+  // 题型设置为求算数项时不能有余数
+  const disabled = formData.value.remainder == '3'
+  return [
+    { key: '0', label: "求结果", disabled: false },
+    { key: '1', label: "求算数项", disabled }
+  ]
+})
+
+const remainderOptions = computed(() => {
+  // 题型设置为求算数项时不能有余数
+  // 多步运算时不能有余数
+  const disabled = formData.value.whereIsResult == '1' || formData.value.step > 1
+  return [
+    { key: '1', label: "随机余数", disabled: false },
+    { key: '2', label: "结果整除", disabled: false },
+    { key: '3', label: "结果余数", disabled }
+  ]
+})
+
 /**
  * 
  * @param {Function} done 
