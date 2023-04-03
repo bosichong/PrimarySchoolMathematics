@@ -10,19 +10,19 @@ import request from '@/utils/request'
 export function generatePaper(options, paperList) {
   const postPaperList = paperList.map(p => {
 
-    const multiSteps = p.formulaList.map(j => [parseInt(j.min), parseInt(j.max)])
-    multiSteps.push([p.resultMinValue, p.resultMaxValue])
-
+    const multiSteps = p.formulaList.map(j => [parseInt(j.min), parseInt(j.max)])   
     const symbols = p.formulaList.reduce((pre, cur) => {
       cur.operators && pre.push(cur.operators)
       return pre
     }, [])
-
+    
     // 补缺
     for (let i = 0; i < 4 - p.formulaList.length; i++) {
       multiSteps.push([1, 9])
       symbols.push([1])
     }
+
+    multiSteps.push([p.resultMinValue, p.resultMaxValue])
 
     return {
       step: parseInt(p.step),
