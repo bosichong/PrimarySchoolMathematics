@@ -212,8 +212,7 @@ def produce_PSM(json_data):
             for option in customFormulaOptions:
                 for c in option["customFormulaList"]:
                     paper.append(c["formula"])
-
-        print('生成的试卷', paper)
+        
         random.shuffle(paper)  # 随机打乱
         psm_list.append(paper)  # 添加到list 准备后期打印
         # 为生成的文件起名r
@@ -226,7 +225,7 @@ def produce_PSM(json_data):
 
     solution = None
     if json_data[1]['solution'] == '1':
-        solution = 7.3
+         solution = 4.6
 
     # print(psm_list)
 

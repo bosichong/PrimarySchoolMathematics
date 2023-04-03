@@ -3,7 +3,6 @@
         <img alt="python-3.8.8" src="https://img.shields.io/badge/Python-3.8.8-green?logo=python" />
         <img alt="fastAPI-0.85.1" src="https://img.shields.io/badge/fastAPI-0.85.1-green" />
         <img alt="Vue-3.2.41" src="https://img.shields.io/badge/Vue-3.2.41-blue" />
-        <img alt="Ant Design of Vue" src="https://img.shields.io/badge/Ant Design of Vue-3.2.14-blue" />
         <img alt="license-Apache--2.0" src="https://img.shields.io/badge/license-Apache--2.0-green" />
         <a href="https://gitee.com/J_Sky/PrimarySchoolMathematics" color="inherit">
             <img alt="" src="https://img.shields.io/badge/Gitee--PrimarySchoolMathematics-red?logo=gitee" />

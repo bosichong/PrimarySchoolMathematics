@@ -8,7 +8,7 @@ export function loadConfiguration() {
     // todo 初始化配置
     return {
       step: '1', // 几步运算
-      numberOfFormulas: 60, // 口算题数量
+      numberOfFormulas: 30, // 口算题数量
       whereIsResult: '0', // 题型设置
       enableBrackets: false, // 启用括号
       carry: '1',
