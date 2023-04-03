@@ -215,16 +215,15 @@ def produce_PSM(json_data):
             solution = 4.6
 
         # print(psm_list)
-        # todo
-        pp = PrintPreview(psm_list, psm_title,
-                          subtit, col=json_data[1]["lieshu"], docxpath=json_data[1]["docx"], tableRowHeight=solution)
+        
+        pp = PrintPreview(psm_list, psm_title, subtit, col=json_data[1]["lieshu"], tableRowHeight=solution)
         pp.delpath()  # 删除之前的口算题
         pp.produce()  # 生成docx
         pp.filetovuepublicdocx()  # 复制新的口算题到前端目录
         pp.docxtozip()  # 打包zip到vue 目录下变提供下载
         psm_list.clear()  # 清空打印列表。
         # print(type(json_data))
-        appConfig.saveAll(json_data)  # 保存所有配置项
+        # appConfig.saveAll(json_data)  # 保存所有配置项
         # self.movdocx()
         return 1
 

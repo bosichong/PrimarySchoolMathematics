@@ -6,14 +6,20 @@
  * @FilePath: /PrimarySchoolMath/vue3_webfrontend/src/main.js
  */
 import { createApp } from 'vue'
-import Antd from 'ant-design-vue';
 import App from './App.vue'
-import 'ant-design-vue/dist/antd.css';
-import router from './router';
-import axios from 'axios'
+import { router } from './router';
+import "./styles/shared.scss";
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
 const app = createApp(App);
-app.use(Antd);
+
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
+
+app.use(ElementPlus)
 app.use(router)
 app.mount('#app');
