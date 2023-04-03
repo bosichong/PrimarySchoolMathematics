@@ -2,11 +2,8 @@
   <div>
     <ElFormItem label="几步运算?">
       <el-radio-group v-model="formData.step" @change="changeStep">
-        <el-radio-button label="1">一步运算</el-radio-button>
-        <el-radio-button label="2">两步运算</el-radio-button>
-        <el-radio-button label="3">三步运算</el-radio-button>
+        <el-radio-button v-for="o in stepOptions" :label="o.key" :disabled="o.disabled">{{ o.label }}</el-radio-button>
       </el-radio-group>
-
       <ElButton type="primary" style="margin-left: 6px;" @click="openOptionsDrawer">其他设置</ElButton>
     </ElFormItem>
 
@@ -22,14 +19,14 @@
         <ElRow :gutter="8">
           <ElCol :span="8">
             <ElFormItem :prop="`formulaList.${index}.min`" :rules="requiredNumberRule">
-              <ElInput v-model="item.min">
+              <ElInput v-model.number="item.min">
                 <template #prepend>最小值</template>
               </ElInput>
             </ElFormItem>
           </ElCol>
           <ElCol :span="8">
             <ElFormItem :prop="`formulaList.${index}.max`" :rules="requiredNumberRule">
-              <ElInput v-model="item.max">
+              <ElInput v-model.number="item.max">
                 <template #prepend>最大值</template>
               </ElInput>
             </ElFormItem>
@@ -42,14 +39,14 @@
       <ElRow :gutter="8">
         <ElCol :span="8">
           <ElFormItem prop="resultMinValue">
-            <ElInput v-model="formData.resultMinValue">
+            <ElInput v-model.number="formData.resultMinValue">
               <template #prepend>最小值</template>
             </ElInput>
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
           <ElFormItem prop="resultMaxValue">
-            <ElInput v-model="formData.resultMaxValue">
+            <ElInput v-model.number="formData.resultMaxValue">
               <template #prepend>最大值</template>
             </ElInput>
           </ElFormItem>
@@ -60,7 +57,7 @@
     <ElFormItem prop="numberOfFormulas">
       <ElRow :gutter="20">
         <ElCol :span="11">
-          <ElInput v-model="formData.numberOfFormulas">
+          <ElInput v-model.number="formData.numberOfFormulas">
             <template #prepend>口算题数量</template>
           </ElInput>
         </ElCol>
@@ -127,6 +124,16 @@ const requiredNumberRule = [
   { required: true, message: '此项为必填项' }, { type: 'number', message: '此项必须为数字' }
 ]
 
+
+const stepOptions = computed(() => {
+  // 多步运算时不能有余数
+  const disabled = formData.value.remainder == '3'
+  return [
+    { key: '1', label: "一步运算", disabled: false },
+    { key: '2', label: "两步运算", disabled },
+    { key: '3', label: "三步运算", disabled }
+  ]
+})
 const changeStep = (val) => {
   // 选择了新的几步运算后, 计算新值与旧值的差
   const difference = parseInt(val) - formData.value.formulaList.length + 1

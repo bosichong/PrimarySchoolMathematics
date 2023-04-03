@@ -62,7 +62,6 @@ class PrintPreview:
         
 
         dirPath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docx"+os.sep)
-        print('dir path',dirPath)
 
         self.p_list = l
         self.p_title = tit

@@ -11,19 +11,19 @@ export function generatePaper(options, paperList) {
   // 组装需要自动生成的题型组
   const postAutoGeneratePaperList = paperList.filter(p => !p.customFormulaList).map(p => {
 
-    const multiSteps = p.formulaList.map(j => [parseInt(j.min), parseInt(j.max)])
-    multiSteps.push([p.resultMinValue, p.resultMaxValue])
-
+    const multiSteps = p.formulaList.map(j => [parseInt(j.min), parseInt(j.max)])   
     const symbols = p.formulaList.reduce((pre, cur) => {
       cur.operators && pre.push(cur.operators)
       return pre
     }, [])
-
+    
     // 补缺
     for (let i = 0; i < 4 - p.formulaList.length; i++) {
       multiSteps.push([1, 9])
       symbols.push([1])
     }
+
+    multiSteps.push([p.resultMinValue, p.resultMaxValue])
 
     return {
       step: parseInt(p.step),

@@ -3,8 +3,8 @@
     <ElForm ref="refForm" :model="formData" :rules="formRules">
       <ElFormItem label="题型设置">
         <el-radio-group v-model="formData.whereIsResult">
-          <el-radio-button label="0">求结果</el-radio-button>
-          <el-radio-button label="1">求算数项</el-radio-button>
+          <el-radio-button v-for="o in whereIsResultOptions" :label="o.key" :disabled="o.disabled">{{ o.label
+          }}</el-radio-button>
         </el-radio-group>
       </ElFormItem>
 
@@ -30,9 +30,8 @@
 
       <el-form-item label="除法设置">
         <el-radio-group v-model="formData.remainder">
-          <el-radio-button label="1">随机余数</el-radio-button>
-          <el-radio-button label="2">结果整除</el-radio-button>
-          <el-radio-button label="3">结果余数</el-radio-button>
+          <el-radio-button v-for="o in remainderOptions" :label="o.key" :disabled="o.disabled">{{ o.label
+          }}</el-radio-button>
         </el-radio-group>
       </el-form-item>
 
@@ -46,14 +45,18 @@
       <el-form-item>
         <el-row :gutter="20">
           <el-col :span="9">
-            <el-input v-model="formData.numberOfPapers">
-              <template #prepend>生成的卷子数量</template>
-            </el-input>
+            <ElFormItem prop="numberOfPapers">
+              <el-input v-model.number="formData.numberOfPapers">
+                <template #prepend>生成的卷子数量</template>
+              </el-input>
+            </ElFormItem>
           </el-col>
           <el-col :span="8">
-            <el-input v-model="formData.numberOfPagerColumns">
-              <template #prepend>口算题列数</template>
-            </el-input>
+            <ElFormItem prop="numberOfPagerColumns">
+              <el-input v-model.number="formData.numberOfPagerColumns">
+                <template #prepend>口算题列数</template>
+              </el-input>
+            </ElFormItem>
           </el-col>
         </el-row>
       </el-form-item>
@@ -110,8 +113,14 @@ const formData = computed({
 })
 
 const formRules = ref({
-  numberOfPapers: [{ required: true, message: '请填写卷子数量' }, { type: 'number', message: '请填写数字' }],
-  numberOfPagerColumns: [{ required: true, message: '请填写卷子列数' }],
+  numberOfPapers: [
+    { required: true, message: '请填写卷子数量' },
+    { type: 'number', message: '请填写数字' }
+  ],
+  numberOfPagerColumns: [
+    { required: true, message: '请填写卷子列数' },
+    { type: 'number', message: '请填写数字' }
+  ],
   paperTitle: [
     { required: true, message: '请填写卷子标题' }
   ],
@@ -121,6 +130,27 @@ const formRules = ref({
 })
 
 const refForm = ref(null)
+
+const whereIsResultOptions = computed(() => {
+  // 题型设置为求算数项时不能有余数
+  const disabled = formData.value.remainder == '3'
+  return [
+    { key: '0', label: "求结果", disabled: false },
+    { key: '1', label: "求算数项", disabled }
+  ]
+})
+
+const remainderOptions = computed(() => {
+  // 题型设置为求算数项时不能有余数
+  // 多步运算时不能有余数
+  const disabled = formData.value.whereIsResult == '1' || formData.value.step > 1
+  return [
+    { key: '1', label: "随机余数", disabled: false },
+    { key: '2', label: "结果整除", disabled: false },
+    { key: '3', label: "结果余数", disabled }
+  ]
+})
+
 /**
  * 
  * @param {Function} done 

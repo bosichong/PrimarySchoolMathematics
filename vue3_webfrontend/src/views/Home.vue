@@ -73,7 +73,7 @@ const formData = ref({
 const formRules = ref({
   resultMinValue: [{ required: true, message: '请填写运算结果最小值' }, { type: 'number', message: '请填写数字' }],
   resultMaxValue: [{ required: true, message: '请填写运算结果最大值' }, { type: 'number', message: '请填写数字' }],
-  numberOfFormulas: [{ required: true, message: '请填写口算题数量' }]
+  numberOfFormulas: [{ required: true, message: '请填写口算题数量' }, { type: 'number', message: '请填写数字' }]
 })
 
 onMounted(async () => {

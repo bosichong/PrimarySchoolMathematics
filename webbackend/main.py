@@ -199,10 +199,31 @@ def produce_PSM(json_data):
     '''发布口算题保存.docx文件'''
     psm_list = []  # 口算题列表
     psm_title = []  # 标题列表
- 
-    # 循环生成每套题
-    for i in range(json_data[1]["juanzishu"]):
-        paper = getPsmList(json_data)  # 生成一页口算题
+
+    # print(data[0])
+    if len(json_data[0]) == 0:
+        print('还没有添加口算题到列表中哈！')  # 打印测试
+        return 0
+    else:
+        # 循环生成每套题
+        for i in range(json_data[1]["juanzishu"]):
+            templist = getPsmList(json_data)  # 生成一页口算题
+            random.shuffle(templist)  # 随机打乱
+            psm_list.append(templist)  # 添加到list 准备后期打印
+            # 为生成的文件起名r
+            # psm_title.clear()
+
+        for i in range(json_data[1]["juanzishu"]):
+            psm_title.append(json_data[1]["jz_title"])
+        # print(self.psm_title)
+        subtit = json_data[1]["inf_title"]
+        
+        # 如果解题方式选择了用竖式解题,在每一行的题目下面需要留白
+        solution = None
+        if json_data[1]['solution'] == '1':
+            solution = 4.6
+
+        # print(psm_list)
         
         # 处理自定义题目,如果有自定义题目也加入到试卷中
         if(json_data[2]): # 约定数组的第三项是自定义题目配置
