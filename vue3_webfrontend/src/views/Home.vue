@@ -3,9 +3,7 @@
     <ElForm ref="refForm" :model="formData" :rules="formRules" label-position="top">
       <ElFormItem label="几步运算?">
         <el-radio-group v-model="formData.step" @change="changeStep">
-          <el-radio-button label="1">一步运算</el-radio-button>
-          <el-radio-button label="2">两步运算</el-radio-button>
-          <el-radio-button label="3">三步运算</el-radio-button>
+          <el-radio-button v-for="o in stepOptions" :label="o.key" :disabled="o.disabled">{{ o.label }}</el-radio-button>
         </el-radio-group>
 
         <ElButton type="primary" style="margin-left: 6px;" @click="openOptionsDrawer">其他设置</ElButton>
@@ -147,6 +145,15 @@ const requiredNumberRule = [
 ]
 
 
+const stepOptions = computed(() => {
+  // 多步运算时不能有余数
+  const disabled = formData.value.remainder == '3'
+  return [
+    { key: '1', label: "一步运算", disabled: false },
+    { key: '2', label: "两步运算", disabled },
+    { key: '3', label: "三步运算", disabled }
+  ]
+})
 const changeStep = (val) => {
   // 选择了新的几步运算后, 计算新值与旧值的差
   const difference = parseInt(val) - formData.value.formulaList.length + 1
