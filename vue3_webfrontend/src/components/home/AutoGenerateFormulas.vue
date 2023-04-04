@@ -154,11 +154,13 @@ const openOptionsDrawer = () => {
 }
 
 const append = () => {
-  props.refForm?.validate((valid) => {
+  refForm?.value?.validate((valid) => {
     if (!valid) return
-
-    const { step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue } = formData.value
-    paperList.value.push({ step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue })
+    
+    const { step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue } = cloneDeep(toRaw(formData.value))
+    paperList.value.push({
+      step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue
+    })
   })
 }
 

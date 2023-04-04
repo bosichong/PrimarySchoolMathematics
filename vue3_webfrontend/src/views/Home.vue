@@ -34,6 +34,7 @@
 
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
+import { cloneDeep } from "lodash";
 import { PaperDownloadDialog, CustomFormulas, AutoGenerateFormulas } from "@/components/home";
 import { loadConfiguration, saveConfiguration } from "@/utils/configurationUtil";
 import { generatePaper } from '@/apis/paper';
