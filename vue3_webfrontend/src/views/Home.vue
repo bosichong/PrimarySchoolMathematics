@@ -92,6 +92,7 @@
 
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
+import { cloneDeep } from "lodash";
 import OptionsDrawer from "@/components/home/OptionsDrawer.vue";
 import PaperDownloadDialog from "@/components/home/PaperDownloadDialog.vue";
 import { loadConfiguration, saveConfiguration } from "@/utils/configurationUtil";
@@ -203,9 +204,11 @@ const paperDescriptionList = computed(() => {
 const append = () => {
   refForm?.value?.validate((valid) => {
     if (!valid) return
-
-    const { step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue } = formData.value
-    paperList.value.push({ step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue })
+    
+    const { step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue } = cloneDeep(toRaw(formData.value))
+    paperList.value.push({
+      step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue
+    })
   })
 }
 
