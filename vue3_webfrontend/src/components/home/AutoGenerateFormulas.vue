@@ -75,7 +75,8 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, toRaw } from 'vue';
+import { cloneDeep } from "lodash";
 import { OptionsDrawer } from "@/components/home";
 
 const props = defineProps({
@@ -154,9 +155,9 @@ const openOptionsDrawer = () => {
 }
 
 const append = () => {
-  refForm?.value?.validate((valid) => {
+  props.refForm?.validate((valid) => {
     if (!valid) return
-    
+
     const { step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue } = cloneDeep(toRaw(formData.value))
     paperList.value.push({
       step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue
