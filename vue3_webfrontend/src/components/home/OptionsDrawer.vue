@@ -88,11 +88,13 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { fileNameGeneratedRuleEnum } from '@/utils/enum.js';
 
-const fileNameGeneratedRuleOptions = [
-  { key: 'baseOnTitleAndIndex', label: '卷子标题+序号' },
-  { key: 'baseOnIndexOnly', label: '仅序号' },
-]
+const fileNameGeneratedRuleOptions = computed(() => {
+  return Object.entries(fileNameGeneratedRuleEnum).map(([, { key, text }]) => {
+    return { key, label: text }
+  })
+})
 
 const props = defineProps({
   visible: {

@@ -40,7 +40,7 @@ class PrintPreview:
 
     '''
 
-    def __init__(self, l, tit, subtitle, col=3, tsize=26, subsize=11, csize=16, tableRowHeight=None):
+    def __init__(self, l, tit, subtitle, col=3, tsize=26, subsize=11, csize=16, solution=None, fileNameGeneratedRule=None):
         '''
         :param l: list 需要打印的口算题列表
         :param tit: list 口算页标题
@@ -64,6 +64,12 @@ class PrintPreview:
         self.p_subtitle_size = subsize
         self.p_content_siae = csize
         self.docxpath = dirPath
+        self.fileNameGeneratedRule = fileNameGeneratedRule
+
+        if solution == '1':
+            tableRowHeight = 4.6
+        else:
+            tableRowHeight = None
         self.tableRowHeight = tableRowHeight
 
     def create_psmdocx(self, l, title, docxname):
@@ -123,7 +129,13 @@ class PrintPreview:
     def produce(self):
         k = 1
         for l, t in zip(self.p_list, self.p_title):
-            self.create_psmdocx(l, t, t + str(k))
+            if self.fileNameGeneratedRule == 'baseOnTitleAndIndex':
+                fileName = t + str(k)
+            elif self.fileNameGeneratedRule == 'baseOnIndexOnly':
+                fileName = str(k)
+            else:
+                fileName = str(k)
+            self.create_psmdocx(l, t, fileName)
             k = k + 1
 
     def createDir(self, path):

@@ -1,3 +1,5 @@
+import { fileNameGeneratedRuleEnum } from "./enum"
+
 const key = 'customer-config'
 
 export function loadConfiguration() {
@@ -28,6 +30,7 @@ export function loadConfiguration() {
       ],
       resultMinValue: 1, // 试题运行结果最小值
       resultMaxValue: 9, // 试题运行结果最大值
+      fileNameGeneratedRule: fileNameGeneratedRuleEnum.baseOnTitleAndIndex.key
     }
   }
 }

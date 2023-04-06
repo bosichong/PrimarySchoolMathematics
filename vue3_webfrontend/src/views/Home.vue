@@ -37,6 +37,7 @@ import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue'
 import { PaperDownloadDialog, CustomFormulas, AutoGenerateFormulas } from "@/components/home";
 import { loadConfiguration, saveConfiguration } from "@/utils/configurationUtil";
 import { generatePaper } from '@/apis/paper';
+import { fileNameGeneratedRuleEnum } from '@/utils/enum';
 
 const { proxy } = getCurrentInstance()
 
@@ -68,7 +69,7 @@ const formData = ref({
   customFormulaList: [
     { formula: '' }
   ],
-  fileNameGeneratedRule: "baseOnTitleAndIndex"
+  fileNameGeneratedRule: fileNameGeneratedRuleEnum.baseOnTitleAndIndex.key
 })
 
 const formRules = ref({
@@ -96,6 +97,7 @@ onMounted(async () => {
   formData.value.formulaList = config.formulaList
   formData.value.resultMinValue = config.resultMinValue
   formData.value.resultMaxValue = config.resultMaxValue
+  formData.value.fileNameGeneratedRule = config.fileNameGeneratedRule
 })
 
 const paperList = ref([])

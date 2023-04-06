@@ -212,7 +212,7 @@ def produce_PSM(json_data):
             for option in customFormulaOptions:
                 for c in option["customFormulaList"]:
                     paper.append(c["formula"])
-        
+
         random.shuffle(paper)  # 随机打乱
         psm_list.append(paper)  # 添加到list 准备后期打印
         # 为生成的文件起名r
@@ -223,14 +223,10 @@ def produce_PSM(json_data):
     # print(self.psm_title)
     subtit = json_data[1]["inf_title"]
 
-    solution = None
-    if json_data[1]['solution'] == '1':
-         solution = 4.6
-
     # print(psm_list)
 
     pp = PrintPreview(psm_list, psm_title, subtit,
-                      col=json_data[1]["lieshu"], tableRowHeight=solution)
+                      col=json_data[1]["lieshu"], solution=json_data[1]['solution'], fileNameGeneratedRule=json_data[1]["fileNameGeneratedRule"])
     pp.delpath()  # 删除之前的口算题
     pp.produce()  # 生成docx
     pp.filetovuepublicdocx()  # 复制新的口算题到前端目录
