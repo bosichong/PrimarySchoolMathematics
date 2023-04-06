@@ -6,7 +6,8 @@
     <ElFormItem v-for="item, index in formData.customFormulaList" :prop="`customFormulaList.${index}.formula`"
       :rules="requiredRule">
       <div class="formula">
-        <ElInput ref="refCustomFormulaInputs" v-model="item.formula" placeholder="例: 20 * 10" @keydown.enter.prevent="add(index)" />
+        <ElInput ref="refCustomFormulaInputs" v-model="item.formula" placeholder="例: 20*10"
+          @keydown.enter.prevent="add(index)" />
         <el-icon v-show="formData.customFormulaList.length == (index + 1)" @click="add(index)">
           <CirclePlusFilled />
         </el-icon>
@@ -82,7 +83,8 @@ const remove = (index) => {
 const append = () => {
   const customFormulaList = formData.value.customFormulaList.reduce((prev, cur) => {
     if (cur.formula) {
-      const formula = cur.formula.replace('*', 'x').replace('/', '÷').trim() + ' ='
+      let formula = cur.formula.replace('*', 'x').replace('/', '÷').trim() + '='
+      formula = formula.replace(/\s+/g, '');
       prev.push({ formula })
     }
     return prev
