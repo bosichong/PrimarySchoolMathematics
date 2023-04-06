@@ -1,76 +1,20 @@
 <template>
   <div class="page-container">
     <ElForm ref="refForm" :model="formData" :rules="formRules" label-position="top">
-      <ElFormItem label="几步运算?">
-        <el-radio-group v-model="formData.step" @change="changeStep">
-          <el-radio-button v-for="o in stepOptions" :label="o.key" :disabled="o.disabled">{{ o.label }}</el-radio-button>
+      <ElFormItem label="生成模式">
+        <el-radio-group v-model="formData.generateMode">
+          <el-radio-button label="1">自动生成</el-radio-button>
+          <el-radio-button label="2">手动添加</el-radio-button>
         </el-radio-group>
-
-        <ElButton type="primary" style="margin-left: 6px;" @click="openOptionsDrawer">其他设置</ElButton>
       </ElFormItem>
 
-      <template v-for="item, index in formData.formulaList">
-        <ElFormItem v-if="item.operators" :label="`第${index}步运算符号选择`" :prop="`formulaList.${index}.operators`"
-          :rules="requiredRule">
-          <el-checkbox-group v-model="item.operators">
-            <el-checkbox v-for="o in operatorOptions" :label="o.key">{{ o.label }}</el-checkbox>
-          </el-checkbox-group>
-        </ElFormItem>
-
-        <ElFormItem :label="`算数项${index + 1}`">
-          <ElRow :gutter="8">
-            <ElCol :span="8">
-              <ElFormItem :prop="`formulaList.${index}.min`" :rules="requiredNumberRule">
-                <ElInput v-model.number="item.min">
-                  <template #prepend>最小值</template>
-                </ElInput>
-              </ElFormItem>
-            </ElCol>
-            <ElCol :span="8">
-              <ElFormItem :prop="`formulaList.${index}.max`" :rules="requiredNumberRule">
-                <ElInput v-model.number="item.max">
-                  <template #prepend>最大值</template>
-                </ElInput>
-              </ElFormItem>
-            </ElCol>
-          </ElRow>
-        </ElFormItem>
+      <template v-if="formData.generateMode == '1'">
+        <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" />
       </template>
 
-      <ElFormItem label="运算结果">
-        <ElRow :gutter="8">
-          <ElCol :span="8">
-            <ElFormItem prop="resultMinValue">
-              <ElInput v-model.number="formData.resultMinValue">
-                <template #prepend>最小值</template>
-              </ElInput>
-            </ElFormItem>
-          </ElCol>
-          <ElCol :span="8">
-            <ElFormItem prop="resultMaxValue">
-              <ElInput v-model.number="formData.resultMaxValue">
-                <template #prepend>最大值</template>
-              </ElInput>
-            </ElFormItem>
-          </ElCol>
-        </ElRow>
-      </ElFormItem>
-
-      <ElFormItem prop="numberOfFormulas">
-        <ElRow :gutter="20">
-          <ElCol :span="11">
-            <ElInput v-model.number="formData.numberOfFormulas">
-              <template #prepend>口算题数量</template>
-            </ElInput>
-          </ElCol>
-          <ElCol :span="5">
-            <el-button type="primary" @click="append">添加口算题</el-button>
-          </ElCol>
-          <ElCol :span="5">
-            <el-button @click="clear">清空口算题</el-button>
-          </ElCol>
-        </ElRow>
-      </ElFormItem>
+      <template v-if="formData.generateMode == '2'">
+        <CustomFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" />
+      </template>
 
       <template v-if="paperDescriptionList && paperDescriptionList.length">
         <ElFormItem label="当前口算题包含的内容">
@@ -84,28 +28,17 @@
     <el-button :disabled="!paperList.length" type="primary" :loading="buttonLoading"
       @click="generate">点此生成口算题卷子</el-button>
 
-    <OptionsDrawer v-model:visible="optionsDrawerVisible" v-model:formulasFormData="formData" />
-
-    <PaperDownloadDialog v-model:visible="paperDownloadDialogVisible" />
+    <PaperDownloadDialog v-model:visible="paperDownloadDialogVisible" :source="paperDownloadDialogSource"/>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
-import { cloneDeep } from "lodash";
-import OptionsDrawer from "@/components/home/OptionsDrawer.vue";
-import PaperDownloadDialog from "@/components/home/PaperDownloadDialog.vue";
+import { PaperDownloadDialog, CustomFormulas, AutoGenerateFormulas } from "@/components/home";
 import { loadConfiguration, saveConfiguration } from "@/utils/configurationUtil";
 import { generatePaper } from '@/apis/paper';
 
 const { proxy } = getCurrentInstance()
-
-const operatorOptions = [
-  { key: 1, label: '+(加法)' },
-  { key: 2, label: '-(减法)' },
-  { key: 3, label: '×(乘法)' },
-  { key: 4, label: '÷(除法)' }
-]
 
 const refForm = ref(null)
 
@@ -131,6 +64,10 @@ const formData = ref({
   ],
   resultMinValue: 1, // 试题运行结果最小值
   resultMaxValue: 9, // 试题运行结果最大值
+  generateMode: '1',
+  customFormulaList: [
+    { formula: '' }
+  ]
 })
 
 const formRules = ref({
@@ -138,36 +75,6 @@ const formRules = ref({
   resultMaxValue: [{ required: true, message: '请填写运算结果最大值' }, { type: 'number', message: '请填写数字' }],
   numberOfFormulas: [{ required: true, message: '请填写口算题数量' }, { type: 'number', message: '请填写数字' }]
 })
-const requiredRule = [
-  { required: true, message: '此项为必填项' }
-]
-const requiredNumberRule = [
-  { required: true, message: '此项为必填项' }, { type: 'number', message: '此项必须为数字' }
-]
-
-
-const stepOptions = computed(() => {
-  // 多步运算时不能有余数
-  const disabled = formData.value.remainder == '3'
-  return [
-    { key: '1', label: "一步运算", disabled: false },
-    { key: '2', label: "两步运算", disabled },
-    { key: '3', label: "三步运算", disabled }
-  ]
-})
-const changeStep = (val) => {
-  // 选择了新的几步运算后, 计算新值与旧值的差
-  const difference = parseInt(val) - formData.value.formulaList.length + 1
-
-  // 如果差是正数说明需要增加新的算数项,如果差是负数说明需要减去旧的算数项
-  if (difference > 0) {
-    for (let i = 1; i <= difference; i++) {
-      formData.value.formulaList.push({ min: 1, max: 9, operators: [1] })
-    }
-  } else if (difference < 0) {
-    formData.value.formulaList.splice(difference, Math.abs(difference))
-  }
-}
 
 onMounted(async () => {
   console.log('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
@@ -190,50 +97,29 @@ onMounted(async () => {
   formData.value.resultMaxValue = config.resultMaxValue
 })
 
-const optionsDrawerVisible = ref(false)
-const openOptionsDrawer = () => {
-  optionsDrawerVisible.value = true
-}
-
 const paperList = ref([])
 const paperDescriptionList = computed(() => {
   return paperList.value.map(p => {
-    return `${p.step}步计算题口算题${p.numberOfFormulas}道`
+    return p.customFormulaList && p.customFormulaList.length ? `自定义口算题${p.numberOfFormulas}道` : `${p.step}步计算题口算题${p.numberOfFormulas}道`
   })
 })
-const append = () => {
-  refForm?.value?.validate((valid) => {
-    if (!valid) return
-    
-    const { step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue } = cloneDeep(toRaw(formData.value))
-    paperList.value.push({
-      step, numberOfFormulas, whereIsResult, formulaList, resultMinValue, resultMaxValue
-    })
-  })
-}
-
-const clear = () => {
-  paperList.value = []
-}
 
 const buttonLoading = ref(false)
 const paperDownloadDialogVisible = ref(false)
+const paperDownloadDialogSource = ref([])
 const generate = async () => {
   try {
     buttonLoading.value = true
-    const { data: { info } } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
+    const { data } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
     saveConfiguration(toRaw(unref(formData)))
-    proxy.$message.success(info)
+    proxy.$message.success('口算题生成完毕！')
 
     paperDownloadDialogVisible.value = true
+    paperDownloadDialogSource.value = data
   } finally {
     buttonLoading.value = false
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.page-container {
-  min-height: calc(100vh - 64px - 20px - 20px - 100px);
-}
-</style>
+<style lang="scss" scoped></style>

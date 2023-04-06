@@ -35,7 +35,7 @@ service.interceptors.response.use(
   },
   (error) => {
     const { response } = error
-    showMessage(response.data)
+    showMessage(response.data?.detail)
     return Promise.reject(error)
   }
 )
