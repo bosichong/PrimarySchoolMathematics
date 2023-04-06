@@ -21,7 +21,6 @@ from fastapi.staticfiles import StaticFiles
 from utils import make_docx_dirs
 from Psmrcddup import Generator
 from PrintPreview import PrintPreview
-from APPconfig import AppConfig
 from pydantic import BaseModel
 import uvicorn as uvicorn
 from starlette.responses import Response
@@ -57,7 +56,6 @@ origins = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:8000"
     "http://localhost:8000",
-
 ]
 # 配置允许域名列表、允许方法、请求头、cookie等
 app.add_middleware(
@@ -74,10 +72,6 @@ app.mount("/dist", StaticFiles(directory=os.path.join(BASE_DIR,
 app.mount("/assets", StaticFiles(directory=os.path.join(BASE_DIR,
           'webbackend/dist/assets')), name="assets")
 
-# APP配置文件对象
-appConfig = AppConfig()
-
-
 @app.get("/")
 def main():
     html_path = os.path.join(os.path.dirname(
@@ -90,41 +84,11 @@ def main():
 
 
 @app.get("/test")
-def test(data: str):
-    return data
-
-
-@app.get("/api_getconfigjson")
-def getConfigJson():
-    """
-    打开程序首页后加载程序的默认配置
-    """
-    # print(appConfig.loadINI())
-    rs = {'config': appConfig.loadINI(), }
-    return rs
-
-
-class Psm_A(BaseModel):
-    '''
-    验证口算题的模型
-    '''
-    data: dict
-
-
-@app.post('/api_createpsm')
-def createpsm(data: Psm_A):
-    """创建一组口算题的配置,接收前端送来的一组口算题配置，判断配置是否合法。"""
-    jsondata = data.data
-    # print(jsondata)
-    rs = {"info": isZeroA(jsondata["step"],
-                          jsondata["multistep"], jsondata["symbols"], jsondata["number"], jsondata["div"]["remainder"],
-                          jsondata["is_result"])}
-    return rs
-
+def test():
+    return "Hello World!"
 
 class Psm_Data(BaseModel):
     data: str
-
 
 @app.post('/api/psm')
 def generate_psm(data: Psm_Data):
@@ -145,30 +109,6 @@ def generate_psm(data: Psm_Data):
     docxPath = os.path.join(baseDir, 'webbackend/dist/docx')  # 前端docx文件夹
     docxList = getpathfile(docxPath)
     return docxList
-
-
-@app.get('/getpsmlist')
-def getpsmlist():
-    basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    docxpath = os.path.join(basedir, 'webbackend/dist/docx')  # 前端docx文件夹
-    docxs = getpathfile(docxpath)
-    # print(docxs)
-    return docxs
-
-
-def getRstr(isok):
-    """
-    根据判断返回口算题是否生成的提示文字
-    :param isok bool
-    :return bool
-    """
-
-    if isok:
-        rs = {"info": "口算题生成完毕！"}
-    else:
-        rs = {"info": "程序运行失败！是不是还没有添加口算题就点了生成按钮？"}
-    return rs
-
 
 def isZeroA(step, multistep, symbols, number, remainder, is_result):
     '''
@@ -252,33 +192,6 @@ def getPsmList(json_data):
             is_result=j["is_result"], is_bracket=j["is_bracket"], )
         templist = templist + g.generate_data()
     return templist
-
-
-def q_PSM(json_data):
-    '''
-    命令行快速生成口算题
-    :json_data 口算题配置文件
-    '''
-    psm_list = []  # 口算题列表
-    psm_title = []  # 标题列表
-    for i in range(json_data[1]["juanzishu"]):
-        templist = getPsmList(json_data)  # 生成一页口算题
-        random.shuffle(templist)  # 随机打乱
-        psm_list.append(templist)  # 添加到list 准备后期打印
-        # 为生成的文件起名r
-        # psm_title.clear()
-
-    for i in range(json_data[1]["juanzishu"]):
-        psm_title.append(json_data[1]["jz_title"])
-
-    subtit = json_data[1]["inf_title"]  # 小标题
-    pp = PrintPreview(psm_list, psm_title,
-                      subtit, col=json_data[1]["lieshu"], )
-
-    pp.produce()  # 生成docx
-    psm_list.clear()  # 清空打印列表。
-    return 1
-
 
 def getpathfile(path):
     '''返回当前目录下的文件名称'''
