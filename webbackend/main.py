@@ -29,8 +29,10 @@ from fastapi.middleware.cors import CORSMiddleware  # 解决跨域
 from fastapi import FastAPI, HTTPException
 import random
 
+BACKEND_PATH = os.path.dirname(os.path.abspath(__file__))
+ROOT_PATH = os.path.dirname(BACKEND_PATH)
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print('ROOT_PATH', ROOT_PATH)
 
 __version__ = "1.2.1"
 
@@ -67,15 +69,15 @@ app.add_middleware(
 )
 
 
-app.mount("/dist", StaticFiles(directory=os.path.join(BASE_DIR,
+app.mount("/dist", StaticFiles(directory=os.path.join(ROOT_PATH,
           'webbackend/dist')), name="dist")
-app.mount("/assets", StaticFiles(directory=os.path.join(BASE_DIR,
+app.mount("/assets", StaticFiles(directory=os.path.join(ROOT_PATH,
           'webbackend/dist/assets')), name="assets")
+
 
 @app.get("/")
 def main():
-    html_path = os.path.join(os.path.dirname(
-        os.path.abspath(__file__)), 'dist', 'index.html')
+    html_path = os.path.join(BACKEND_PATH, 'dist', 'index.html')
     html_content = ''
     with open(html_path, encoding="utf-8") as f:
         html_content = f.read()
@@ -87,8 +89,10 @@ def main():
 def test():
     return "Hello World!"
 
+
 class Psm_Data(BaseModel):
     data: str
+
 
 @app.post('/api/psm')
 def generate_psm(data: Psm_Data):
@@ -105,10 +109,10 @@ def generate_psm(data: Psm_Data):
     produce_PSM(jsonData)
 
     # 获取试卷地址以供下载
-    baseDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    docxPath = os.path.join(baseDir, 'webbackend/dist/docx')  # 前端docx文件夹
+    docxPath = os.path.join(ROOT_PATH, 'webbackend/dist/docx')  # 前端docx文件夹
     docxList = getpathfile(docxPath)
     return docxList
+
 
 def isZeroA(step, multistep, symbols, number, remainder, is_result):
     '''
@@ -192,6 +196,7 @@ def getPsmList(json_data):
             is_result=j["is_result"], is_bracket=j["is_bracket"], )
         templist = templist + g.generate_data()
     return templist
+
 
 def getpathfile(path):
     '''返回当前目录下的文件名称'''
