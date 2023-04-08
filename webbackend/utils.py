@@ -30,11 +30,13 @@ import re
 import zipfile
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # app根目录 PrimarySchoolMath/
-VUE_DOCX_PATH = os.path.join(BASE_DIR, 'webbackend/dist/docx'+os.sep)# 前端docx文件夹
-BACK_DOCX_PATH = os.path.join(BASE_DIR,"docx"+os.sep)
-DOCX_ZIP = os.path.join(VUE_DOCX_PATH,'docs.zip') # zip打包位置
+BACKEND_PATH = os.path.dirname(os.path.abspath(__file__))
+ROOT_PATH = os.path.dirname(BACKEND_PATH)  # app根目录 PrimarySchoolMath/
 
+VUE_DOCX_PATH = os.path.join(
+    ROOT_PATH, 'webbackend/dist/docx'+os.sep)  # 前端docx文件夹
+BACK_DOCX_PATH = os.path.join(ROOT_PATH, "docx"+os.sep)
+DOCX_ZIP = os.path.join(VUE_DOCX_PATH, 'docs.zip')  # zip打包位置
 
 def f1(s):
     '''
@@ -179,7 +181,7 @@ def isResultOk(str, result):
     try:
         # print('比较结果：',str)
         return result[0] <= eval(str) <= result[1]
-    except(ZeroDivisionError):
+    except (ZeroDivisionError):
         return False
 
 
@@ -322,7 +324,7 @@ def getRandomBracket(step):
             return k
 
 
-########2步算式相关判断设置##########
+######## 2步算式相关判断设置##########
 
 
 def getXStepstr(src, is_result):
@@ -413,7 +415,7 @@ def getRandomSymbols(symbols, step):
     return newList
 
 
-########加法相关判断设置##########
+######## 加法相关判断设置##########
 
 
 def is_addcarry(a, b, ):
@@ -437,7 +439,7 @@ def is_addnocarry(a, b):
     return not is_addcarry(a, b)
 
 
-########减法相关判断设置##########
+######## 减法相关判断设置##########
 
 
 def is_abdication(a, b):
@@ -464,7 +466,7 @@ def is_noabdication(a, b):
     return not is_abdication(a, b)
 
 
-########乘法相关判断设置##########
+######## 乘法相关判断设置##########
 
 
 def is_multcarry(a, b):
@@ -481,10 +483,10 @@ def is_multcarry(a, b):
         return True
 
 
-########除法相关判断设置##########
+######## 除法相关判断设置##########
 
 
-########其它相关判断设置##########
+######## 其它相关判断设置##########
 
 
 def is_int(num):
@@ -537,21 +539,22 @@ def get_time(func):
 
     return wrapper
 
+
 def make_docx_dirs():
     '''
     description: 预创建系统需要存放文件的目录
     return {*}
-    '''    
-    if(not os.path.exists(BACK_DOCX_PATH)):
+    '''
+    if (not os.path.exists(BACK_DOCX_PATH)):
         os.mkdir(BACK_DOCX_PATH)
-    if(not os.path.exists(VUE_DOCX_PATH)):
+    if (not os.path.exists(VUE_DOCX_PATH)):
         os.mkdir(VUE_DOCX_PATH)
 
 
 def delfiles(docxpath):
     '''递归删除当前目录下所有文件'''
     docxpath = os.path.join(docxpath)
-    if(os.path.exists(docxpath)):
+    if (os.path.exists(docxpath)):
         for file in os.listdir(docxpath):
             file_path = os.path.join(docxpath, file)
             if os.path.isfile(file_path):
@@ -582,9 +585,8 @@ def zipDir(dirpath, outFullName):
         # 去掉目标根路径，只对目标文件夹下边的文件及文件夹进行压缩
         fpath = path.replace(dirpath, '')
         for filename in filenames:
-            zip.write(os.path.join(path, filename), os.path.join(fpath, filename))
-
-
+            zip.write(os.path.join(path, filename),
+                      os.path.join(fpath, filename))
 
 
 def main():

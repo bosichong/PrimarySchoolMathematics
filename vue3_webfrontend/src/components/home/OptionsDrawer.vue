@@ -61,6 +61,12 @@
         </el-row>
       </el-form-item>
 
+      <el-form-item label="文件名生成规则" prop="fileNameGeneratedRule">
+        <el-radio-group v-model="formData.fileNameGeneratedRule">
+          <el-radio-button v-for="o in fileNameGeneratedRuleOptions" :label="o.key">{{ o.label }}</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+
       <el-form-item prop="paperTitle">
         <el-row :gutter="8">
           <el-col :span="24">
@@ -82,6 +88,13 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { fileNameGeneratedRuleEnum } from '@/utils/enum.js';
+
+const fileNameGeneratedRuleOptions = computed(() => {
+  return Object.entries(fileNameGeneratedRuleEnum).map(([, { key, text }]) => {
+    return { key, label: text }
+  })
+})
 
 const props = defineProps({
   visible: {

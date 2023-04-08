@@ -14,3 +14,18 @@ $primary: #409EFF;
     color: $primary;
   }
 }
+
+// 临时修复element plus bug
+// https://github.com/element-plus/element-plus/issues/10919#issuecomment-1499986576
+.el-form--default.el-form--label-right {
+  .el-form-item {
+    display: flex;
+
+    .el-form-item__label {
+      display: inline-flex;
+      margin-bottom: 0px;
+      height: 32px;
+      line-height: 32px;
+    }
+  }
+}

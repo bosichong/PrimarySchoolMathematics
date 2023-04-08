@@ -49,7 +49,8 @@ export function generatePaper(options, paperList) {
     "lieshu": parseInt(options.numberOfPagerColumns),
     "jz_title": options.paperTitle,
     "inf_title": options.paperSubTitle,
-    "solution": options.solution
+    "solution": options.solution,
+    fileNameGeneratedRule: options.fileNameGeneratedRule
   }
 
   console.debug([postAutoGeneratePaperList, postOptions, postCustomPaperList])
