@@ -16,6 +16,7 @@ Mail    : 1078539713@qq.com
 
 import json
 import sys
+import random
 import os
 from fastapi.staticfiles import StaticFiles
 from utils import make_docx_dirs
@@ -27,12 +28,15 @@ from starlette.responses import Response
 from fastapi.responses import HTMLResponse  # 导出html
 from fastapi.middleware.cors import CORSMiddleware  # 解决跨域
 from fastapi import FastAPI, HTTPException
-import random
+
+from io import BytesIO
+from fastapi.responses import StreamingResponse
+import zipfile
 
 BACKEND_PATH = os.path.dirname(os.path.abspath(__file__))
 ROOT_PATH = os.path.dirname(BACKEND_PATH)
 
-print('ROOT_PATH', ROOT_PATH)
+# print('ROOT_PATH', ROOT_PATH)
 
 __version__ = "1.2.1"
 
@@ -68,11 +72,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 app.mount("/dist", StaticFiles(directory=os.path.join(ROOT_PATH,
-          'webbackend/dist')), name="dist")
+                                                      'webbackend/dist')), name="dist")
 app.mount("/assets", StaticFiles(directory=os.path.join(ROOT_PATH,
-          'webbackend/dist/assets')), name="assets")
+                                                        'webbackend/dist/assets')), name="assets")
 
 
 @app.get("/")
@@ -99,7 +102,9 @@ def generate_psm(data: Psm_Data):
     '''
     接受前端发来的口算题配置生成口算题并保存到文件
     '''
+    print(data.data)
     jsonData = json.loads(data.data)
+
 
     # 验证
     if len(jsonData[0]) == 0:
@@ -112,6 +117,67 @@ def generate_psm(data: Psm_Data):
     docxPath = os.path.join(ROOT_PATH, 'webbackend/dist/docx')  # 前端docx文件夹
     docxList = getpathfile(docxPath)
     return docxList
+
+
+@app.post('/api/psm_io')
+def generate_psm_io(data: Psm_Data):
+    """
+    接受前端发来的口算题配置生成口算题并返回一个zip文件
+    """
+    jsonData = json.loads(data.data)
+
+
+    # 验证
+    if len(jsonData[0]) == 0:
+        raise HTTPException(status_code=400, detail='还没有添加口算题到列表中哈！')
+    # 生成试卷
+    zip_data = produce_PSM_io(jsonData)
+    # 将内存中的 ZIP 文件转换为响应内容
+    zip_data.seek(0)
+    return StreamingResponse(zip_data, media_type="application/zip", headers={"Content-Disposition": "attachment; filename=example.zip"})
+
+
+
+def produce_PSM_io(json_data):
+    """
+    发布口算题,
+    return 并返回一个zip文件
+    """
+    psm_list = []  # 口算题列表
+    psm_title = []  # 标题列表
+
+    # 循环生成每套题
+    for i in range(json_data[1]["juanzishu"]):
+        paper = getPsmList(json_data)  # 生成一页口算题
+
+        # 处理自定义题目,如果有自定义题目也加入到试卷中
+        if (json_data[2]):  # 约定数组的第三项是自定义题目配置
+            customFormulaOptions = json_data[2]
+            for option in customFormulaOptions:
+                for c in option["customFormulaList"]:
+                    paper.append(c["formula"])
+
+        random.shuffle(paper)  # 随机打乱
+        psm_list.append(paper)  # 添加到list 准备后期打印
+    for i in range(json_data[1]["juanzishu"]):
+        psm_title.append(json_data[1]["jz_title"])
+    # print(self.psm_title)
+    subtit = json_data[1]["inf_title"]
+    pp = PrintPreview(psm_list, psm_title, subtit,
+                      col=json_data[1]["lieshu"], solution=json_data[1]['solution'], fileNameGeneratedRule=json_data[1]["fileNameGeneratedRule"])
+    docs_io = pp.produce()  # 生成docx
+    # 创建一个内存中的 ZIP 文件
+    zip_data = BytesIO()
+    with zipfile.ZipFile(zip_data, mode="w") as zip_file:
+    # 向ZIP文件中添加文件，分别包含字符串的文件名 和 docx 的字节流数据
+        for d in docs_io:
+            zip_file.writestr(d[0], d[1].getvalue())
+
+    # # 将压缩后的zip文件保存到磁盘 测试一下
+    # with open('打包后的口算题卷子.zip', 'wb') as f:
+    #     f.write(zip_data.getvalue())
+    return zip_data
+
 
 
 def isZeroA(step, multistep, symbols, number, remainder, is_result):
@@ -181,6 +247,7 @@ def produce_PSM(json_data):
     # self.movdocx()
 
 
+
 def getPsmList(json_data):
     '''
     根据配置文件生成一套口算题的所有题
@@ -192,8 +259,8 @@ def getPsmList(json_data):
         # j = json.loads(j)
         g = Generator(addattrs=j["add"], subattrs=j["sub"], multattrs=j["mult"], divattrs=j["div"],
                       symbols=j["symbols"], multistep=j[
-            "multistep"], number=j["number"], step=j["step"],
-            is_result=j["is_result"], is_bracket=j["is_bracket"], )
+                "multistep"], number=j["number"], step=j["step"],
+                      is_result=j["is_result"], is_bracket=j["is_bracket"], )
         templist = templist + g.generate_data()
     return templist
 
@@ -210,5 +277,5 @@ def getpathfile(path):
 
 if __name__ == '__main__':
     print('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
-    make_docx_dirs()
+    # make_docx_dirs()
     uvicorn.run(app='main:app', host="127.0.0.1", port=8000, reload=True, )

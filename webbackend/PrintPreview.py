@@ -5,7 +5,7 @@ LastEditors: J.sky bosichong@qq.com
 LastEditTime: 2022-11-15 21:33:52
 FilePath: /PrimarySchoolMath/webbackend/PrintPreview.py
 '''
-
+import io
 
 '''
 Author  : J.sky
@@ -77,7 +77,7 @@ class PrintPreview:
         :param l list 一组题库
         :param title str 页面标题
         :param docxname  str 题库保存文件名
-        :return: none
+        :return: 一个数组，包含文件名和doc文件流。
         '''
         if (title == ''):
             page_title = '小学生口算题'
@@ -122,11 +122,18 @@ class PrintPreview:
         table.style.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
         table.style.font.color.rgb = RGBColor(54, 0, 0)  # 颜色设置，这里是用RGB颜色
         table.style.font.size = Pt(self.p_content_siae)  # 字体大小设置，和word里面的字号相对应
-        print(self.docxpath+'{}.docx'.format(docxname))
-        self.createDir(self.docxpath)  # 判断目录是否存在并创建
-        p_docx.save(self.docxpath+'{}.docx'.format(docxname))  # 输出docx
+        # print(self.docxpath+'{}.docx'.format(docxname))
+        # self.createDir(self.docxpath)  # 判断目录是否存在并创建
+        # p_docx.save(self.docxpath+'{}.docx'.format(docxname))  # 输出docx
+        doc_bytes_io = io.BytesIO()
+        p_docx.save(doc_bytes_io)
+        return [docxname+'.docx', doc_bytes_io]
 
     def produce(self):
+        """
+        return 一个list，每项包含文件名和doc文件流。
+        """
+        docs = []
         k = 1
         for l, t in zip(self.p_list, self.p_title):
             if self.fileNameGeneratedRule == 'baseOnTitleAndIndex':
@@ -135,8 +142,9 @@ class PrintPreview:
                 fileName = str(k)
             else:
                 fileName = str(k)
-            self.create_psmdocx(l, t, fileName)
+            docs.append(self.create_psmdocx(l, t, fileName))
             k = k + 1
+        return docs
 
     def createDir(self, path):
         '''
