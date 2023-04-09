@@ -14,7 +14,7 @@ PrimarySchoolMath.egg-info
 PSM
 webbackend/config.ini
 .idea
-vue3_webfrontend/dist
+webbackend/dist
 
 
 # dependencies
