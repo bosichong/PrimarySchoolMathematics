@@ -36,8 +36,9 @@
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
 import { PaperDownloadDialog, CustomFormulas, AutoGenerateFormulas } from "@/components/home";
 import { loadConfiguration, saveConfiguration } from "@/utils/configurationUtil";
+import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
+import { download } from "@/utils/download";
 import { generatePaper } from '@/apis/paper';
-import { fileNameGeneratedRuleEnum } from '@/utils/enum';
 
 const { proxy } = getCurrentInstance()
 
@@ -113,12 +114,19 @@ const paperDownloadDialogSource = ref([])
 const generate = async () => {
   try {
     buttonLoading.value = true
-    const { data } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
-    saveConfiguration(toRaw(unref(formData)))
-    proxy.$message.success('口算题生成完毕！')
+    const { data, headers } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
+    proxy.$message.success('口算题生成完毕，准备开始下载！')
 
-    paperDownloadDialogVisible.value = true
-    paperDownloadDialogSource.value = data
+    const contentType = headers['content-type']
+    const fileExtensions = httpContentTypeExtensionsMappingEnum[contentType.toLowerCase()]
+    const fileName = `${formData.value.paperTitle}.${fileExtensions}`
+
+    download(data, fileName)
+
+    saveConfiguration(toRaw(unref(formData)))
+
+    // paperDownloadDialogVisible.value = true
+    // paperDownloadDialogSource.value = data
   } finally {
     buttonLoading.value = false
   }

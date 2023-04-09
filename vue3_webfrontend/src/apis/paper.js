@@ -5,18 +5,18 @@ import request from '@/utils/request'
  * 生成试卷
  * @param {Object} options 生成试卷的配置参数
  * @param {Array} paperList 需要生成的题型组
- * @returns 
+ * @returns 生成的口算题zip包的流
  */
 export function generatePaper(options, paperList) {
   // 组装需要自动生成的题型组
   const postAutoGeneratePaperList = paperList.filter(p => !p.customFormulaList).map(p => {
 
-    const multiSteps = p.formulaList.map(j => [parseInt(j.min), parseInt(j.max)])   
+    const multiSteps = p.formulaList.map(j => [parseInt(j.min), parseInt(j.max)])
     const symbols = p.formulaList.reduce((pre, cur) => {
       cur.operators && pre.push(cur.operators)
       return pre
     }, [])
-    
+
     // 补缺
     for (let i = 0; i < 4 - p.formulaList.length; i++) {
       multiSteps.push([1, 9])
@@ -56,5 +56,5 @@ export function generatePaper(options, paperList) {
   console.debug([postAutoGeneratePaperList, postOptions, postCustomPaperList])
 
   return request.post(
-    'api/psm', { data: JSON.stringify([postAutoGeneratePaperList, postOptions, postCustomPaperList]) })
+    'api/psm_io', { data: JSON.stringify([postAutoGeneratePaperList, postOptions, postCustomPaperList]) }, { responseType: 'blob', timeout: 10000 })
 }
