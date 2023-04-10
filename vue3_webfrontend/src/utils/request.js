@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
 const service = axios.create({
-  baseURL: 'http://127.0.0.1:8000/',
+  baseURL: process.env.NODE_ENV == 'production' ? '/' : 'http://localhost:1101',
   timeout: 1000 * 10
 })
 
