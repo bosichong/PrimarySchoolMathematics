@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
 const service = axios.create({
-  baseURL: 'http://127.0.0.1:8000/',
+  baseURL: process.env.NODE_ENV == 'production' ? '/' : 'http://localhost:1101',
   timeout: 1000 * 10
 })
 
@@ -35,7 +35,18 @@ service.interceptors.response.use(
   },
   (error) => {
     const { response } = error
-    showMessage(response.data?.detail)
+
+    if (response.data instanceof Blob) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const data = JSON.parse(reader.result)
+        console.log(data)
+        showMessage(data?.detail)
+      }
+      reader.readAsText(response.data)
+    } else {
+      showMessage(response.data?.detail)
+    }
     return Promise.reject(error)
   }
 )

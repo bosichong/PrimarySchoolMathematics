@@ -36,7 +36,6 @@ import zipfile
 BACKEND_PATH = os.path.dirname(os.path.abspath(__file__))
 ROOT_PATH = os.path.dirname(BACKEND_PATH)
 
-# print('ROOT_PATH', ROOT_PATH)
 
 __version__ = "1.2.1"
 
@@ -56,13 +55,7 @@ app = FastAPI(
 )
 
 # 配置允许域名
-origins = [
-    "http://localhost",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:8000"
-    "http://localhost:8000",
-]
+origins = ["*"]
 # 配置允许域名列表、允许方法、请求头、cookie等
 app.add_middleware(
     CORSMiddleware,
@@ -72,25 +65,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/dist", StaticFiles(directory=os.path.join(ROOT_PATH,
-                                                      'webbackend/dist')), name="dist")
-app.mount("/assets", StaticFiles(directory=os.path.join(ROOT_PATH,
-                                                        'webbackend/dist/assets')), name="assets")
+ENV = os.getenv('ENV')
+print('环境为：', ENV)
+
+staticResourcePath = os.path.join(BACKEND_PATH, 'dist')
+if os.path.exists(staticResourcePath):
+    app.mount(
+        "/dist", StaticFiles(directory=staticResourcePath), name="dist")
+    app.mount("/assets", StaticFiles(directory=os.path.join(BACKEND_PATH,
+              'dist/assets')), name="assets")
 
 
 @app.get("/")
 def main():
-    html_path = os.path.join(BACKEND_PATH, 'dist', 'index.html')
-    html_content = ''
-    with open(html_path, encoding="utf-8") as f:
-        html_content = f.read()
-
-    return HTMLResponse(content=html_content, status_code=200)
+    homePagePath = os.path.join(BACKEND_PATH, 'dist', 'index.html')
+    if (os.path.exists(homePagePath)):
+        htmlContent = ''
+        with open(homePagePath, encoding="utf-8") as f:
+            htmlContent = f.read()
+        return HTMLResponse(content=htmlContent, status_code=200)
+    else:
+        return "No static resource!"
 
 
 @app.get("/test")
 def test():
-    return "Hello World!"
+    return "当前环境为:" + (ENV or "未配置")
 
 
 class Psm_Data(BaseModel):
@@ -104,7 +104,6 @@ def generate_psm(data: Psm_Data):
     '''
     print(data.data)
     jsonData = json.loads(data.data)
-
 
     # 验证
     if len(jsonData[0]) == 0:
@@ -126,16 +125,20 @@ def generate_psm_io(data: Psm_Data):
     """
     jsonData = json.loads(data.data)
 
-
     # 验证
     if len(jsonData[0]) == 0:
         raise HTTPException(status_code=400, detail='还没有添加口算题到列表中哈！')
+    # 自动生成的题目不能超过1000题
+    numberOfFormulas = sum([i['number'] for i in jsonData[0]])
+    print('numberOfFormulas', numberOfFormulas)
+    if numberOfFormulas * jsonData[1]["juanzishu"] > 1000:
+        raise HTTPException(status_code=400, detail='题目总数不能超过1000题!')
+
     # 生成试卷
     zip_data = produce_PSM_io(jsonData)
     # 将内存中的 ZIP 文件转换为响应内容
     zip_data.seek(0)
     return StreamingResponse(zip_data, media_type="application/zip", headers={"Content-Disposition": "attachment; filename=example.zip"})
-
 
 
 def produce_PSM_io(json_data):
@@ -169,7 +172,7 @@ def produce_PSM_io(json_data):
     # 创建一个内存中的 ZIP 文件
     zip_data = BytesIO()
     with zipfile.ZipFile(zip_data, mode="w") as zip_file:
-    # 向ZIP文件中添加文件，分别包含字符串的文件名 和 docx 的字节流数据
+        # 向ZIP文件中添加文件，分别包含字符串的文件名 和 docx 的字节流数据
         for d in docs_io:
             zip_file.writestr(d[0], d[1].getvalue())
 
@@ -177,7 +180,6 @@ def produce_PSM_io(json_data):
     # with open('打包后的口算题卷子.zip', 'wb') as f:
     #     f.write(zip_data.getvalue())
     return zip_data
-
 
 
 def isZeroA(step, multistep, symbols, number, remainder, is_result):
@@ -247,7 +249,6 @@ def produce_PSM(json_data):
     # self.movdocx()
 
 
-
 def getPsmList(json_data):
     '''
     根据配置文件生成一套口算题的所有题
@@ -259,8 +260,8 @@ def getPsmList(json_data):
         # j = json.loads(j)
         g = Generator(addattrs=j["add"], subattrs=j["sub"], multattrs=j["mult"], divattrs=j["div"],
                       symbols=j["symbols"], multistep=j[
-                "multistep"], number=j["number"], step=j["step"],
-                      is_result=j["is_result"], is_bracket=j["is_bracket"], )
+            "multistep"], number=j["number"], step=j["step"],
+            is_result=j["is_result"], is_bracket=j["is_bracket"], )
         templist = templist + g.generate_data()
     return templist
 
@@ -277,5 +278,8 @@ def getpathfile(path):
 
 if __name__ == '__main__':
     print('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
-    # make_docx_dirs()
-    uvicorn.run(app='main:app', host="127.0.0.1", port=8000, reload=True, )
+
+    if ENV == 'prod':
+        uvicorn.run(app='main:app', host="0.0.0.0", port=1101)
+    else:
+        uvicorn.run(app='main:app', host="0.0.0.0", port=1101, reload=True, )
