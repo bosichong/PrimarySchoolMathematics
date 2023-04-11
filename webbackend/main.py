@@ -128,6 +128,12 @@ def generate_psm_io(data: Psm_Data):
     # 验证
     if len(jsonData[0]) == 0:
         raise HTTPException(status_code=400, detail='还没有添加口算题到列表中哈！')
+    # 自动生成的题目不能超过1000题
+    numberOfFormulas = sum([i['number'] for i in jsonData[0]])
+    print('numberOfFormulas', numberOfFormulas)
+    if numberOfFormulas * jsonData[1]["juanzishu"] > 1000:
+        raise HTTPException(status_code=400, detail='题目总数不能超过1000题!')
+
     # 生成试卷
     zip_data = produce_PSM_io(jsonData)
     # 将内存中的 ZIP 文件转换为响应内容
@@ -273,4 +279,7 @@ def getpathfile(path):
 if __name__ == '__main__':
     print('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
 
-    uvicorn.run(app='main:app', host="127.0.0.1", port=1101, reload=True, )
+    if ENV == 'prod':
+        uvicorn.run(app='main:app', host="0.0.0.0", port=1101)
+    else:
+        uvicorn.run(app='main:app', host="127.0.0.1", port=1101, reload=True, )

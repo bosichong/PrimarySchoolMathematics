@@ -35,7 +35,18 @@ service.interceptors.response.use(
   },
   (error) => {
     const { response } = error
-    showMessage(response.data?.detail)
+
+    if (response.data instanceof Blob) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const data = JSON.parse(reader.result)
+        console.log(data)
+        showMessage(data?.detail)
+      }
+      reader.readAsText(response.data)
+    } else {
+      showMessage(response.data?.detail)
+    }
     return Promise.reject(error)
   }
 )
