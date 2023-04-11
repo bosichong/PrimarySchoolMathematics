@@ -68,24 +68,29 @@ app.add_middleware(
 ENV = os.getenv('ENV')
 print('环境为：', ENV)
 
-if ENV == 'prod':
-    app.mount("/dist", StaticFiles(directory=os.path.join(BACKEND_PATH, 'dist')), name="dist")
-    app.mount("/assets", StaticFiles(directory=os.path.join(BACKEND_PATH, 'dist/assets')), name="assets")
+staticResourcePath = os.path.join(BACKEND_PATH, 'dist')
+if os.path.exists(staticResourcePath):
+    app.mount(
+        "/dist", StaticFiles(directory=staticResourcePath), name="dist")
+    app.mount("/assets", StaticFiles(directory=os.path.join(BACKEND_PATH,
+              'dist/assets')), name="assets")
 
 
 @app.get("/")
 def main():
-    html_path = os.path.join(BACKEND_PATH, 'dist', 'index.html')
-    html_content = ''
-    with open(html_path, encoding="utf-8") as f:
-        html_content = f.read()
-
-    return HTMLResponse(content=html_content, status_code=200)
+    homePagePath = os.path.join(BACKEND_PATH, 'dist', 'index.html')
+    if (os.path.exists(homePagePath)):
+        htmlContent = ''
+        with open(homePagePath, encoding="utf-8") as f:
+            htmlContent = f.read()
+        return HTMLResponse(content=htmlContent, status_code=200)
+    else:
+        return "No static resource!"
 
 
 @app.get("/test")
 def test():
-    return "Hello World!"
+    return "当前环境为:" + (ENV or "未配置")
 
 
 class Psm_Data(BaseModel):
