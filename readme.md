@@ -37,16 +37,16 @@
 ### 运行后端
 
 1. 本程序开发调试的python环境为`3.8.13`,建议新建一个全新的虚拟环境来测试。
-
-下载程序进入`/webbackend`，安装程序相关依赖，在程序根目录下运行终端：
-
+    下载程序进入`/webbackend`，安装程序相关依赖，在程序根目录下运行终端：
+    ```shell
     cd webbackend
     pip install -r requirements.txt
+    ```
 
-如果pip更新依赖缓慢,请使用下边的代码试试:
-
+    如果pip更新依赖缓慢,请使用下边的代码试试:
+    ```shell
     pip install -r requirements.txt -i http://pypi.douban.com/simple
-
+    ```
 2. `/webbackend`目录终端下运行`python main.py`,或使用`vscode`、`pycharm`打开`/webbackend/main.py`,运行当前文件即可.
 3. 打开浏览器在地址栏中输入`http://127.0.0.1:1101/test`,看到下图就是启动成功了.
 
