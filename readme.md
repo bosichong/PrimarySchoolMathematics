@@ -14,6 +14,8 @@
 
 ## 功能更新
 
+2023-04-11 感谢@kkplusplus重新构建了前端，并新增docker部署启动方式。
+
 2023-03-23 新增解题方式选项,提供口算解题和竖式解题.口算解题为原有逻辑,选择竖式解题生成的数学题目之间会留有空白来给学生列竖式，感谢 @tsukasa521！
 
 ![](imgs/a11.png)
@@ -33,6 +35,20 @@
 2.可以简单设置文档标题，小标题。设置生成的口算题文档个数
 
 ## 本地运行
+
+### 如何部署docker
+
+项目默认提供了docker的部署方式
+
+构建镜像
+```shell
+docker build -t primary-school-mathematics .
+```
+
+启动服务
+```shell
+docker run -d --name=PrimarySchoolMathematics -p 1101:1101 primary-school-mathematics
+```
 
 ### 运行后端
 
@@ -65,18 +81,7 @@
 2. 首次运行时,前后端报错的话,大概率都是依赖没有安装,建议查看错误提示安装相关依赖。
 3. 如果依然无法运行，可以发起issues提供详细的报错信息，或是联系我一起分析。
 
-## 如何部署
-项目默认提供了docker的部署方式
 
-构建镜像
-```shell
-docker build -t primary-school-mathematics .
-```
-
-启动服务
-```shell
-docker run -d --name=PrimarySchoolMathematics -p 1101:1101 primary-school-mathematics
-```
 
 ## 使用教程
 
