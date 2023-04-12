@@ -1,32 +1,46 @@
 <template>
   <div class="page-container">
-    <ElForm ref="refForm" :model="formData" :rules="formRules" label-position="top">
-      <ElFormItem label="生成模式">
-        <el-radio-group v-model="formData.generateMode">
-          <el-radio-button label="1">自动生成</el-radio-button>
-          <el-radio-button label="2">手动添加</el-radio-button>
-        </el-radio-group>
-      </ElFormItem>
+    <ElRow :gutter="20">
+      <ElCol :span="16">
+        <ElForm ref="refForm" :model="formData" :rules="formRules" label-position="top">
+          <ElFormItem label="生成模式">
+            <el-radio-group v-model="formData.generateMode">
+              <el-radio-button label="1">自动生成</el-radio-button>
+              <el-radio-button label="2">手动添加</el-radio-button>
+            </el-radio-group>
+          </ElFormItem>
 
-      <template v-if="formData.generateMode == '1'">
-        <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" />
-      </template>
+          <template v-if="formData.generateMode == '1'">
+            <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" />
+          </template>
 
-      <template v-if="formData.generateMode == '2'">
-        <CustomFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" />
-      </template>
+          <template v-if="formData.generateMode == '2'">
+            <CustomFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" />
+          </template>
 
-      <template v-if="paperDescriptionList && paperDescriptionList.length">
-        <ElFormItem label="当前口算题包含的内容">
-          <div v-for="p in paperDescriptionList">
-            <ElTag style="margin-right: 8px;">{{ p }}</ElTag>
-          </div>
-        </ElFormItem>
-      </template>
-    </ElForm>
+          <template v-if="paperDescriptionList && paperDescriptionList.length">
+            <ElFormItem label="当前口算题包含的内容">
+              <div v-for="p in paperDescriptionList">
+                <ElTag style="margin-right: 8px;">{{ p }}</ElTag>
+              </div>
+            </ElFormItem>
+          </template>
+        </ElForm>
 
-    <el-button :disabled="!paperList.length" type="primary" :loading="buttonLoading"
-      @click="generate">点此生成口算题卷子</el-button>
+        <el-button :disabled="!paperList.length" type="primary" :loading="buttonLoading"
+          @click="generate">点此生成口算题卷子</el-button>
+      </ElCol>
+      <ElCol :span="8">
+        <p>已保存配置列表</p>
+        <ElButton type="primary" @click="addConfiguration">新增</ElButton>
+        <ElCard v-for="c in configurations" :shadow="'hover'">
+          <!-- 是否选中 -->
+          {{ c.name }}
+          <!-- 复制 -->
+          <!-- 删除 -->
+        </ElCard>
+      </ElCol>
+    </ElRow>
 
     <PaperDownloadDialog v-model:visible="paperDownloadDialogVisible" :source="paperDownloadDialogSource" />
   </div>
@@ -35,7 +49,7 @@
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
 import { PaperDownloadDialog, CustomFormulas, AutoGenerateFormulas } from "@/components/home";
-import { loadConfiguration, saveConfiguration } from "@/utils/configurationUtil";
+import { loadConfigurations, saveConfiguration } from "@/utils/configurationUtil";
 import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
 import { download } from "@/utils/download";
 import { generatePaper } from '@/apis/paper';
@@ -79,10 +93,14 @@ const formRules = ref({
   numberOfFormulas: [{ required: true, message: '请填写口算题数量' }, { type: 'number', message: '请填写数字' }]
 })
 
+const configurations = ref([])
+
 onMounted(async () => {
   console.log('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
 
-  const config = loadConfiguration()
+  configurations.value = loadConfigurations()
+  const { data: config } = configurations[0] // todo
+
   formData.value.step = config.step
   formData.value.numberOfFormulas = config.numberOfFormulas
   formData.value.whereIsResult = config.whereIsResult
@@ -108,6 +126,10 @@ const paperDescriptionList = computed(() => {
   })
 })
 
+const addConfiguration = () => { 
+  saveConfiguration('2',"xxx",)
+}
+
 const buttonLoading = ref(false)
 const paperDownloadDialogVisible = ref(false)
 const paperDownloadDialogSource = ref([])
@@ -123,7 +145,7 @@ const generate = async () => {
 
     download(data, fileName)
 
-    saveConfiguration(toRaw(unref(formData)))
+    // saveConfiguration(toRaw(unref(formData)))
 
     // paperDownloadDialogVisible.value = true
     // paperDownloadDialogSource.value = data
