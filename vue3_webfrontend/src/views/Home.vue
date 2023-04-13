@@ -33,14 +33,8 @@
         <el-button type="success" @click="addConfiguration">将当前参数保存为配置</el-button>
       </ElCol>
       <ElCol :span="8">
-        <p>已保存配置列表</p>
-        <ElCard v-for="c in configurations" style="margin-bottom: 20px;" :shadow="'hover'">
-          <!-- 是否选中 -->
-          {{ c.name }}
-          <el-icon v-if="configurations&&configurations.length > 1" @click="remove(c.id)">
-            <CircleCloseFilled />
-          </el-icon>
-        </ElCard>
+        <ConfigurationList :configurations="configurations" @removed="refreshConfiguration"
+          @selected="selectedConfiguration" />
       </ElCol>
     </ElRow>
 
@@ -51,7 +45,7 @@
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
 import { v4 as uuidv4 } from "uuid";
-import { PaperDownloadDialog, CustomFormulas, AutoGenerateFormulas } from "@/components/home";
+import { PaperDownloadDialog, CustomFormulas, AutoGenerateFormulas, ConfigurationList } from "@/components/home";
 import ConfigStorage from "@/utils/configStorage";
 import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
 import { download } from "@/utils/download";
@@ -126,11 +120,6 @@ const paperDescriptionList = computed(() => {
 const refreshConfiguration = () => {
   configurations.value = new ConfigStorage().loadAll()
 }
-const remove = (id) => {
-  new ConfigStorage().remove(id)
-  refreshConfiguration()
-  proxy.$message.success('删除成功!')
-}
 const addConfiguration = () => {
   refForm.value?.validate((valid) => {
     if (!valid) return
@@ -145,6 +134,27 @@ const addConfiguration = () => {
       proxy.$message.success('保存成功!')
     })
   })
+}
+const selectedConfiguration = (configuration) => {
+  console.log(configuration);
+
+  const { data: config } = configuration
+  formData.value.step = config.step
+  formData.value.numberOfFormulas = config.numberOfFormulas
+  formData.value.whereIsResult = config.whereIsResult
+  formData.value.enableBrackets = config.enableBrackets
+  formData.value.carry = config.carry
+  formData.value.abdication = config.abdication
+  formData.value.remainder = config.remainder
+  formData.value.solution = config.solution
+  formData.value.numberOfPapers = config.numberOfPapers
+  formData.value.numberOfPagerColumns = config.numberOfPagerColumns
+  formData.value.paperTitle = config.paperTitle
+  formData.value.paperSubTitle = config.paperSubTitle
+  formData.value.formulaList = config.formulaList
+  formData.value.resultMinValue = config.resultMinValue
+  formData.value.resultMaxValue = config.resultMaxValue
+  formData.value.fileNameGeneratedRule = config.fileNameGeneratedRule
 }
 
 const buttonLoading = ref(false)
@@ -161,8 +171,6 @@ const generate = async () => {
     const fileName = `${formData.value.paperTitle}.${fileExtensions}`
 
     download(data, fileName)
-
-    // saveConfiguration(toRaw(unref(formData)))
 
     // paperDownloadDialogVisible.value = true
     // paperDownloadDialogSource.value = data
