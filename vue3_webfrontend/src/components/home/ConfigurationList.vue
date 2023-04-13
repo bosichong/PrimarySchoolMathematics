@@ -1,12 +1,13 @@
 <template>
   <div>
-    <p>已保存配置列表</p>
-    <ElCard v-for="c in configurations" style="margin-bottom: 20px;" class="card" :shadow="'hover'" @click="handle(c.id)">
-      <div class="card-item">
+    <p class="text-base mb-5">已保存配置列表</p>
+    <ElCard v-for="c in configurations" :class="{ active: c.id == activeConfigurationId }" class="mb-3" :shadow="'hover'"
+      @click="handle(c.id)">
+      <div class="flex justify-between items-center cursor-pointer">
         <!-- 是否选中 -->
-        {{ c.name }}
+        <p class="text-sm">{{ c.name }}</p>
         <el-icon v-if="configurations && configurations.length > 1" @click.stop="remove(c.id)">
-          <CircleCloseFilled />
+          <CircleCloseFilled class="text-xl text-sky-600" />
         </el-icon>
       </div>
     </ElCard>
@@ -48,22 +49,7 @@ const handle = async (id) => {
 </script>
 
 <style lang="scss" scoped>
-.card {
-
-  &.active {
-    background-color: aqua;
-  }
-
-  .card-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-
-    i {
-      font-size: 20px;
-      color: blue;
-    }
-  }
+.active {
+  @apply bg-sky-100;
 }
 </style>
