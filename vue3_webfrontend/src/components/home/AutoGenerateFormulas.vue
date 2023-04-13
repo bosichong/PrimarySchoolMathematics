@@ -38,14 +38,16 @@
     <ElFormItem label="运算结果">
       <ElRow :gutter="8">
         <ElCol :span="8">
-          <ElFormItem prop="resultMinValue">
+          <ElFormItem prop="resultMinValue"
+            :rules="[{ required: true, message: '请填写运算结果最小值' }, { type: 'number', message: '请填写数字' }]">
             <ElInput v-model.number="formData.resultMinValue">
               <template #prepend>最小值</template>
             </ElInput>
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem prop="resultMaxValue">
+          <ElFormItem prop="resultMaxValue"
+            :rules="[{ required: true, message: '请填写运算结果最大值' }, { type: 'number', message: '请填写数字' }]">
             <ElInput v-model.number="formData.resultMaxValue">
               <template #prepend>最大值</template>
             </ElInput>
@@ -54,7 +56,8 @@
       </ElRow>
     </ElFormItem>
 
-    <ElFormItem prop="numberOfFormulas">
+    <ElFormItem prop="numberOfFormulas"
+      :rules="[{ required: true, message: '请填写口算题数量' }, { type: 'number', message: '请填写数字' }]">
       <ElRow :gutter="20">
         <ElCol :span="11">
           <ElInput v-model.number="formData.numberOfFormulas">

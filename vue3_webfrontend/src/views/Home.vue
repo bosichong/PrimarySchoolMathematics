@@ -2,7 +2,7 @@
   <div class="page-container">
     <ElRow :gutter="20">
       <ElCol :span="16">
-        <ElForm ref="refForm" :model="formData" :rules="formRules" label-position="top">
+        <ElForm ref="refForm" :model="formData" label-position="top">
           <ElFormItem label="生成模式">
             <el-radio-group v-model="formData.generateMode">
               <el-radio-button label="1">自动生成</el-radio-button>
@@ -29,15 +29,17 @@
 
         <el-button :disabled="!paperList.length" type="primary" :loading="buttonLoading"
           @click="generate">点此生成口算题卷子</el-button>
+
+        <el-button type="success" @click="addConfiguration">将当前参数保存为配置</el-button>
       </ElCol>
       <ElCol :span="8">
         <p>已保存配置列表</p>
-        <ElButton type="primary" @click="addConfiguration">新增</ElButton>
-        <ElCard v-for="c in configurations" :shadow="'hover'">
+        <ElCard v-for="c in configurations" style="margin-bottom: 20px;" :shadow="'hover'">
           <!-- 是否选中 -->
           {{ c.name }}
-          <!-- 复制 -->
-          <!-- 删除 -->
+          <el-icon v-if="configurations&&configurations.length > 1" @click="remove(c.id)">
+            <CircleCloseFilled />
+          </el-icon>
         </ElCard>
       </ElCol>
     </ElRow>
@@ -48,8 +50,9 @@
 
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
+import { v4 as uuidv4 } from "uuid";
 import { PaperDownloadDialog, CustomFormulas, AutoGenerateFormulas } from "@/components/home";
-import { loadConfigurations, saveConfiguration } from "@/utils/configurationUtil";
+import ConfigStorage from "@/utils/configStorage";
 import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
 import { download } from "@/utils/download";
 import { generatePaper } from '@/apis/paper';
@@ -87,19 +90,13 @@ const formData = ref({
   fileNameGeneratedRule: fileNameGeneratedRuleEnum.baseOnTitleAndIndex.key
 })
 
-const formRules = ref({
-  resultMinValue: [{ required: true, message: '请填写运算结果最小值' }, { type: 'number', message: '请填写数字' }],
-  resultMaxValue: [{ required: true, message: '请填写运算结果最大值' }, { type: 'number', message: '请填写数字' }],
-  numberOfFormulas: [{ required: true, message: '请填写口算题数量' }, { type: 'number', message: '请填写数字' }]
-})
-
 const configurations = ref([])
 
 onMounted(async () => {
   console.log('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
 
-  configurations.value = loadConfigurations()
-  const { data: config } = configurations[0] // todo
+  refreshConfiguration()
+  const { data: config } = configurations.value[0] // todo
 
   formData.value.step = config.step
   formData.value.numberOfFormulas = config.numberOfFormulas
@@ -126,8 +123,28 @@ const paperDescriptionList = computed(() => {
   })
 })
 
-const addConfiguration = () => { 
-  saveConfiguration('2',"xxx",)
+const refreshConfiguration = () => {
+  configurations.value = new ConfigStorage().loadAll()
+}
+const remove = (id) => {
+  new ConfigStorage().remove(id)
+  refreshConfiguration()
+  proxy.$message.success('删除成功!')
+}
+const addConfiguration = () => {
+  refForm.value?.validate((valid) => {
+    if (!valid) return
+
+    proxy.$messageBox.prompt('请给配置起个名字', '提示', {
+      inputPattern: /^\S{1,9}\S$/,
+      inputPlaceholder: '不能多于10个字符',
+      inputErrorMessage: '不能为空且不能多于10个字符'
+    }).then(({ value }) => {
+      new ConfigStorage().save(uuidv4(), value, toRaw(unref(formData)))
+      refreshConfiguration()
+      proxy.$message.success('保存成功!')
+    })
+  })
 }
 
 const buttonLoading = ref(false)
