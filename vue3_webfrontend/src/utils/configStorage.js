@@ -66,7 +66,7 @@ export default class {
   remove(id) {
     const configurations = this.#getConfigurations()
     const index = configurations.findIndex(p => p.id == id)
-    configurations.splice(index)
+    configurations.splice(index, 1)
     this.#setConfigurations(configurations)
   }
 

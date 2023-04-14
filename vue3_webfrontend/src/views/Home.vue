@@ -33,8 +33,8 @@
         <el-button type="success" @click="addConfiguration">将当前参数保存为配置</el-button>
       </ElCol>
       <ElCol :span="8">
-        <ConfigurationList :configurations="configurations" @removed="refreshConfiguration"
-          @selected="selectedConfiguration" />
+        <ConfigurationList v-model:active-index="activeConfigurationId" :configurations="configurations" @removed="refreshConfiguration"
+          @selected="selectedConfiguration" @reset="refreshConfiguration" />
       </ElCol>
     </ElRow>
 
@@ -117,6 +117,7 @@ const paperDescriptionList = computed(() => {
   })
 })
 
+const activeConfigurationId = ref('1')
 const refreshConfiguration = () => {
   configurations.value = new ConfigStorage().loadAll()
 }
