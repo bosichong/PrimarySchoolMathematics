@@ -37,15 +37,13 @@
           @selected="selectedConfiguration" @reset="refreshConfiguration" />
       </ElCol>
     </ElRow>
-
-    <PaperDownloadDialog v-model:visible="paperDownloadDialogVisible" :source="paperDownloadDialogSource" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
 import { v4 as uuidv4 } from "uuid";
-import { PaperDownloadDialog, CustomFormulas, AutoGenerateFormulas, ConfigurationList } from "@/components/home";
+import { CustomFormulas, AutoGenerateFormulas, ConfigurationList } from "@/components/home";
 import ConfigStorage from "@/utils/configStorage";
 import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
 import { download } from "@/utils/download";
@@ -130,7 +128,9 @@ const addConfiguration = () => {
       inputPlaceholder: '不能多于10个字符',
       inputErrorMessage: '不能为空且不能多于10个字符'
     }).then(({ value }) => {
-      new ConfigStorage().save(uuidv4(), value, toRaw(unref(formData)))
+      const newId = uuidv4()
+      new ConfigStorage().save(newId, value, toRaw(unref(formData)))
+      activeConfigurationId.value = newId 
       refreshConfiguration()
       proxy.$message.success('保存成功!')
     })
@@ -159,8 +159,6 @@ const selectedConfiguration = (configuration) => {
 }
 
 const buttonLoading = ref(false)
-const paperDownloadDialogVisible = ref(false)
-const paperDownloadDialogSource = ref([])
 const generate = async () => {
   try {
     buttonLoading.value = true
@@ -173,8 +171,6 @@ const generate = async () => {
 
     download(data, fileName)
 
-    // paperDownloadDialogVisible.value = true
-    // paperDownloadDialogSource.value = data
   } finally {
     buttonLoading.value = false
   }

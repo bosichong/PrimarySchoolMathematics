@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, ref, computed, watch } from 'vue';
+import { getCurrentInstance, ref, computed, watch, nextTick } from 'vue';
 import ConfigStorage from '@/utils/configStorage';
 import { cloneDeep } from 'lodash';
 
@@ -44,26 +44,41 @@ const activeConfigurationId = computed({
 })
 
 const remove = async (id) => {
-  await proxy.$messageBox.confirm('确定删除吗? ', '提示', { type: 'warning' })
-  new ConfigStorage().remove(id)
-  proxy.$message.success('删除成功!')
-  emits('removed')
+  try {
+    await proxy.$messageBox.confirm('确定删除吗? ', '提示', { type: 'warning' })
+    new ConfigStorage().remove(id)
+    proxy.$message.success('删除成功!')
+    // 如果删除的配置正在被使用，则自动选择第一个
+    if (activeConfigurationId.value == id) {
+      activeConfigurationId.value = props.configurations[0].id
+    }
+    emits('removed')
+  } catch (error) {
+
+  }
 }
 
-const reset = () => {
-  const configStorage = new ConfigStorage()
-  configStorage.clear()
+const reset = async () => {
+  try {
+    await proxy.$messageBox.confirm('确定重置吗? ', '提示', { type: 'warning' })
 
-  // 如果目前选中的是默认配置
-  if (activeConfigurationId.value == '1') {
-    proxy.$message.success('重置成功')
-    emits('reset')
-  } else {
-    const c = props.configurations.find(p => p.id == '1')
-    activeConfigurationId.value = '1'
-    proxy.$message.success('重置成功')
-    emits('reset')
-    emits('selected', cloneDeep(c))
+    const configStorage = new ConfigStorage()
+    configStorage.clear()
+
+    if (activeConfigurationId.value == '1') {
+      proxy.$message.success('重置成功')
+      emits('reset')
+    } else {
+      emits('reset')
+      nextTick(()=>{
+        const c = props.configurations.find(p => p.id == '1')
+        activeConfigurationId.value = '1'
+        emits('selected', cloneDeep(c))
+        proxy.$message.success('重置成功')
+      })
+    }
+  } catch (error) {
+
   }
 }
 
