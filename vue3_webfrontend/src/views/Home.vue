@@ -11,7 +11,8 @@
           </ElFormItem>
 
           <template v-if="formData.generateMode == '1'">
-            <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" />
+            <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm"
+              @add-configuration="addConfiguration" />
           </template>
 
           <template v-if="formData.generateMode == '2'">
@@ -27,14 +28,12 @@
           </template>
         </ElForm>
 
-        <el-button :disabled="!paperList.length" type="primary" :loading="buttonLoading"
+        <el-button :disabled="!paperList.length" type="primary" size="large" :loading="buttonLoading"
           @click="generate">点此生成口算题卷子</el-button>
-
-        <el-button type="success" @click="addConfiguration">将当前参数保存为配置</el-button>
       </ElCol>
       <ElCol :span="8">
-        <ConfigurationList v-model:active-index="activeConfigurationId" :configurations="configurations" @removed="refreshConfiguration"
-          @selected="selectedConfiguration" @reset="refreshConfiguration" />
+        <ConfigurationList v-model:active-index="activeConfigurationId" :configurations="configurations"
+          @removed="refreshConfiguration" @selected="selectedConfiguration" @reset="refreshConfiguration" />
       </ElCol>
     </ElRow>
   </div>
@@ -42,7 +41,6 @@
 
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
-import { v4 as uuidv4 } from "uuid";
 import { CustomFormulas, AutoGenerateFormulas, ConfigurationList } from "@/components/home";
 import ConfigStorage from "@/utils/configStorage";
 import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
@@ -119,22 +117,9 @@ const activeConfigurationId = ref('1')
 const refreshConfiguration = () => {
   configurations.value = new ConfigStorage().loadAll()
 }
-const addConfiguration = () => {
-  refForm.value?.validate((valid) => {
-    if (!valid) return
-
-    proxy.$messageBox.prompt('请给配置起个名字', '提示', {
-      inputPattern: /^\S{1,9}\S$/,
-      inputPlaceholder: '不能多于10个字符',
-      inputErrorMessage: '不能为空且不能多于10个字符'
-    }).then(({ value }) => {
-      const newId = uuidv4()
-      new ConfigStorage().save(newId, value, toRaw(unref(formData)))
-      activeConfigurationId.value = newId 
-      refreshConfiguration()
-      proxy.$message.success('保存成功!')
-    })
-  })
+const addConfiguration = (newId) => {
+  activeConfigurationId.value = newId
+  refreshConfiguration()
 }
 const selectedConfiguration = (configuration) => {
   console.log(configuration);

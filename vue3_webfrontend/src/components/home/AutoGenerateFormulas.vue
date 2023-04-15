@@ -59,18 +59,18 @@
     <ElFormItem prop="numberOfFormulas"
       :rules="[{ required: true, message: '请填写口算题数量' }, { type: 'number', message: '请填写数字' }]">
       <ElRow :gutter="20">
-        <ElCol :span="11">
+        <ElCol :span="14">
           <ElInput v-model.number="formData.numberOfFormulas">
             <template #prepend>口算题数量</template>
           </ElInput>
         </ElCol>
-        <ElCol :span="5">
-          <el-button type="primary" @click="append">添加口算题</el-button>
-        </ElCol>
-        <ElCol :span="5">
-          <el-button @click="clear">清空口算题</el-button>
-        </ElCol>
       </ElRow>
+    </ElFormItem>
+
+    <ElFormItem>
+      <ElButton type="primary" @click="append">添加口算题</ElButton>
+      <ElButton @click="clear">清空口算题</ElButton>
+      <el-button type="success" @click="addConfiguration">将当前参数保存为配置</el-button>
     </ElFormItem>
 
     <OptionsDrawer v-model:visible="optionsDrawerVisible" v-model:formulasFormData="formData" />
@@ -78,9 +78,13 @@
 </template>
 
 <script setup>
-import { computed, ref, toRaw } from 'vue';
+import { computed, ref, unref, toRaw, getCurrentInstance } from 'vue';
+import { v4 as uuidv4 } from "uuid";
 import { cloneDeep } from "lodash";
+import ConfigStorage from '@/utils/configStorage';
 import { OptionsDrawer } from "@/components/home";
+
+const { proxy } = getCurrentInstance()
 
 const props = defineProps({
   formulasFormData: {
@@ -94,7 +98,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:formulasFormData', 'update:papers'])
+const emit = defineEmits(['update:formulasFormData', 'update:papers', 'add-configuration'])
 
 const formData = computed({
   get() {
@@ -170,6 +174,23 @@ const append = () => {
 
 const clear = () => {
   paperList.value = []
+}
+
+const addConfiguration = () => {
+  props.refForm?.validate((valid) => {
+    if (!valid) return
+
+    proxy.$messageBox.prompt('请给配置起个名字', '提示', {
+      inputPattern: /^\S{1,9}\S$/,
+      inputPlaceholder: '不能多于10个字符',
+      inputErrorMessage: '不能为空且不能多于10个字符'
+    }).then(({ value }) => {
+      const newId = uuidv4()
+      new ConfigStorage().save(newId, value, toRaw(unref(formData)))
+      proxy.$message.success('保存成功!')
+      emit('add-configuration', newId)
+    })
+  })
 }
 </script>
 

@@ -56,5 +56,5 @@ export function generatePaper(options, paperList) {
   console.debug([postAutoGeneratePaperList, postOptions, postCustomPaperList])
 
   return request.post(
-    '/api/psm_io', { data: JSON.stringify([postAutoGeneratePaperList, postOptions, postCustomPaperList]) }, { responseType: 'blob', timeout: 10000 })
+    '/api/psm', { data: JSON.stringify([postAutoGeneratePaperList, postOptions, postCustomPaperList]) }, { responseType: 'blob', timeout: 10000 })
 }
