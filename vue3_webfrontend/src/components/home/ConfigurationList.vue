@@ -10,7 +10,7 @@
         <!-- 是否选中 -->
         <p class="text-sm">{{ c.name }}</p>
         <el-icon v-if="configurations && configurations.length > 1" @click.stop="remove(c.id)">
-          <CircleCloseFilled class="text-xl text-sky-600" />
+          <CircleCloseFilled />
         </el-icon>
       </div>
     </ElCard>
@@ -100,5 +100,9 @@ watch(() => props.activeIndex, async (val) => {
 <style lang="scss" scoped>
 .active {
   @apply bg-sky-100;
+}
+
+i{
+  @apply text-xl text-sky-600;
 }
 </style>
