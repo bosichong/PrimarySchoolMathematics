@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <ElRow :gutter="20">
-      <ElCol :span="16">
+      <ElCol :xs="24" :sm="16" :md="16" :lg="12" :xl="8">
         <ElForm ref="refForm" :model="formData" label-position="top">
           <ElFormItem label="生成模式">
             <el-radio-group v-model="formData.generateMode">
@@ -31,7 +31,7 @@
         <el-button :disabled="!paperList.length" type="primary" size="large" :loading="buttonLoading"
           @click="generate">点此生成口算题卷子</el-button>
       </ElCol>
-      <ElCol :span="8">
+      <ElCol :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
         <ConfigurationList v-model:active-index="activeConfigurationId" :configurations="configurations"
           @removed="refreshConfiguration" @selected="selectedConfiguration" @reset="refreshConfiguration" />
       </ElCol>
