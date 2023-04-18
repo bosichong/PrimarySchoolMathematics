@@ -1,5 +1,5 @@
 
-#  Primary School Mathematics 小学数学口算题
+#  Primary School Mathematics 小学数学口算题 2.0
 
 ![输入图片说明](https://img.shields.io/badge/Python-3.8.8-green?logo=python)
 ![输入图片说明](https://img.shields.io/badge/fastAPI-0.85.1-green)
@@ -7,57 +7,69 @@
 ![输入图片说明](https://img.shields.io/badge/license-Apache--2.0-green)
 ![输入图片说明](https://img.shields.io/badge/Github--PrimarySchoolMathematics-green?logo=github)
 
+## 背景 | Background
 孩子上小学一年级了，加减乘除的口算就要开始练习了，估计老师肯定会让家长出题，所以提前准备一下，利用Python开发了一套自动生成小学生口算题的小应用。
 为了让辛苦的程序员老爹解放抄题的双手，本程序让你拥有更多的时间去写代码而不用去手写几道口算题而劳神伤脑。所以有或没有娃子的程序员老爹们一起来继续优化个开源小程序的？有什么点子，发现什么BUG，欢迎提出issue。
 
-仅以此软件，献给那些热爱`Python`的程序员老爹们！
+仅以此软件，献给那些热爱编程的程序员老爹们！
 
-## 功能更新
+## 功能列表 | Features
+- 可以设置各算数项和结果的取值范围及多步算数符号的选择，可以生成求结果、求算数项、带括号的算式，最多支持3步算式题，除法可以生成带有余数的口算题。
+- 可以简单设置试卷标题，副标题。设置生成的口算题试卷个数。
+- 用户配置持久化改为前端处理
+- 新增解题方式选项,提供口算解题和竖式解题.口算解题为原有逻辑,选择竖式解题生成的数学题目之间会留有空白来给学生列竖式
+- 新增可以手动添加题目功能
+- 可根据规则生成文件名
 
-2023-03-23 新增解题方式选项,提供口算解题和竖式解题.口算解题为原有逻辑,选择竖式解题生成的数学题目之间会留有空白来给学生列竖式，感谢 @tsukasa521！
+## 贡献者 | Contributors
+- [@J_sky](https://github.com/bosichong)
+- [@KK++](https://github.com/tsukasa521)
 
-![](imgs/a11.png)
+## 本地运行 | Getting Started
+前往后端目录
 
-![](imgs/a22.png)
+```bash
+  cd webbackend
+```
 
-2022-12-02 把前端页面打包集成到了fastapi,可以不用在启动前端的环境来使用本程序了.
+安装依赖
 
-2022-11-13 更换了前端框架为vue3,后续将更新一些新功能.比如一键生成预制的常见类型的口算题,口算题小游戏等.
+```bash
+  pip install -r requirements.txt
 
-2022-11-05 由于之前代码所用的框架是比较久远的版本,很多新人需要折腾很长时间才能运行起来,鉴于此种情况,全面更换了前后端的框架,使程序的运行环境搭建更为方便了.重构期间修复了一些bug和逻辑.
+  # 如果更新依赖缓慢,请使用下边的代码试试:
+  pip install -r requirements.txt -i http://pypi.douban.com/simple
+```
 
-## 核心功能：
+启动
 
-1.可以设置各算数项和结果的取值范围及多步算数符号的选择，可以生成求结果、求算数项、带括号的算式，最多支持3步算式题,除法可以生成带有余数的口算题.
+```bash
+  python main.py
+```
 
-2.可以简单设置文档标题，小标题。设置生成的口算题文档个数
+打开浏览器在地址栏中输入`http://127.0.0.1:1101/test`,看到提示语`xxx`就表示启动成功了。
 
-## 本地运行
+前往前端目录
 
-### 运行后端
+```bash
+  cd vue3_webfrontend
+```
 
-1. 本程序开发调试的python环境为`3.8.13`,建议新建一个全新的虚拟环境来测试。
-    下载程序进入`/webbackend`，安装程序相关依赖，在程序根目录下运行终端：
-    ```shell
-    cd webbackend
-    pip install -r requirements.txt
-    ```
+安装依赖
 
-    如果pip更新依赖缓慢,请使用下边的代码试试:
-    ```shell
-    pip install -r requirements.txt -i http://pypi.douban.com/simple
-    ```
-2. `/webbackend`目录终端下运行`python main.py`,或使用`vscode`、`pycharm`打开`/webbackend/main.py`,运行当前文件即可.
-3. 打开浏览器在地址栏中输入`http://127.0.0.1:1101/test`,看到下图就是启动成功了.
+```bash
+  npm install
+  yarn
+```
 
-### 运行前端 
-1.  进入`./vue3_webfrontend` 终端输入: `cd vue3_webfrontend`,如果你使用的是vscode,可以使用分屏新建终端,这样前后端的服务器启动可以一目了然.
-![](imgs/02.png)
-2. 终端输入:`npm install`或`yarn`更新下载前端的依赖,如果速度太慢,建议临时使用镜像服务器下载依赖:`npm install --registry https://registry.npm.taobao.org`.
-3. 终端输入:`npm run dev`或`yarn dev`启动前端服务器.正常的话打开网址`http://127.0.0.1:1102`你会看到下图:
-![](imgs/03.png)
+启动
 
-前后端都启动之后就可以正常使用了!
+```bash
+  npm run start
+  yarn dev
+```
+
+启动成功后访问`http://127.0.0.1:1102`即可。
 
 **最近发现有些朋友下载代码后不能使用请看这里**
 
@@ -65,7 +77,7 @@
 2. 首次运行时,前后端报错的话,大概率都是依赖没有安装,建议查看错误提示安装相关依赖。
 3. 如果依然无法运行，可以发起issues提供详细的报错信息，或是联系我一起分析。
 
-## 如何部署
+## 如何部署 | How to deploy
 项目默认提供了docker的部署方式
 
 构建镜像
@@ -78,7 +90,7 @@ docker build -t primary-school-mathematics .
 docker run -d --name=PrimarySchoolMathematics -p 1101:1101 primary-school-mathematics
 ```
 
-## 使用教程
+## 如何使用 | How to use
 
 ### 程序的使用
 
