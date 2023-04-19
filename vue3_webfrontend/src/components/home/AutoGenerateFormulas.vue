@@ -181,9 +181,9 @@ const addConfiguration = () => {
     if (!valid) return
 
     proxy.$messageBox.prompt('请给配置起个名字', '提示', {
-      inputPattern: /^\S{1,9}\S$/,
+      inputPattern: /^\S{1,10}$/,
       inputPlaceholder: '不能多于10个字符',
-      inputErrorMessage: '不能为空且不能多于10个字符'
+      inputErrorMessage: '配置名字不能为空且不能多于10个字符'
     }).then(({ value }) => {
       const newId = uuidv4()
       new ConfigStorage().save(newId, value, toRaw(unref(formData)))
