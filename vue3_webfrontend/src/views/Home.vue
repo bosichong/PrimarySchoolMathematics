@@ -11,7 +11,7 @@
           </ElFormItem>
 
           <template v-if="formData.generateMode == '1'">
-            <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm"
+            <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" :configurations="configurations"
               @add-configuration="addConfiguration" />
           </template>
 

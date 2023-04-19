@@ -95,7 +95,8 @@ const props = defineProps({
   },
   refForm: {
     type: Object
-  }
+  },
+  configurations: Array
 })
 
 const emit = defineEmits(['update:formulasFormData', 'update:papers', 'add-configuration'])
@@ -185,6 +186,11 @@ const addConfiguration = () => {
       inputPlaceholder: '不能多于10个字符',
       inputErrorMessage: '配置名字不能为空且不能多于10个字符'
     }).then(({ value }) => {
+      if (props.configurations?.length >= 10) {
+        proxy.$message.error('最多只能保存10份配置！')
+        return
+      }
+
       const newId = uuidv4()
       new ConfigStorage().save(newId, value, toRaw(unref(formData)))
       proxy.$message.success('保存成功!')
