@@ -120,6 +120,8 @@ docker run -d --name=PrimarySchoolMathematics -p 1101:1101 primary-school-mathem
 ## 贡献者 | Contributors
 - [@J_sky](https://github.com/bosichong)
 - [@KK++](https://github.com/tsukasa521)
+- [@ruancheng77](https://github.com/ruancheng77)
+- [@andywu1998](https://github.com/andywu1998)
 
 ## 一些想法
 后续还想添加的功能有：小数的口算题，整十百千的口算，分数口算题（这个完全没有思路）。
