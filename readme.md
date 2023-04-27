@@ -32,13 +32,16 @@
 ![](docs/images/Sample01.png)
 
 例2：2位数乘以2位数的竖式题
-
+![](docs/images/Sample02.png)
 
 例3：2位数除以1位数并且有余数
+![](docs/images/Sample03.png)
 
+例4：不带括号的混合运算
+![](docs/images/Sample04.png)
 
-例4：带括号和不带括号的混合运算
-
+例5：带括号的混合运算
+![](docs/images/Sample05.png)
 
 ## 本地运行 | Getting Started
 前往后端目录
