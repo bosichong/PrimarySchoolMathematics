@@ -1,17 +1,15 @@
 :root {}
 
-$primary: #409EFF;
-
 .page-container {
   min-height: calc(100vh - 64px - 20px - 20px - 110px);
 }
 
 .p-under {
   color: #00000073;
-  font-size: 12px;
+  @apply text-xs;
 
   i {
-    color: $primary;
+    @apply text-sky-600;
   }
 }
 

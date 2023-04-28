@@ -19,7 +19,6 @@ import sys
 import random
 import os
 from fastapi.staticfiles import StaticFiles
-from utils import make_docx_dirs
 from Psmrcddup import Generator
 from PrintPreview import PrintPreview
 from pydantic import BaseModel
@@ -99,27 +98,6 @@ class Psm_Data(BaseModel):
 
 @app.post('/api/psm')
 def generate_psm(data: Psm_Data):
-    '''
-    接受前端发来的口算题配置生成口算题并保存到文件
-    '''
-    print(data.data)
-    jsonData = json.loads(data.data)
-
-    # 验证
-    if len(jsonData[0]) == 0:
-        raise HTTPException(status_code=400, detail='还没有添加口算题到列表中哈！')
-
-    # 生成试卷
-    produce_PSM(jsonData)
-
-    # 获取试卷地址以供下载
-    docxPath = os.path.join(ROOT_PATH, 'webbackend/dist/docx')  # 前端docx文件夹
-    docxList = getpathfile(docxPath)
-    return docxList
-
-
-@app.post('/api/psm_io')
-def generate_psm_io(data: Psm_Data):
     """
     接受前端发来的口算题配置生成口算题并返回一个zip文件
     """
@@ -135,13 +113,13 @@ def generate_psm_io(data: Psm_Data):
         raise HTTPException(status_code=400, detail='题目总数不能超过1000题!')
 
     # 生成试卷
-    zip_data = produce_PSM_io(jsonData)
+    zip_data = produce_PSM(jsonData)
     # 将内存中的 ZIP 文件转换为响应内容
     zip_data.seek(0)
     return StreamingResponse(zip_data, media_type="application/zip", headers={"Content-Disposition": "attachment; filename=example.zip"})
 
 
-def produce_PSM_io(json_data):
+def produce_PSM(json_data):
     """
     发布口算题,
     return 并返回一个zip文件
@@ -209,46 +187,6 @@ def isZeroA(step, multistep, symbols, number, remainder, is_result):
         return "三步计算口算题" + str_number + "道|||"
 
 
-def produce_PSM(json_data):
-    '''发布口算题保存.docx文件'''
-    psm_list = []  # 口算题列表
-    psm_title = []  # 标题列表
-
-    # 循环生成每套题
-    for i in range(json_data[1]["juanzishu"]):
-        paper = getPsmList(json_data)  # 生成一页口算题
-
-        # 处理自定义题目,如果有自定义题目也加入到试卷中
-        if (json_data[2]):  # 约定数组的第三项是自定义题目配置
-            customFormulaOptions = json_data[2]
-            for option in customFormulaOptions:
-                for c in option["customFormulaList"]:
-                    paper.append(c["formula"])
-
-        random.shuffle(paper)  # 随机打乱
-        psm_list.append(paper)  # 添加到list 准备后期打印
-        # 为生成的文件起名r
-        # psm_title.clear()
-
-    for i in range(json_data[1]["juanzishu"]):
-        psm_title.append(json_data[1]["jz_title"])
-    # print(self.psm_title)
-    subtit = json_data[1]["inf_title"]
-
-    # print(psm_list)
-
-    pp = PrintPreview(psm_list, psm_title, subtit,
-                      col=json_data[1]["lieshu"], solution=json_data[1]['solution'], fileNameGeneratedRule=json_data[1]["fileNameGeneratedRule"])
-    pp.delpath()  # 删除之前的口算题
-    pp.produce()  # 生成docx
-    pp.filetovuepublicdocx()  # 复制新的口算题到前端目录
-    pp.docxtozip()  # 打包zip到vue 目录下变提供下载
-    psm_list.clear()  # 清空打印列表。
-    # print(type(json_data))
-    # appConfig.saveAll(json_data)  # 保存所有配置项
-    # self.movdocx()
-
-
 def getPsmList(json_data):
     '''
     根据配置文件生成一套口算题的所有题
@@ -264,16 +202,6 @@ def getPsmList(json_data):
             is_result=j["is_result"], is_bracket=j["is_bracket"], )
         templist = templist + g.generate_data()
     return templist
-
-
-def getpathfile(path):
-    '''返回当前目录下的文件名称'''
-    path_list = []
-    for root, dirs, files in os.walk(path):
-        for f in files:
-            if f.endswith(".docx"):
-                path_list.append(f)
-    return path_list
 
 
 if __name__ == '__main__':

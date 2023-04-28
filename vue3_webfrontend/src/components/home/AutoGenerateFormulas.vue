@@ -38,14 +38,16 @@
     <ElFormItem label="运算结果">
       <ElRow :gutter="8">
         <ElCol :span="8">
-          <ElFormItem prop="resultMinValue">
+          <ElFormItem prop="resultMinValue"
+            :rules="[{ required: true, message: '请填写运算结果最小值' }, { type: 'number', message: '请填写数字' }]">
             <ElInput v-model.number="formData.resultMinValue">
               <template #prepend>最小值</template>
             </ElInput>
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem prop="resultMaxValue">
+          <ElFormItem prop="resultMaxValue"
+            :rules="[{ required: true, message: '请填写运算结果最大值' }, { type: 'number', message: '请填写数字' }]">
             <ElInput v-model.number="formData.resultMaxValue">
               <template #prepend>最大值</template>
             </ElInput>
@@ -54,20 +56,21 @@
       </ElRow>
     </ElFormItem>
 
-    <ElFormItem prop="numberOfFormulas">
+    <ElFormItem prop="numberOfFormulas"
+      :rules="[{ required: true, message: '请填写口算题数量' }, { type: 'number', message: '请填写数字' }]">
       <ElRow :gutter="20">
-        <ElCol :span="11">
+        <ElCol :span="14">
           <ElInput v-model.number="formData.numberOfFormulas">
             <template #prepend>口算题数量</template>
           </ElInput>
         </ElCol>
-        <ElCol :span="5">
-          <el-button type="primary" @click="append">添加口算题</el-button>
-        </ElCol>
-        <ElCol :span="5">
-          <el-button @click="clear">清空口算题</el-button>
-        </ElCol>
       </ElRow>
+    </ElFormItem>
+
+    <ElFormItem>
+      <ElButton type="primary" @click="append">添加口算题</ElButton>
+      <ElButton @click="clear">清空口算题</ElButton>
+      <el-button type="success" @click="addConfiguration">将当前参数保存为配置</el-button>
     </ElFormItem>
 
     <OptionsDrawer v-model:visible="optionsDrawerVisible" v-model:formulasFormData="formData" />
@@ -75,9 +78,13 @@
 </template>
 
 <script setup>
-import { computed, ref, toRaw } from 'vue';
+import { computed, ref, unref, toRaw, getCurrentInstance } from 'vue';
+import { v4 as uuidv4 } from "uuid";
 import { cloneDeep } from "lodash";
+import ConfigStorage from '@/utils/configStorage';
 import { OptionsDrawer } from "@/components/home";
+
+const { proxy } = getCurrentInstance()
 
 const props = defineProps({
   formulasFormData: {
@@ -88,10 +95,11 @@ const props = defineProps({
   },
   refForm: {
     type: Object
-  }
+  },
+  configurations: Array
 })
 
-const emit = defineEmits(['update:formulasFormData', 'update:papers'])
+const emit = defineEmits(['update:formulasFormData', 'update:papers', 'add-configuration'])
 
 const formData = computed({
   get() {
@@ -167,6 +175,28 @@ const append = () => {
 
 const clear = () => {
   paperList.value = []
+}
+
+const addConfiguration = () => {
+  props.refForm?.validate((valid) => {
+    if (!valid) return
+
+    proxy.$messageBox.prompt('请给配置起个名字', '提示', {
+      inputPattern: /^\S{1,10}$/,
+      inputPlaceholder: '不能多于10个字符',
+      inputErrorMessage: '配置名字不能为空且不能多于10个字符'
+    }).then(({ value }) => {
+      if (props.configurations?.length >= 10) {
+        proxy.$message.error('最多只能保存10份配置！')
+        return
+      }
+
+      const newId = uuidv4()
+      new ConfigStorage().save(newId, value, toRaw(unref(formData)))
+      proxy.$message.success('保存成功!')
+      emit('add-configuration', newId)
+    })
+  })
 }
 </script>
 

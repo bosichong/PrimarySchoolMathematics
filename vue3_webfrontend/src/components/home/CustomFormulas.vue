@@ -5,7 +5,7 @@
     </p>
     <ElFormItem v-for="item, index in formData.customFormulaList" :prop="`customFormulaList.${index}.formula`"
       :rules="requiredRule">
-      <div class="formula">
+      <div class="flex items-center">
         <ElInput ref="refCustomFormulaInputs" v-model="item.formula" placeholder="例: 20*10"
           @keydown.enter.prevent="add(index)" />
         <el-icon v-show="formData.customFormulaList.length == (index + 1)" @click="add(index)">
@@ -99,13 +99,7 @@ const clear = () => {
 </script>
 
 <style lang="scss" scoped>
-.formula {
-  display: flex;
-  align-items: center;
-
-  i {
-    margin-left: 6px;
-    font-size: 20px;
-  }
+i {
+  @apply text-xl ml-1;
 }
 </style>

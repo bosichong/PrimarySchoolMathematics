@@ -1,41 +1,48 @@
 <template>
   <div class="page-container">
-    <ElForm ref="refForm" :model="formData" :rules="formRules" label-position="top">
-      <ElFormItem label="生成模式">
-        <el-radio-group v-model="formData.generateMode">
-          <el-radio-button label="1">自动生成</el-radio-button>
-          <el-radio-button label="2">手动添加</el-radio-button>
-        </el-radio-group>
-      </ElFormItem>
+    <ElRow :gutter="20">
+      <ElCol :xs="24" :sm="16" :md="16" :lg="12" :xl="8">
+        <ElForm ref="refForm" :model="formData" label-position="top">
+          <ElFormItem label="生成模式">
+            <el-radio-group v-model="formData.generateMode">
+              <el-radio-button label="1">自动生成</el-radio-button>
+              <el-radio-button label="2">手动添加</el-radio-button>
+            </el-radio-group>
+          </ElFormItem>
 
-      <template v-if="formData.generateMode == '1'">
-        <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" />
-      </template>
+          <template v-if="formData.generateMode == '1'">
+            <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" :configurations="configurations"
+              @add-configuration="addConfiguration" />
+          </template>
 
-      <template v-if="formData.generateMode == '2'">
-        <CustomFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" />
-      </template>
+          <template v-if="formData.generateMode == '2'">
+            <CustomFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" />
+          </template>
 
-      <template v-if="paperDescriptionList && paperDescriptionList.length">
-        <ElFormItem label="当前口算题包含的内容">
-          <div v-for="p in paperDescriptionList">
-            <ElTag style="margin-right: 8px;">{{ p }}</ElTag>
-          </div>
-        </ElFormItem>
-      </template>
-    </ElForm>
+          <template v-if="paperDescriptionList && paperDescriptionList.length">
+            <ElFormItem label="当前口算题包含的内容">
+              <div v-for="p in paperDescriptionList">
+                <ElTag style="margin-right: 8px;">{{ p }}</ElTag>
+              </div>
+            </ElFormItem>
+          </template>
+        </ElForm>
 
-    <el-button :disabled="!paperList.length" type="primary" :loading="buttonLoading"
-      @click="generate">点此生成口算题卷子</el-button>
-
-    <PaperDownloadDialog v-model:visible="paperDownloadDialogVisible" :source="paperDownloadDialogSource" />
+        <el-button :disabled="!paperList.length" type="primary" size="large" :loading="buttonLoading"
+          @click="generate">点此生成口算题卷子</el-button>
+      </ElCol>
+      <ElCol :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+        <ConfigurationList v-model:active-index="activeConfigurationId" :configurations="configurations"
+          @removed="refreshConfiguration" @selected="selectedConfiguration" @reset="refreshConfiguration" />
+      </ElCol>
+    </ElRow>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
-import { PaperDownloadDialog, CustomFormulas, AutoGenerateFormulas } from "@/components/home";
-import { loadConfiguration, saveConfiguration } from "@/utils/configurationUtil";
+import { CustomFormulas, AutoGenerateFormulas, ConfigurationList } from "@/components/home";
+import ConfigStorage from "@/utils/configStorage";
 import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
 import { download } from "@/utils/download";
 import { generatePaper } from '@/apis/paper';
@@ -73,16 +80,14 @@ const formData = ref({
   fileNameGeneratedRule: fileNameGeneratedRuleEnum.baseOnTitleAndIndex.key
 })
 
-const formRules = ref({
-  resultMinValue: [{ required: true, message: '请填写运算结果最小值' }, { type: 'number', message: '请填写数字' }],
-  resultMaxValue: [{ required: true, message: '请填写运算结果最大值' }, { type: 'number', message: '请填写数字' }],
-  numberOfFormulas: [{ required: true, message: '请填写口算题数量' }, { type: 'number', message: '请填写数字' }]
-})
+const configurations = ref([])
 
 onMounted(async () => {
   console.log('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
 
-  const config = loadConfiguration()
+  refreshConfiguration()
+  const { data: config } = configurations.value[0] // todo
+
   formData.value.step = config.step
   formData.value.numberOfFormulas = config.numberOfFormulas
   formData.value.whereIsResult = config.whereIsResult
@@ -108,9 +113,37 @@ const paperDescriptionList = computed(() => {
   })
 })
 
+const activeConfigurationId = ref('1')
+const refreshConfiguration = () => {
+  configurations.value = new ConfigStorage().loadAll()
+}
+const addConfiguration = (newId) => {
+  activeConfigurationId.value = newId
+  refreshConfiguration()
+}
+const selectedConfiguration = (configuration) => {
+  console.log(configuration);
+
+  const { data: config } = configuration
+  formData.value.step = config.step
+  formData.value.numberOfFormulas = config.numberOfFormulas
+  formData.value.whereIsResult = config.whereIsResult
+  formData.value.enableBrackets = config.enableBrackets
+  formData.value.carry = config.carry
+  formData.value.abdication = config.abdication
+  formData.value.remainder = config.remainder
+  formData.value.solution = config.solution
+  formData.value.numberOfPapers = config.numberOfPapers
+  formData.value.numberOfPagerColumns = config.numberOfPagerColumns
+  formData.value.paperTitle = config.paperTitle
+  formData.value.paperSubTitle = config.paperSubTitle
+  formData.value.formulaList = config.formulaList
+  formData.value.resultMinValue = config.resultMinValue
+  formData.value.resultMaxValue = config.resultMaxValue
+  formData.value.fileNameGeneratedRule = config.fileNameGeneratedRule
+}
+
 const buttonLoading = ref(false)
-const paperDownloadDialogVisible = ref(false)
-const paperDownloadDialogSource = ref([])
 const generate = async () => {
   try {
     buttonLoading.value = true
@@ -123,10 +156,6 @@ const generate = async () => {
 
     download(data, fileName)
 
-    saveConfiguration(toRaw(unref(formData)))
-
-    // paperDownloadDialogVisible.value = true
-    // paperDownloadDialogSource.value = data
   } finally {
     buttonLoading.value = false
   }
