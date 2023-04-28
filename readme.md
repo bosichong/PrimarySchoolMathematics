@@ -106,15 +106,6 @@
 ## 如何部署 | How to deploy
 项目默认提供了docker的部署方式
 
-构建镜像
-```shell
-docker build -t primary-school-mathematics .
-```
-
-启动服务
-```shell
-docker run -d --name=PrimarySchoolMathematics -p 1101:1101 primary-school-mathematics
-```
 
 ## 技术栈 | Tech Stack
 - Vue3
