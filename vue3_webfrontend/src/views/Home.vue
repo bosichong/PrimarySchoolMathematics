@@ -11,8 +11,8 @@
           </ElFormItem>
 
           <template v-if="formData.generateMode == '1'">
-            <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" :configurations="configurations"
-              @add-configuration="addConfiguration" />
+            <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm"
+              :configurations="configurations" @add-configuration="addConfiguration" />
           </template>
 
           <template v-if="formData.generateMode == '2'">
@@ -36,12 +36,14 @@
           @removed="refreshConfiguration" @selected="selectedConfiguration" @reset="refreshConfiguration" />
       </ElCol>
     </ElRow>
+
+    <PrintPreviewDialog v-model:visible="printPreviewDialogVisible" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
-import { CustomFormulas, AutoGenerateFormulas, ConfigurationList } from "@/components/home";
+import { CustomFormulas, AutoGenerateFormulas, ConfigurationList, PrintPreviewDialog } from "@/components/home";
 import ConfigStorage from "@/utils/configStorage";
 import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
 import { download } from "@/utils/download";
@@ -143,6 +145,7 @@ const selectedConfiguration = (configuration) => {
   formData.value.fileNameGeneratedRule = config.fileNameGeneratedRule
 }
 
+const printPreviewDialogVisible = ref(false)
 const buttonLoading = ref(false)
 const generate = async () => {
   try {
