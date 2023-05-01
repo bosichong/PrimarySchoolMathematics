@@ -2,7 +2,7 @@
   <el-dialog v-model="currentVisible" fullscreen title="" :show-close="false" append-to-body :close-on-click-modal="false"
     @open="open" @closed="closed">
 
-    <div class="A4">
+    <div class="A4 bg">
       <div class="sheet padding-10mm">
         <div>
           <h1>三年级下学期口算题</h1>
@@ -133,12 +133,52 @@ const print = () => {
 <style lang="scss">
 // @import url("https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css");
 
-@page {
-  size: A4
+// @page {
+//   size: A4
+// }
+
+.sheet {
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  page-break-after: always;
 }
 
 .A4 {
+  margin: -30px -20px;
+  margin-top: -60px;
   text-align: center;
+}
+
+.A4 {
+  &.bg {
+    background: #e0e0e0;
+    // box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+  }
+
+  .sheet {
+    // width: 210mm;
+    // height: 296mm;
+    background: white;
+    // margin: 5mm;
+    
+    &.padding-10mm {
+      padding: 10mm
+    }
+
+    &.padding-15mm {
+      padding: 15mm
+    }
+
+    &.padding-20mm {
+      padding: 20mm
+    }
+
+    &.padding-25mm {
+      padding: 25mm
+    }
+  }
 }
 
 .row {
@@ -152,4 +192,5 @@ const print = () => {
 
 .col34 {
   width: 34%;
-}</style>
+}
+</style>
