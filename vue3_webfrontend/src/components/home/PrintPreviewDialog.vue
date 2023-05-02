@@ -1,85 +1,86 @@
 <template>
-  <el-dialog v-model="currentVisible" fullscreen title="" :show-close="false" append-to-body :close-on-click-modal="false"
-    @open="open" @closed="closed">
-
-    <div class="A4 bg">
-      <div class="sheet padding-10mm">
-        <div>
-          <h1>三年级下学期口算题</h1>
-          <h3>姓名：__________</h3>
+  <el-dialog class="xxx" v-model="currentVisible" fullscreen :show-close="false" append-to-body
+    :close-on-click-modal="false" @open="open" @closed="closed">
+    <div class="preview">
+      <div class="A4">
+        <div class="sheet padding-10mm">
+          <div>
+            <h1>三年级下学期口算题</h1>
+            <h3>姓名：__________</h3>
+          </div>
+          <div class="row">
+            <div class="col33">
+              <p>20+29=</p>
+              <p>88+57=</p>
+              <p>92-54=</p>
+              <p>22+75=</p>
+              <p>8+22=</p>
+              <p>70-22=</p>
+              <p>12+29=</p>
+              <p>68-49=</p>
+              <p>64+10=</p>
+              <p>21+31=</p>
+              <p>11+25=</p>
+              <p>61-17=</p>
+              <p>91-52=</p>
+              <p>20+79=</p>
+              <p>14+47=</p>
+              <p>43-14=</p>
+              <p>37-24=</p>
+              <p>71-19=</p>
+              <p>90-48=</p>
+              <p>43+45=</p>
+              <p>4+49=</p>
+            </div>
+            <div class="col33">
+              <p>20+29=</p>
+              <p>88+57=</p>
+              <p>92-54=</p>
+              <p>22+75=</p>
+              <p>8+22=</p>
+              <p>70-22=</p>
+              <p>12+29=</p>
+              <p>68-49=</p>
+              <p>64+10=</p>
+              <p>21+31=</p>
+              <p>11+25=</p>
+              <p>61-17=</p>
+              <p>91-52=</p>
+              <p>20+79=</p>
+              <p>14+47=</p>
+              <p>43-14=</p>
+              <p>37-24=</p>
+              <p>71-19=</p>
+              <p>90-48=</p>
+              <p>43+45=</p>
+              <p>4+49=</p>
+            </div>
+            <div class="col34">
+              <p>20+29=</p>
+              <p>88+57=</p>
+              <p>92-54=</p>
+              <p>22+75=</p>
+              <p>8+22=</p>
+              <p>70-22=</p>
+              <p>12+29=</p>
+              <p>68-49=</p>
+              <p>64+10=</p>
+              <p>21+31=</p>
+              <p>11+25=</p>
+              <p>61-17=</p>
+              <p>91-52=</p>
+              <p>20+79=</p>
+              <p>14+47=</p>
+              <p>43-14=</p>
+              <p>37-24=</p>
+              <p>71-19=</p>
+              <p>90-48=</p>
+              <p>43+45=</p>
+              <p>4+49=</p>
+            </div>
+          </div>
+          <div style="page-break-after: always;"></div>
         </div>
-        <div class="row">
-          <div class="col33">
-            <p>20+29=</p>
-            <p>88+57=</p>
-            <p>92-54=</p>
-            <p>22+75=</p>
-            <p>8+22=</p>
-            <p>70-22=</p>
-            <p>12+29=</p>
-            <p>68-49=</p>
-            <p>64+10=</p>
-            <p>21+31=</p>
-            <p>11+25=</p>
-            <p>61-17=</p>
-            <p>91-52=</p>
-            <p>20+79=</p>
-            <p>14+47=</p>
-            <p>43-14=</p>
-            <p>37-24=</p>
-            <p>71-19=</p>
-            <p>90-48=</p>
-            <p>43+45=</p>
-            <p>4+49=</p>
-          </div>
-          <div class="col33">
-            <p>20+29=</p>
-            <p>88+57=</p>
-            <p>92-54=</p>
-            <p>22+75=</p>
-            <p>8+22=</p>
-            <p>70-22=</p>
-            <p>12+29=</p>
-            <p>68-49=</p>
-            <p>64+10=</p>
-            <p>21+31=</p>
-            <p>11+25=</p>
-            <p>61-17=</p>
-            <p>91-52=</p>
-            <p>20+79=</p>
-            <p>14+47=</p>
-            <p>43-14=</p>
-            <p>37-24=</p>
-            <p>71-19=</p>
-            <p>90-48=</p>
-            <p>43+45=</p>
-            <p>4+49=</p>
-          </div>
-          <div class="col34">
-            <p>20+29=</p>
-            <p>88+57=</p>
-            <p>92-54=</p>
-            <p>22+75=</p>
-            <p>8+22=</p>
-            <p>70-22=</p>
-            <p>12+29=</p>
-            <p>68-49=</p>
-            <p>64+10=</p>
-            <p>21+31=</p>
-            <p>11+25=</p>
-            <p>61-17=</p>
-            <p>91-52=</p>
-            <p>20+79=</p>
-            <p>14+47=</p>
-            <p>43-14=</p>
-            <p>37-24=</p>
-            <p>71-19=</p>
-            <p>90-48=</p>
-            <p>43+45=</p>
-            <p>4+49=</p>
-          </div>
-        </div>
-        <div style="page-break-after: always;"></div>
       </div>
     </div>
 
@@ -137,6 +138,18 @@ const print = () => {
 //   size: A4
 // }
 
+.xxx {
+  --el-dialog-padding-primary: 0;
+
+  .el-dialog__header {
+    padding-bottom: 0;
+  }
+
+  .el-dialog__body {
+    padding: 0;
+  }
+}
+
 .sheet {
   margin: 0;
   overflow: hidden;
@@ -146,23 +159,22 @@ const print = () => {
 }
 
 .A4 {
-  margin: -30px -20px;
-  margin-top: -60px;
   text-align: center;
 }
 
-.A4 {
-  &.bg {
-    background: #e0e0e0;
-    // box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
-  }
+.preview {
+  // margin: -60px -20px -30px -20px;
+  background: #e0e0e0;
+  padding: 5mm;
+}
 
+.A4 {
   .sheet {
     // width: 210mm;
     // height: 296mm;
     background: white;
-    // margin: 5mm;
-    
+    box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+
     &.padding-10mm {
       padding: 10mm
     }
