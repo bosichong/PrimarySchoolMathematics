@@ -119,6 +119,10 @@ const closed = () => {
 
 }
 
+window.onafterprint = (event) => {
+  console.log('After print');
+}
+
 const isPrint = ref(false)
 const print = () => {
   isPrint.value = true
@@ -203,11 +207,11 @@ const print = () => {
   width: 34%;
 }
 
-h1{
+h1 {
   @apply text-3xl font-bold mb-4;
 }
 
-h3{
+h3 {
   @apply text-lg;
 }
 
