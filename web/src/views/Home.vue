@@ -36,14 +36,13 @@
           @removed="refreshConfiguration" @selected="selectedConfiguration" @reset="refreshConfiguration" />
       </ElCol>
     </ElRow>
-
-    <PrintPreviewDialog v-model:visible="printPreviewDialogVisible" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
-import { CustomFormulas, AutoGenerateFormulas, ConfigurationList, PrintPreviewDialog } from "@/components/home";
+import { useRouter } from "vue-router";
+import { CustomFormulas, AutoGenerateFormulas, ConfigurationList } from "@/components/home";
 import ConfigStorage from "@/utils/configStorage";
 import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
 import { download } from "@/utils/download";
@@ -145,23 +144,26 @@ const selectedConfiguration = (configuration) => {
   formData.value.fileNameGeneratedRule = config.fileNameGeneratedRule
 }
 
-const printPreviewDialogVisible = ref(false)
 const buttonLoading = ref(false)
+const router = useRouter()
 const generate = async () => {
-  try {
-    buttonLoading.value = true
-    const { data, headers } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
-    proxy.$message.success('口算题生成完毕，准备开始下载！')
+  const url = router.resolve('/print').href
+  window.open(url)
+  
+  // try {
+  //   buttonLoading.value = true
+  //   const { data, headers } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
+  //   proxy.$message.success('口算题生成完毕，准备开始下载！')
 
-    const contentType = headers['content-type']
-    const fileExtensions = httpContentTypeExtensionsMappingEnum[contentType.toLowerCase()]
-    const fileName = `${formData.value.paperTitle}.${fileExtensions}`
+  //   const contentType = headers['content-type']
+  //   const fileExtensions = httpContentTypeExtensionsMappingEnum[contentType.toLowerCase()]
+  //   const fileName = `${formData.value.paperTitle}.${fileExtensions}`
 
-    download(data, fileName)
+  //   download(data, fileName)
 
-  } finally {
-    buttonLoading.value = false
-  }
+  // } finally {
+  //   buttonLoading.value = false
+  // }
 }
 </script>
 

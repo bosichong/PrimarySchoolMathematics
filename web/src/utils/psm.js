@@ -513,7 +513,7 @@ function get_time(func) {
 }
 
 
-class Generator {
+class FormulasGenerator {
     /**
      * 口算题生器核心类，负责生成完整的口算题
      * @param {Object} addattrs
@@ -574,7 +574,7 @@ class Generator {
      * 根据条件生成所需口算题
      * @return {Array} 一组口算题
      */
-    generate_data() {
+    generate() {
         const slist = [];
         while (true) {
             const formula = this.__getformula();  // 生成一道算式题

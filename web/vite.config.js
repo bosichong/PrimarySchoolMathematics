@@ -6,7 +6,7 @@ const srcPath = path.resolve(__dirname, 'src')
 
 export default defineConfig({
   server: {
-    port: 1102,
+    port: 1101,
   },
   resolve: {
     alias: {
