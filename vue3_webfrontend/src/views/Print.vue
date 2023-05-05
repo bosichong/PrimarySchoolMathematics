@@ -1,10 +1,10 @@
 <template>
   <div :class="{ 'preview': !isPrinting }">
     <div class="A4">
-      <div class="sheet padding-10mm">
-        <div class="mb-12">
-          <h1>三年级下学期口算题</h1>
-          <h3>姓名：__________</h3>
+      <div class="sheet padding-10mm" :class="{ 'sheet-shadow': !isPrinting }">
+        <div class="mt-12 mb-12">
+          <h1>小学生口算题</h1>
+          <h3>姓名：__________ 日期：____月____日 时间：________ 对题：____道</h3>
         </div>
         <div class="row">
           <div class="col33">
@@ -28,6 +28,101 @@
             <p>71-19=</p>
             <p>90-48=</p>
             <p>43+45=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+5=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+10=</p>
+          </div>
+          <div class="col34">
+            <p>20+29=</p>
+            <p>88+57=</p>
+            <p>92-54=</p>
+            <p>22+75=</p>
+            <p>8+22=</p>
+            <p>70-22=</p>
+            <p>12+29=</p>
+            <p>68-49=</p>
+            <p>64+10=</p>
+            <p>21+31=</p>
+            <p>11+25=</p>
+            <p>61-17=</p>
+            <p>91-52=</p>
+            <p>20+79=</p>
+            <p>14+47=</p>
+            <p>43-14=</p>
+            <p>37-24=</p>
+            <p>71-19=</p>
+            <p>90-48=</p>
+            <p>43+45=</p>
+          </div>
+          <div class="col34">
+            <p>20+29=</p>
+            <p>88+57=</p>
+            <p>92-54=</p>
+            <p>22+75=</p>
+            <p>8+22=</p>
+            <p>70-22=</p>
+            <p>12+29=</p>
+            <p>68-49=</p>
+            <p>64+10=</p>
+            <p>21+31=</p>
+            <p>11+25=</p>
+            <p>61-17=</p>
+            <p>91-52=</p>
+            <p>20+79=</p>
+            <p>14+47=</p>
+            <p>43-14=</p>
+            <p>37-24=</p>
+            <p>71-19=</p>
+            <p>90-48=</p>
+            <p>43+45=</p>
+          </div>
+        </div>
+      </div>
+      <!-- 模拟第二份 -->
+      <div class="sheet padding-10mm" :class="{ 'sheet-shadow': !isPrinting }">
+        <div class="mt-12 mb-12">
+          <h1>小学生口算题</h1>
+          <h3>姓名：__________ 日期：____月____日 时间：________ 对题：____道</h3>
+        </div>
+        <div class="row">
+          <div class="col33">
+            <p>20+29=</p>
+            <p>88+57=</p>
+            <p>92-54=</p>
+            <p>22+75=</p>
+            <p>8+22=</p>
+            <p>70-22=</p>
+            <p>12+29=</p>
+            <p>68-49=</p>
+            <p>64+10=</p>
+            <p>21+31=</p>
+            <p>11+25=</p>
+            <p>61-17=</p>
+            <p>91-52=</p>
+            <p>20+79=</p>
+            <p>14+47=</p>
+            <p>43-14=</p>
+            <p>37-24=</p>
+            <p>71-19=</p>
+            <p>90-48=</p>
+            <p>43+45=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+5=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+1=</p>
+            <p>43+10=</p>
           </div>
           <div class="col34">
             <p>20+29=</p>
@@ -85,6 +180,13 @@
 <script setup>
 import { nextTick, onMounted, ref } from "vue";
 
+/**
+ * 要处理的场景
+ * 场景1: 一份试卷一页能显示完
+ * 场景2: 一份试卷一页能不能显示完(A4纸一列最多26道题)
+ * 场景3: 多份试卷一页能显示完
+ * 场景4: 多份试卷一页能不能显示完
+*/
 const isPrinting = ref(false)
 onMounted(() => {
   window.onbeforeprint = () => {
@@ -119,7 +221,6 @@ const print = () => {
 
 .A4 {
   text-align: center;
-  // position: relative;
 }
 
 .sheet {
@@ -130,12 +231,21 @@ const print = () => {
   page-break-after: always;
 }
 
+.sheet-shadow {
+  box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+}
+
 .A4 {
   .sheet {
     width: 210mm;
-    height: 296mm;
+    // height: 296mm;
     background: white;
-    box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+
+    @apply mt-2;
+
+    &:first-of-type {
+      @apply mt-0;
+    }
 
     &.padding-10mm {
       padding: 10mm
@@ -169,15 +279,16 @@ const print = () => {
 }
 
 h1 {
-  @apply text-3xl font-bold mb-4;
+  @apply text-3xl font-bold mb-5;
 }
 
 h3 {
-  @apply text-lg;
+  @apply text-base;
 }
 
 p {
-  @apply text-base;
+  @apply text-sm;
+  margin-right: 20%;
   margin-bottom: 16px;
 }
 
