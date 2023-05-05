@@ -1,5 +1,5 @@
 <template>
-  <div class="preview">
+  <div :class="{ 'preview': !isPrinting }">
     <div class="A4">
       <div class="sheet padding-10mm">
         <div class="mb-12">
@@ -75,30 +75,53 @@
           </div>
         </div>
       </div>
+      <div class="btn" v-if="!isPrinting">
+        <ElButton class="mr-2 w-32" type="primary" @click="print">打印</ElButton>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-const n = ref(1)
+import { nextTick, onMounted, ref } from "vue";
+
+const isPrinting = ref(false)
 onMounted(() => {
   window.onbeforeprint = () => {
-    console.log('before');
-    n.value += 1
+    console.log('before')
+    isPrinting.value = true
+  }
+
+  window.onafterprint = () => {
+    console.log('after')
+    nextTick(() => {
+      isPrinting.value = false
+    })
   }
 })
+
+const print = () => {
+  isPrinting.value = true
+  nextTick(() => {
+    window.print()
+  })
+}
 </script>
 
 <style lang="scss" scoped>
 .preview {
   background: #e0e0e0;
   padding: 5mm;
-  height: 100vh;
+  display: flex;
+  justify-content: center;
+  // height: 100vh;
 }
+
 .A4 {
   text-align: center;
+  // position: relative;
 }
+
 .sheet {
   margin: 0;
   overflow: hidden;
@@ -112,7 +135,7 @@ onMounted(() => {
     width: 210mm;
     height: 296mm;
     background: white;
-    // box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+    box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
 
     &.padding-10mm {
       padding: 10mm
@@ -156,5 +179,15 @@ h3 {
 p {
   @apply text-base;
   margin-bottom: 16px;
+}
+
+.btn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  height: 50px;
+  @apply flex justify-end items-center;
+  @apply bg-black bg-opacity-50 w-full;
 }
 </style>
