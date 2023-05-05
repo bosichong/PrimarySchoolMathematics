@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <!-- <el-container>
     <el-aside width="150px">
       <Menu></Menu>
     </el-aside>
@@ -14,7 +14,8 @@
         <Footer />
       </el-footer>
     </el-container>
-  </el-container>
+  </el-container> -->
+  <router-view />
 </template>
 
 <script setup>

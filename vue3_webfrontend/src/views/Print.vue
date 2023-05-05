@@ -1,7 +1,5 @@
 <template>
-  <el-dialog class="xxx" v-model="currentVisible" fullscreen :show-close="false" append-to-body
-    :close-on-click-modal="false" @open="open" @closed="closed">
-    <!-- <div class="preview"> -->
+  <div class="preview">
     <div class="A4">
       <div class="sheet padding-10mm">
         <div class="mb-12">
@@ -76,81 +74,31 @@
             <p>43+45=</p>
           </div>
         </div>
-        <div style="page-break-after: always;"></div>
       </div>
     </div>
-    <!-- </div> -->
-
-    <template #footer v-if="!isPrint">
-      <el-button type="primary" @click="print">打印</el-button>
-      <el-button @click="currentVisible = false">关闭</el-button>
-    </template>
-  </el-dialog>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed, defineComponent, nextTick } from 'vue';
-
-const props = defineProps({
-  visible: {
-    type: Boolean
-  },
-  source: {
-    type: Object
+import { onMounted, ref } from "vue";
+const n = ref(1)
+onMounted(() => {
+  window.onbeforeprint = () => {
+    console.log('before');
+    n.value += 1
   }
 })
-
-const emit = defineEmits(['update:visible'])
-
-const currentVisible = computed({
-  get() {
-    return props.visible
-  },
-  set(val) {
-    emit('update:visible', val)
-  }
-})
-
-const open = async () => {
-
-}
-
-const closed = () => {
-
-}
-
-window.onafterprint = (event) => {
-  console.log('After print');
-}
-
-const isPrint = ref(false)
-const print = () => {
-  isPrint.value = true
-  nextTick(() => {
-    window.print()
-  })
-}
 </script>
 
-<style lang="scss">
-// @import url("https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css");
-
-// @page {
-//   size: A4
-// }
-
-.xxx {
-  --el-dialog-padding-primary: 0;
-
-  .el-dialog__header {
-    padding-bottom: 0;
-  }
-
-  .el-dialog__body {
-    padding: 0;
-  }
+<style lang="scss" scoped>
+.preview {
+  background: #e0e0e0;
+  padding: 5mm;
+  height: 100vh;
 }
-
+.A4 {
+  text-align: center;
+}
 .sheet {
   margin: 0;
   overflow: hidden;
@@ -160,19 +108,9 @@ const print = () => {
 }
 
 .A4 {
-  text-align: center;
-}
-
-.preview {
-  // margin: -60px -20px -30px -20px;
-  background: #e0e0e0;
-  padding: 5mm;
-}
-
-.A4 {
   .sheet {
-    // width: 210mm;
-    // height: 296mm;
+    width: 210mm;
+    height: 296mm;
     background: white;
     // box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
 
@@ -207,24 +145,16 @@ const print = () => {
   width: 34%;
 }
 
-// h1 {
-//   @apply text-3xl font-bold mb-4;
-// }
+h1 {
+  @apply text-3xl font-bold mb-4;
+}
 
-// h3 {
-//   @apply text-lg;
-// }
+h3 {
+  @apply text-lg;
+}
 
-// p {
-//   @apply text-base;
-//   margin-bottom: 16px;
-// }
-
-/** Fix for Chrome issue #273306 **/
-@media print {
-  body {
-    width: 210mm;
-    height: 296mm;
-  }
+p {
+  @apply text-base;
+  margin-bottom: 16px;
 }
 </style>

@@ -5,7 +5,7 @@
  * @LastEditTime: 2022-12-01 23:24:16
  * @FilePath: /PrimarySchoolMath/vue3_webfrontend/src/router/index.js
  */
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 export const routes = [
     {
@@ -16,11 +16,16 @@ export const routes = [
         path: '/home',
         name: 'home',
         component: () => import('../views/Home.vue'),
+    },
+    {
+        path: '/print',
+        name: 'print',
+        component: () => import('../views/Print.vue'),
     }
 ];
 
 
 export const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
 });
