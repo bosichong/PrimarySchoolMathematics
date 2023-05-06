@@ -1,172 +1,14 @@
 <template>
   <div :class="{ 'preview': !isPrinting }">
     <div class="A4">
-      <div class="sheet padding-10mm" :class="{ 'sheet-shadow': !isPrinting }">
+      <div v-for="sheet in sheets" class="sheet padding-10mm" :class="{ 'sheet-shadow': !isPrinting }">
         <div class="mt-12 mb-12">
-          <h1>小学生口算题</h1>
-          <h3>姓名：__________ 日期：____月____日 时间：________ 对题：____道</h3>
+          <h1>{{ sheet.paperTitle }}</h1>
+          <h3>{{ sheet.paperSubTitle }}</h3>
         </div>
         <div class="row">
-          <div class="col33">
-            <p>20+29=</p>
-            <p>88+57=</p>
-            <p>92-54=</p>
-            <p>22+75=</p>
-            <p>8+22=</p>
-            <p>70-22=</p>
-            <p>12+29=</p>
-            <p>68-49=</p>
-            <p>64+10=</p>
-            <p>21+31=</p>
-            <p>11+25=</p>
-            <p>61-17=</p>
-            <p>91-52=</p>
-            <p>20+79=</p>
-            <p>14+47=</p>
-            <p>43-14=</p>
-            <p>37-24=</p>
-            <p>71-19=</p>
-            <p>90-48=</p>
-            <p>43+45=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+5=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+10=</p>
-          </div>
-          <div class="col34">
-            <p>20+29=</p>
-            <p>88+57=</p>
-            <p>92-54=</p>
-            <p>22+75=</p>
-            <p>8+22=</p>
-            <p>70-22=</p>
-            <p>12+29=</p>
-            <p>68-49=</p>
-            <p>64+10=</p>
-            <p>21+31=</p>
-            <p>11+25=</p>
-            <p>61-17=</p>
-            <p>91-52=</p>
-            <p>20+79=</p>
-            <p>14+47=</p>
-            <p>43-14=</p>
-            <p>37-24=</p>
-            <p>71-19=</p>
-            <p>90-48=</p>
-            <p>43+45=</p>
-          </div>
-          <div class="col34">
-            <p>20+29=</p>
-            <p>88+57=</p>
-            <p>92-54=</p>
-            <p>22+75=</p>
-            <p>8+22=</p>
-            <p>70-22=</p>
-            <p>12+29=</p>
-            <p>68-49=</p>
-            <p>64+10=</p>
-            <p>21+31=</p>
-            <p>11+25=</p>
-            <p>61-17=</p>
-            <p>91-52=</p>
-            <p>20+79=</p>
-            <p>14+47=</p>
-            <p>43-14=</p>
-            <p>37-24=</p>
-            <p>71-19=</p>
-            <p>90-48=</p>
-            <p>43+45=</p>
-          </div>
-        </div>
-      </div>
-      <!-- 模拟第二份 -->
-      <div class="sheet padding-10mm" :class="{ 'sheet-shadow': !isPrinting }">
-        <div class="mt-12 mb-12">
-          <h1>小学生口算题</h1>
-          <h3>姓名：__________ 日期：____月____日 时间：________ 对题：____道</h3>
-        </div>
-        <div class="row">
-          <div class="col33">
-            <p>20+29=</p>
-            <p>88+57=</p>
-            <p>92-54=</p>
-            <p>22+75=</p>
-            <p>8+22=</p>
-            <p>70-22=</p>
-            <p>12+29=</p>
-            <p>68-49=</p>
-            <p>64+10=</p>
-            <p>21+31=</p>
-            <p>11+25=</p>
-            <p>61-17=</p>
-            <p>91-52=</p>
-            <p>20+79=</p>
-            <p>14+47=</p>
-            <p>43-14=</p>
-            <p>37-24=</p>
-            <p>71-19=</p>
-            <p>90-48=</p>
-            <p>43+45=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+5=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+1=</p>
-            <p>43+10=</p>
-          </div>
-          <div class="col34">
-            <p>20+29=</p>
-            <p>88+57=</p>
-            <p>92-54=</p>
-            <p>22+75=</p>
-            <p>8+22=</p>
-            <p>70-22=</p>
-            <p>12+29=</p>
-            <p>68-49=</p>
-            <p>64+10=</p>
-            <p>21+31=</p>
-            <p>11+25=</p>
-            <p>61-17=</p>
-            <p>91-52=</p>
-            <p>20+79=</p>
-            <p>14+47=</p>
-            <p>43-14=</p>
-            <p>37-24=</p>
-            <p>71-19=</p>
-            <p>90-48=</p>
-            <p>43+45=</p>
-          </div>
-          <div class="col34">
-            <p>20+29=</p>
-            <p>88+57=</p>
-            <p>92-54=</p>
-            <p>22+75=</p>
-            <p>8+22=</p>
-            <p>70-22=</p>
-            <p>12+29=</p>
-            <p>68-49=</p>
-            <p>64+10=</p>
-            <p>21+31=</p>
-            <p>11+25=</p>
-            <p>61-17=</p>
-            <p>91-52=</p>
-            <p>20+79=</p>
-            <p>14+47=</p>
-            <p>43-14=</p>
-            <p>37-24=</p>
-            <p>71-19=</p>
-            <p>90-48=</p>
-            <p>43+45=</p>
+          <div v-for="col in sheet.columnsOfPaper" class="col33">
+            <p v-for="f in col">{{ f }}</p>
           </div>
         </div>
       </div>
@@ -178,7 +20,7 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useAppStore } from "@/stores/app";
 
@@ -193,9 +35,25 @@ import { useAppStore } from "@/stores/app";
 const isPrinting = ref(false)
 const route = useRoute()
 const appStore = useAppStore()
-onMounted(() => {
-  console.log(appStore.printPreviewPapers)
 
+const sheets = computed(() => {
+  return appStore.printPreviewPapers.map(p => {
+    const { paperTitle, paperSubTitle, formulas } = p
+    const numberOfCols = formulas.length / 3
+
+    let columnsOfPaper = [];
+    let index = 0
+    while (index < formulas.length) {
+      columnsOfPaper.push(formulas.slice(index, numberOfCols + index));
+      index += numberOfCols;
+    }
+    columnsOfPaper = columnsOfPaper.reverse()
+    console.log(columnsOfPaper);
+    return { paperTitle, paperSubTitle, columnsOfPaper }
+  })
+})
+
+onMounted(() => {
   window.onbeforeprint = () => {
     console.log('before')
     isPrinting.value = true
