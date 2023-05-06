@@ -47,6 +47,8 @@ import ConfigStorage from "@/utils/configStorage";
 import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
 import { download } from "@/utils/download";
 import { generatePaper } from '@/apis/paper';
+import { useAppStore } from '@/stores/app';
+import { createFormulasGenerator } from '@/utils/paperGenerator';
 
 const { proxy } = getCurrentInstance()
 
@@ -145,11 +147,11 @@ const selectedConfiguration = (configuration) => {
 }
 
 const buttonLoading = ref(false)
+const appStore = useAppStore()
 const router = useRouter()
-const generate = async () => {
-  const url = router.resolve('/print').href
-  window.open(url)
-  
+const generate = () => {
+  const papers = createFormulasGenerator(toRaw(unref(formData)), toRaw(unref(paperList)))
+  appStore.navigateToPrint(router, papers)
   // try {
   //   buttonLoading.value = true
   //   const { data, headers } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))

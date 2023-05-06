@@ -179,6 +179,9 @@
 
 <script setup>
 import { nextTick, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import { useAppStore } from "@/stores/app";
+
 
 /**
  * 要处理的场景
@@ -188,7 +191,11 @@ import { nextTick, onMounted, ref } from "vue";
  * 场景4: 多份试卷一页能不能显示完
 */
 const isPrinting = ref(false)
+const route = useRoute()
+const appStore = useAppStore()
 onMounted(() => {
+  console.log(appStore.printPreviewPapers)
+
   window.onbeforeprint = () => {
     console.log('before')
     isPrinting.value = true

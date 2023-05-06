@@ -13,6 +13,7 @@ export const routes = [
     {
         path: '/print',
         name: 'print',
+        props: true,
         component: () => import('../views/Print.vue'),
     }
 ];

@@ -513,7 +513,7 @@ function get_time(func) {
 }
 
 
-class FormulasGenerator {
+export default class FormulasGenerator {
     /**
      * 口算题生器核心类，负责生成完整的口算题
      * @param {Object} addattrs
