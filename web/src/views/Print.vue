@@ -39,7 +39,7 @@ const appStore = useAppStore()
 const sheets = computed(() => {
   return appStore.printPreviewPapers.map(p => {
     const { paperTitle, paperSubTitle, formulas } = p
-    const numberOfCols = formulas.length / 3
+    const numberOfCols = formulas.length / 3 // todo 列数是动态的
 
     let columnsOfPaper = [];
     let index = 0
