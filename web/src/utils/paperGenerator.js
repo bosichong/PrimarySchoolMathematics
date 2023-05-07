@@ -41,13 +41,21 @@ export function createFormulasGenerator(options, paperList) {
   const papers = []
 
   for (let i = 0; i < parseInt(options.numberOfPapers); i++) {
-    const op = postAutoGeneratePaperList[0] // todo 要处理多套题库
-    const Gen = new FormulasGenerator(op.add, op.sub, op.mult, op.div, op.step, op.number, op.is_result, op.is_bracket, op.multistep, op.symbols)
-    const f = Gen.generate()
-    // todo 要打乱题目
+    const f = postAutoGeneratePaperList.reduce((pre, cur) => {
+      const op = cur
+      const Gen = new FormulasGenerator(op.add, op.sub, op.mult, op.div, op.step, op.number, op.is_result, op.is_bracket, op.multistep, op.symbols)
+      pre.push(...Gen.generate())
+      return pre
+    }, [])
+
+    f.sort((pre, cur) => {
+      return Math.random() > 0.5 ? -1 : 1
+    })
+
     papers.push({
       paperTitle: options.paperTitle,
       paperSubTitle: options.paperSubTitle,
+      numberOfPagerColumns: parseInt(options.numberOfPagerColumns),
       formulas: f
     })
   }

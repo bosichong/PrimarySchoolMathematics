@@ -7,12 +7,13 @@
           <h3>{{ sheet.paperSubTitle }}</h3>
         </div>
         <div class="row">
-          <div v-for="col in sheet.columnsOfPaper" class="col33">
+          <div v-for="col in sheet.columnsOfPaper" :style="`width: ${sheet.colWidth}%;`">
             <p v-for="f in col">{{ f }}</p>
           </div>
         </div>
       </div>
       <div class="btn" v-if="!isPrinting">
+        <ElButton @click="goBack">返回</ElButton>
         <ElButton class="mr-2 w-32" type="primary" @click="print">打印</ElButton>
       </div>
     </div>
@@ -21,7 +22,7 @@
 
 <script setup>
 import { computed, nextTick, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useAppStore } from "@/stores/app";
 
 
@@ -33,13 +34,15 @@ import { useAppStore } from "@/stores/app";
  * 场景4: 多份试卷一页能不能显示完
 */
 const isPrinting = ref(false)
-const route = useRoute()
+const router = useRouter()
 const appStore = useAppStore()
 
 const sheets = computed(() => {
   return appStore.printPreviewPapers.map(p => {
-    const { paperTitle, paperSubTitle, formulas } = p
-    const numberOfCols = formulas.length / 3 // todo 列数是动态的
+    const { paperTitle, paperSubTitle, numberOfPagerColumns, formulas } = p
+    
+    const numberOfCols = formulas.length / numberOfPagerColumns
+    const colWidth = 100 / numberOfPagerColumns
 
     let columnsOfPaper = [];
     let index = 0
@@ -49,7 +52,7 @@ const sheets = computed(() => {
     }
     columnsOfPaper = columnsOfPaper.reverse()
     console.log(columnsOfPaper);
-    return { paperTitle, paperSubTitle, columnsOfPaper }
+    return { paperTitle, paperSubTitle, columnsOfPaper, colWidth }
   })
 })
 
@@ -66,6 +69,10 @@ onMounted(() => {
     })
   }
 })
+
+const goBack = () => {
+  router.back()
+}
 
 const print = () => {
   isPrinting.value = true
