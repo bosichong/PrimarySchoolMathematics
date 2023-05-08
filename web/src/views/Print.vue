@@ -8,7 +8,7 @@
         </div>
         <div class="row">
           <div v-for="col in sheet.columnsOfPaper" :style="`width: ${sheet.colWidth}%;`">
-            <p v-for="f in col">{{ f }}</p>
+            <p :style="`margin-bottom: ${sheet.rowHeight}`" v-for="f in col">{{ f }}</p>
           </div>
         </div>
       </div>
@@ -39,10 +39,11 @@ const appStore = useAppStore()
 
 const sheets = computed(() => {
   return appStore.printPreviewPapers.map(p => {
-    const { paperTitle, paperSubTitle, numberOfPagerColumns, formulas } = p
-    
+    const { paperTitle, paperSubTitle, numberOfPagerColumns, solution, formulas } = p
+
     const numberOfCols = formulas.length / numberOfPagerColumns
     const colWidth = 100 / numberOfPagerColumns
+    const rowHeight = solution == '0' ? '16px' : '216px'
 
     let columnsOfPaper = [];
     let index = 0
@@ -52,7 +53,7 @@ const sheets = computed(() => {
     }
     columnsOfPaper = columnsOfPaper.reverse()
     console.log(columnsOfPaper);
-    return { paperTitle, paperSubTitle, columnsOfPaper, colWidth }
+    return { paperTitle, paperSubTitle, columnsOfPaper, colWidth, rowHeight }
   })
 })
 
@@ -161,7 +162,6 @@ h3 {
 p {
   @apply text-sm;
   margin-right: 20%;
-  margin-bottom: 16px;
 }
 
 .btn {
