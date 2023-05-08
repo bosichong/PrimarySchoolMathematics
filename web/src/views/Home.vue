@@ -87,6 +87,7 @@ const configurations = ref([])
 
 onMounted(async () => {
   console.log('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
+  document.title = '小学数学口算题 | Primary School Mathematics'
 
   refreshConfiguration()
   const { data: config } = configurations.value[0] // todo
@@ -151,7 +152,7 @@ const appStore = useAppStore()
 const router = useRouter()
 const generate = () => {
   const papers = createFormulasGenerator(toRaw(unref(formData)), toRaw(unref(paperList)))
-  appStore.navigateToPrint(router, papers)
+  appStore.navigateToPrint(router, formData.value.fileNameGeneratedRule == fileNameGeneratedRuleEnum.baseOnTitleAndIndex.key ? formData.value.paperTitle : "", papers)
   // try {
   //   buttonLoading.value = true
   //   const { data, headers } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))

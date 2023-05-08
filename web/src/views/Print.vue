@@ -22,7 +22,7 @@
 
 <script setup>
 import { computed, nextTick, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useAppStore } from "@/stores/app";
 
 
@@ -34,6 +34,7 @@ import { useAppStore } from "@/stores/app";
  * 场景4: 多份试卷一页能不能显示完
 */
 const isPrinting = ref(false)
+const route = useRoute()
 const router = useRouter()
 const appStore = useAppStore()
 
@@ -58,6 +59,18 @@ const sheets = computed(() => {
 })
 
 onMounted(() => {
+  // 修改网页标题以作为打印时文件的文件名
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const second = now.getSeconds();
+  const timeStr = `${year}${month}${day}${hour}${minute}${second}`;
+  console.log(timeStr);
+  document.title = route.query.fileName + timeStr
+
   window.onbeforeprint = () => {
     console.log('before')
     isPrinting.value = true

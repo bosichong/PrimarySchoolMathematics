@@ -5,10 +5,16 @@ export const useAppStore = defineStore('app', {
     printPreviewPapers: []
   }),
   actions: {
-    navigateToPrint(router, printPreviewPapers) {
+    /**
+     * 
+     * @param {import("vue-router").Router} router 
+     * @param {String} fileName 
+     * @param {Array} printPreviewPapers 
+     */
+    navigateToPrint(router, fileName, printPreviewPapers) {
       this.$patch((s) => {
         s.printPreviewPapers = printPreviewPapers
-        router.push('/print')
+        router.push({ path: '/print', query: { fileName } })
       })
     }
   }
