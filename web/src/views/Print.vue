@@ -44,7 +44,7 @@ const sheets = computed(() => {
 
     const numberOfCols = formulas.length / numberOfPagerColumns
     const colWidth = 100 / numberOfPagerColumns
-    const rowHeight = solution == '0' ? '16px' : '216px'
+    const rowHeight = solution == '0' ? '16px' : '160px'
 
     let columnsOfPaper = [];
     let index = 0
