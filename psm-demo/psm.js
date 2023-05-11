@@ -253,7 +253,7 @@ const isAddSub = (s, result, carry, abdication) => {
     }
 };
 
-const getMoreStep = (formulas, result, symbols, step, carry, abdication, remainder, is_bracket, is_result) => {
+const getMoreStep = (formulas, result, symbols, step, carry, abdication, remainder, is_bracket, is_result, isInt, decimal) => {
     /**
      * 生成符合规则的口算运算题
      * @param {Array} formulas 整数算数项
@@ -265,9 +265,11 @@ const getMoreStep = (formulas, result, symbols, step, carry, abdication, remaind
      * @param {number} remainder 除法余数
      * @param {number} is_bracket 是否包含括号
      * @param {number} is_result 求结果，求运算项
+     * @param {boolean} isInt 是否为整数或小数
+     * @param {number} is_result 小数的为数
      * @return {string} 一道符合规则的口算运算题
      */
-    const f = getRandomNum(formulas, step);
+    const f = getRandomNum(formulas, step, isInt, decimal);
     const question = getPSMstr(f, symbols, step, is_bracket);
 
     if (validator(question, result, carry, abdication, remainder)) {
@@ -488,15 +490,23 @@ function get_num(number) {
  * 根据所给的数值范围，步数，返回合法的数值。
  * @param {Array} list
  * @param {number} step
+ * @param {boolean} isInt
+ * @param {list} decimal
  * @return {Array}
  */
-function getRandomNum(list, step) {
+function getRandomNum(list, step, isInt = true, decimal = [1, 2]) {
     let newList = [];
     for (let i = 0; i < step + 1; i++) {
-        newList.push(Math.floor(Math.random() * (list[i][1] - list[i][0] + 1) + list[i][0]));
+        if (isInt) {
+            newList.push(Math.floor(Math.random() * (list[i][1] - list[i][0] + 1) + list[i][0]));
+        } else {
+            let num = Math.random() * (list[i][1] - list[i][0]) + list[i][0];
+            newList.push(parseFloat(num.toFixed(decimal[Math.floor(Math.random() * decimal.length)])));
+        }
     }
     return newList;
 }
+
 
 /**
  * 定义一个程序运行时间计算装饰器无返回结果
@@ -527,7 +537,7 @@ class Generator {
      * @param {Array} multistep
      * @param {Array} symbols
      */
-    constructor(addattrs, subattrs, multattrs, divattrs, step, number, is_result, is_bracket, multistep, symbols) {
+    constructor(addattrs, subattrs, multattrs, divattrs, step, number, is_result, is_bracket, multistep, symbols, isInt, decimal) {
         if (step === undefined) {
             throw new Error("required param signum is missing or signum is None");
         }
@@ -545,6 +555,8 @@ class Generator {
         this.number = number;
         this.multistep = multistep;
         this.symbols = symbols;
+        this.isInt = isInt;
+        this.decimal = decimal;
         this.__data_list = [];  // 生成的口算题
     }
 
@@ -555,7 +567,7 @@ class Generator {
     __getformula() {
         const f = this.__get_formulas();
         return getMoreStep(f, this.multistep[4], this.symbols, this.step, this.addattrs["carry"],
-            this.subattrs["abdication"], this.divattrs["remainder"], this.is_bracket, this.is_result);
+            this.subattrs["abdication"], this.divattrs["remainder"], this.is_bracket, this.is_result, this.isInt, this.decimal);
     }
 
     /**
