@@ -1,8 +1,6 @@
 
 #  小学数学口算题 | Primary School Mathematics 2.0
 
-![输入图片说明](https://img.shields.io/badge/Python-3.8.8-green?logo=python)
-![输入图片说明](https://img.shields.io/badge/fastAPI-0.85.1-green)
 ![输入图片说明](https://img.shields.io/badge/Vue-3.2.41-blue)
 ![输入图片说明](https://img.shields.io/badge/license-Apache--2.0-green)
 ![输入图片说明](https://img.shields.io/badge/Github--PrimarySchoolMathematics-green?logo=github)
@@ -22,7 +20,7 @@
 - 用户可最多保存10份配置在浏览器端，方便给熊孩子重复生成口算题。🔥
 - 除口算解题外还提供生成竖式题，让熊孩子不能逃脱被试卷支配的恐惧。🔥
 - 除了自动生成试题外，还支持手动添加题目，可以手工添加特殊题目，还可以将之前的错题进行重复练习。🔥
-- 提供仅用序号来作为生成的文件名，让家长们蹭公司打印机时更隐蔽。🔥
+- 提供仅用日期来作为生成的文件名，让家长们蹭公司打印机时更隐蔽。🔥
 
 ## 如何使用 | How to use
 
@@ -44,35 +42,8 @@
 ![](docs/images/Sample05.png)
 
 ## 本地运行 | Getting Started
-前往后端目录
-
 ```bash
-  cd webbackend
-```
-
-安装依赖
-
-```bash
-  # Python version >= 3.8.X
-
-  pip install -r requirements.txt
-
-  # 如果更新依赖缓慢,请使用下边的代码试试:
-  pip install -r requirements.txt -i http://pypi.douban.com/simple
-```
-
-启动
-
-```bash
-  python main.py
-```
-
-打开浏览器在地址栏中输入`http://127.0.0.1:1101/test`,看到显示`当前环境为:未配置`就表示启动成功了。
-
-前往前端目录
-
-```bash
-  cd vue3_webfrontend
+  cd web
 ```
 
 安装依赖
@@ -89,29 +60,22 @@
 
 ```bash
   # NPM
-  npm run start
+  npm run dev
 
   # Yarn
   yarn dev
 ```
 
-启动成功后访问`http://127.0.0.1:1102`即可。
-
-**最近发现有些朋友下载代码后不能使用请看这里**
-
-1. 本程序运行调试的python环境为`3.8.X`,建议新建一个全新的虚拟环境来测试。
-2. 首次运行时,前后端报错的话,大概率都是依赖没有安装,建议查看错误提示安装相关依赖。
-3. 如果依然无法运行，可以发起issues提供详细的报错信息，或是联系我一起分析。
+启动成功后访问 `http://127.0.0.1:1101` 即可。
 
 ## 如何部署 | How to deploy
 项目默认提供了docker的部署方式
 
 
 ## 技术栈 | Tech Stack
-- Vue3
+- Vue 3
+- pinia
 - element-plus
-- Python 3.8
-- FastAPI
 
 ## 贡献者 | Contributors
 感谢曾经贡献过代码的同学，再次谢谢你们！
