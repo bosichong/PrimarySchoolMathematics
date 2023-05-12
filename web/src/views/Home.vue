@@ -151,6 +151,7 @@ const buttonLoading = ref(false)
 const appStore = useAppStore()
 const router = useRouter()
 const generate = () => {
+  // todo 生成试卷数量不能过多
   const papers = createFormulasGenerator(toRaw(unref(formData)), toRaw(unref(paperList)))
   appStore.navigateToPrint(router, formData.value.fileNameGeneratedRule == fileNameGeneratedRuleEnum.baseOnTitleAndIndex.key ? formData.value.paperTitle : "", papers)
   // try {
