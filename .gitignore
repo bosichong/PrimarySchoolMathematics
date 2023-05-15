@@ -9,12 +9,7 @@ layout
 .vscode/settings.json
 setup.py
 bestpkg
-build
-PrimarySchoolMath.egg-info
-PSM
-webbackend/config.ini
 .idea
-webbackend/dist
 
 
 # dependencies
@@ -26,7 +21,6 @@ node_modules
 /coverage
 
 # production
-dist
 /build
 
 # misc
