@@ -14,12 +14,14 @@ export default defineConfig({
       '@/': `${srcPath}/`,
     }
   },
-  plugins: [vue(),
-  createHtmlPlugin({
-    inject: {
-      data: {
-        title: '小学数学口算题 | Primary School Mathematics'
+  plugins: [
+    vue(),
+    createHtmlPlugin({
+      inject: {
+        data: {
+          title: '小学数学口算题 | Primary School Mathematics'
+        }
       }
-    }
-  })]
+    })
+  ]
 })
