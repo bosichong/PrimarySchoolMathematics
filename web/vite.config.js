@@ -6,7 +6,7 @@ import { createHtmlPlugin } from "vite-plugin-html";
 const srcPath = path.resolve(__dirname, 'src')
 
 export default defineConfig({
-  base: '/PrimarySchoolMathematics/',
+  base: '/PrimarySchoolMathematics',
   server: {
     port: 1101,
   },
