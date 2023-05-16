@@ -11,8 +11,8 @@
           </ElFormItem>
 
           <template v-if="formData.generateMode == '1'">
-            <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm" :configurations="configurations"
-              @add-configuration="addConfiguration" />
+            <AutoGenerateFormulas v-model:formulas-form-data="formData" v-model:papers="paperList" :ref-form="refForm"
+              :configurations="configurations" @add-configuration="addConfiguration" />
           </template>
 
           <template v-if="formData.generateMode == '2'">
@@ -41,11 +41,14 @@
 
 <script setup>
 import { ref, onMounted, unref, toRaw, getCurrentInstance, computed } from 'vue';
+import { useRouter } from "vue-router";
 import { CustomFormulas, AutoGenerateFormulas, ConfigurationList } from "@/components/home";
 import ConfigStorage from "@/utils/configStorage";
 import { fileNameGeneratedRuleEnum, httpContentTypeExtensionsMappingEnum } from '@/utils/enum';
 import { download } from "@/utils/download";
 import { generatePaper } from '@/apis/paper';
+import { useAppStore } from '@/stores/app';
+import { createFormulasGenerator } from '@/utils/paperGenerator';
 
 const { proxy } = getCurrentInstance()
 
@@ -84,6 +87,7 @@ const configurations = ref([])
 
 onMounted(async () => {
   console.log('少年，我看你骨骼精奇，是万中无一的编程奇才，有个程序员大佬qq群[217840699]你加下吧!维护世界和平就靠你了')
+  document.title = '小学数学口算题 | Primary School Mathematics'
 
   refreshConfiguration()
   const { data: config } = configurations.value[0] // todo
@@ -144,21 +148,22 @@ const selectedConfiguration = (configuration) => {
 }
 
 const buttonLoading = ref(false)
-const generate = async () => {
-  try {
-    buttonLoading.value = true
-    const { data, headers } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
-    proxy.$message.success('口算题生成完毕，准备开始下载！')
+const appStore = useAppStore()
+const router = useRouter()
+const generate = () => {
+  // 生成试卷数量不能过多
+  const numberOfFormulas = paperList.value.reduce((prev, cur) => {
+    prev += parseInt(cur.numberOfFormulas)
+    return prev
+  }, 0)
 
-    const contentType = headers['content-type']
-    const fileExtensions = httpContentTypeExtensionsMappingEnum[contentType.toLowerCase()]
-    const fileName = `${formData.value.paperTitle}.${fileExtensions}`
-
-    download(data, fileName)
-
-  } finally {
-    buttonLoading.value = false
+  if (numberOfFormulas * formData.value.numberOfPapers > 1000) {
+    proxy.$message.error('题目总数不能超过1000题!')
+    return
   }
+
+  const papers = createFormulasGenerator(toRaw(unref(formData)), toRaw(unref(paperList)))
+  appStore.navigateToPrint(router, formData.value.fileNameGeneratedRule == fileNameGeneratedRuleEnum.baseOnTitleAndIndex.key ? formData.value.paperTitle : "", papers)
 }
 </script>
 

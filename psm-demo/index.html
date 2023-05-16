@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>首页</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .top {
+        height: 30vh; /* top保持30%的视口高度 */
+        background-color: #ccc;
+      }
+
+      .bottom {
+        height: 70vh; /* 底部70% */
+        background-color: #eee;
+        position: relative;
+      }
+
+      .bottom iframe {
+        position: absolute;
+        top: 0;
+        left: 50%; /* 横向居中 */
+        transform: translateX(-50%); /* 横向居中 */
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <div>这里设置口算题的生成配置</div>
+      <div>
+        <button id="create_psm">生成口算题</button>
+        <button id="btn">打印口算题</button>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <iframe src="p.html" id="printIframe" name="printIframe"></iframe>
+    </div>
+    <script src="psm.js"></script>
+
+    <script>
+      const btn = document.getElementById("btn");
+      btn.addEventListener("click", function () {
+        document.getElementById("printIframe").contentWindow.iframePrint();
+      });
+
+      // 生成口算题
+
+      const op = {
+        add: { carry: 1 },
+        sub: { abdication: 1 },
+        mult: {},
+        div: { remainder: 2 },
+        step: 1,
+        is_result: 0,
+        number: 30,
+        is_bracket: 0,
+        multistep: [
+          [0, 2],
+          [0, 2],
+          [1, 999],
+          [1, 999],
+          [0, 999],
+        ],
+        symbols: [
+          [1, 2],
+          [1, 2],
+          [1, 2],
+        ],
+        isInt: false,
+        decimal: [1,2],
+      };
+
+      const op1 = {
+        juanzishu: 3,
+        lieshu: 3,
+        jz_title: "小学生口算题",
+        inf_title:
+          "姓名：__________ 日期：____月____日 时间：________ 对题：____道",
+      };
+
+      // iframe的DOM操作必须等待页面全部加载完毕才能操作。
+      window.onload = function () {
+        const btn_cp = document.getElementById("create_psm");
+        const iframe = document.getElementById("printIframe");
+        const iframeContent = iframe.contentWindow.document;
+        const psmPage = iframeContent.getElementById("psm-page");
+
+        btn_cp.addEventListener("click", function () {
+          let psm_html = "";
+          if (psmPage) {
+            for (let i = 0; i < op1.juanzishu; i++) {
+              let g = new Generator(
+                op.add,
+                op.sub,
+                op.mult,
+                op.div,
+                op.step,
+                op.number,
+                op.is_result,
+                op.is_bracket,
+                op.multistep,
+                op.symbols,
+                op.isInt,
+                op.decimal
+              );
+              ks = g.generate_data();
+              psm_html +=
+                '<h1 id="psm-title">' +
+                op1.jz_title +
+                "</h1><article>" +
+                ks +
+                '</article><div style="page-break-after: always;"></div>';
+            }
+            psmPage.innerHTML = psm_html;
+          } else {
+            console.error("Cannot find psm-page element in iframe content");
+          }
+        });
+      };
+    </script>
+  </body>
+</html>
