@@ -19,7 +19,8 @@ export const routes = [
 ];
 
 
+const baseUrl = import.meta.env.BASE_URL
 export const router = createRouter({
-    history: createWebHistory('/PrimarySchoolMathematics'),
+    history: createWebHistory(baseUrl),
     routes,
 });

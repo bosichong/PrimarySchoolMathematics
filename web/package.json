@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "cross-env NODE_ENV=production vite build",
+    "build:github": "vite build --base=/PrimarySchoolMathematics/",
+    "preview:github": "vite preview --base=/PrimarySchoolMathematics/",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
