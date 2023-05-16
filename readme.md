@@ -1,5 +1,5 @@
 
-#  小学数学口算题 | Primary School Mathematics 2.0
+#  小学数学口算题 | Primary School Mathematics 2.1
 
 ![输入图片说明](https://img.shields.io/badge/Vue-3.2.41-blue)
 ![输入图片说明](https://img.shields.io/badge/license-Apache--2.0-green)
@@ -66,10 +66,6 @@
 ```
 
 启动成功后访问 `http://127.0.0.1:1101` 即可。
-
-## 如何部署 | How to deploy
-项目默认提供了docker的部署方式
-
 
 ## 技术栈 | Tech Stack
 - Vue 3

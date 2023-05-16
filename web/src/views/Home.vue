@@ -151,23 +151,19 @@ const buttonLoading = ref(false)
 const appStore = useAppStore()
 const router = useRouter()
 const generate = () => {
-  // todo 生成试卷数量不能过多
+  // 生成试卷数量不能过多
+  const numberOfFormulas = paperList.value.reduce((prev, cur) => {
+    prev += parseInt(cur.numberOfFormulas)
+    return prev
+  }, 0)
+
+  if (numberOfFormulas * formData.value.numberOfPapers > 1000) {
+    proxy.$message.error('题目总数不能超过1000题!')
+    return
+  }
+
   const papers = createFormulasGenerator(toRaw(unref(formData)), toRaw(unref(paperList)))
   appStore.navigateToPrint(router, formData.value.fileNameGeneratedRule == fileNameGeneratedRuleEnum.baseOnTitleAndIndex.key ? formData.value.paperTitle : "", papers)
-  // try {
-  //   buttonLoading.value = true
-  //   const { data, headers } = await generatePaper(toRaw(unref(formData)), toRaw(unref(paperList)))
-  //   proxy.$message.success('口算题生成完毕，准备开始下载！')
-
-  //   const contentType = headers['content-type']
-  //   const fileExtensions = httpContentTypeExtensionsMappingEnum[contentType.toLowerCase()]
-  //   const fileName = `${formData.value.paperTitle}.${fileExtensions}`
-
-  //   download(data, fileName)
-
-  // } finally {
-  //   buttonLoading.value = false
-  // }
 }
 </script>
 
