@@ -87,7 +87,7 @@
 
 开发和维护花费了我很多业余时间，如果你觉得项目帮助到您，请认真考虑请作者喝一杯咖啡好吗？😋
 
-![](imgs/wx.png) ![](imgs/zfb.png)
+![](images/wx.png) ![](images/zfb.png)
 
 
 
