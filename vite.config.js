@@ -6,10 +6,6 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 
 const srcPath = path.resolve(__dirname, 'src')
 
-
-console.log(path.resolve('./'))
-console.log(process.cwd());
-
 export default defineConfig({
   server: {
     port: 1101,
@@ -33,7 +29,7 @@ export default defineConfig({
       targets: [
         {
           src: 'dist/*',
-          dest: path.resolve('./', 'docs')
+          dest: path.resolve(__dirname, 'docs')
         }
       ]
     })
