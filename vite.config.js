@@ -2,8 +2,13 @@ import path from "path";
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { createHtmlPlugin } from "vite-plugin-html";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 const srcPath = path.resolve(__dirname, 'src')
+
+
+console.log(path.resolve('./'))
+console.log(process.cwd());
 
 export default defineConfig({
   server: {
@@ -22,6 +27,15 @@ export default defineConfig({
           title: '小学数学口算题 | Primary School Mathematics'
         }
       }
+    }),
+    viteStaticCopy({
+      silent: true,
+      targets: [
+        {
+          src: 'dist/*',
+          dest: path.resolve('./', 'docs')
+        }
+      ]
     })
   ]
 })
