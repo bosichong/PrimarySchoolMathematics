@@ -28,46 +28,44 @@
 ### 例子 | Samples
 
 例1：生成10以内的加减法
-![](docs/images/Sample01.png)
+![](images/Sample01.png)
 
 例2：2位数乘以2位数的竖式题
-![](docs/images/Sample02.png)
+![](images/Sample02.png)
 
 例3：2位数除以1位数并且有余数
-![](docs/images/Sample03.png)
+![](images/Sample03.png)
 
 例4：不带括号的混合运算
-![](docs/images/Sample04.png)
+![](images/Sample04.png)
 
 例5：带括号的混合运算
-![](docs/images/Sample05.png)
+![](images/Sample05.png)
 
 ## 本地运行 | Getting Started
-```bash
-  cd web
-```
-
 安装依赖
 
-```bash
-  # NPM
-  npm install
-
-  # Yarn(推荐)
-  yarn
+```sh
+  yarn # 推荐Yarn安装
 ```
 
 启动
 
-```bash
-  # NPM
-  npm run dev
-
-  # Yarn
+```sh
   yarn dev
 ```
 
 启动成功后访问 `http://127.0.0.1:1101` 即可。
+
+打包
+
+```sh
+  yarn build
+
+  yarn build:github # 为了部署github pages
+```
+
+> 打包完成后,为了github page部署,前端静态资源会复制一份到`docs`文件夹
 
 ## 技术栈 | Tech Stack
 - Vue 3
@@ -87,7 +85,7 @@
 
 开发和维护花费了我很多业余时间，如果你觉得项目帮助到您，请认真考虑请作者喝一杯咖啡好吗？😋
 
-![](imgs/wx.png) ![](imgs/zfb.png)
+![](images/wx.png) ![](images/zfb.png)
 
 
 
