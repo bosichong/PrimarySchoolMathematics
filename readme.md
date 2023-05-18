@@ -13,6 +13,8 @@
 
 [直接使用地址](https://tsukasa521.github.io/PrimarySchoolMathematics)
 
+[备用地址](https://kkplusplus.gitee.io/primaryschoolmathematics)
+
 ## 功能列表 | Features
 - 可以设置各算数项和结果的取值范围及多步算数（最多三步）符号的选择。
 - 可以生成求结果、求算数项、带括号的算式，除法可以生成带有余数的口算题。
