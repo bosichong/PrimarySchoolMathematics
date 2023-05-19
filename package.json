@@ -1,7 +1,7 @@
 {
-  "name": "web-app",
+  "name": "primary-school-mathematics",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",

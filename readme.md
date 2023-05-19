@@ -13,7 +13,8 @@
 
 [直接使用地址](https://tsukasa521.github.io/PrimarySchoolMathematics)
 
-[备用地址](https://kkplusplus.gitee.io/primaryschoolmathematics)
+如果访问慢可以使用这个地址:
+[地址](https://kkplusplus.gitee.io/primaryschoolmathematics)
 
 ## 功能列表 | Features
 - 可以设置各算数项和结果的取值范围及多步算数（最多三步）符号的选择。
