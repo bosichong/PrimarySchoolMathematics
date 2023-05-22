@@ -14,7 +14,7 @@
         content="请作者喝一杯咖啡！"
         placement="top"
     >
-      <el-button type="success" :icon="Coffee" size="large" circle @click="centerDialogVisible = true" class="fixed right-5 inset-y-1/4 text-lg"/>
+      <el-button type="success" :icon="Coffee" size="large" circle @click="centerDialogVisible = true" class="coffee-me fixed right-5 inset-y-1/4 text-lg"/>
     </el-tooltip>
 
     <el-dialog v-model="centerDialogVisible" title="请作者喝一杯咖啡：）" width="30%" center>
@@ -63,5 +63,8 @@ const bands = ref([
 <style lang="scss" scoped>
 footer {
   background: #f0f2f5;
+}
+.coffee-me{
+  font-size: 18px;
 }
 </style>
