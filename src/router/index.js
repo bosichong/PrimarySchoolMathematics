@@ -20,6 +20,7 @@ export const routes = [
 
 
 const baseUrl = import.meta.env.BASE_URL
+// console.log(baseUrl)
 export const router = createRouter({
     history: createWebHistory(baseUrl),
     routes,
