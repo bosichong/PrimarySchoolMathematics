@@ -8,6 +8,7 @@
     "build:github": "vite build --base=/PrimarySchoolMathematics/",
     "preview:github": "vite preview --base=/PrimarySchoolMathematics/",
     "build": "vite build",
+    "build:suiyan": "vite build --base=/demo/psm/",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -18,8 +19,7 @@
     "pinia": "^2.0.35",
     "uuid": "^9.0.0",
     "vue": "^3.2.41",
-    "vue-router": "^4.1.6",
-    "yarn": "^1.22.19"
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.2.0",
