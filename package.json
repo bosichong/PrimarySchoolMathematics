@@ -8,6 +8,7 @@
     "build:github": "vite build --base=/PrimarySchoolMathematics/",
     "preview:github": "vite preview --base=/PrimarySchoolMathematics/",
     "build": "vite build",
+    "build:suiyan": "vite build --base=/demo/psm/",
     "preview": "vite preview"
   },
   "dependencies": {
