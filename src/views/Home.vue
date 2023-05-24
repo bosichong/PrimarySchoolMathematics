@@ -164,6 +164,7 @@ const generate = () => {
 
   const papers = createFormulasGenerator(toRaw(unref(formData)), toRaw(unref(paperList)))
   appStore.navigateToPrint(router, formData.value.fileNameGeneratedRule == fileNameGeneratedRuleEnum.baseOnTitleAndIndex.key ? formData.value.paperTitle : "", papers)
+  paperList.value = []
 }
 </script>
 
