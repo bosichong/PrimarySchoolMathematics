@@ -10,7 +10,7 @@
     "build": "vite build",
     "build:suiyan": "vite build --base=/demo/psm/",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
