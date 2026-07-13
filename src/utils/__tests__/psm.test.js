@@ -82,4 +82,46 @@ describe('FormulasGenerator.generate', () => {
       expect(formula.endsWith('=')).toBe(true)
     })
   })
+
+  it('replaces a number with placeholder when is_result is 1', () => {
+    const gen = createGenerator({ is_result: 1 })
+    const formulas = gen.generate()
+    formulas.forEach(formula => {
+      expect(formula.includes('__')).toBe(true)
+    })
+  })
+
+  it('includes brackets when is_bracket is enabled for multi-step', () => {
+    const gen = createGenerator({
+      step: 2,
+      is_bracket: 1,
+      multistep: [[1, 9], [1, 9], [1, 9], [1, 9], [1, 99]],
+      symbols: [[1], [1]]
+    })
+    const formulas = gen.generate()
+    formulas.forEach(formula => {
+      expect(formula.includes('(')).toBe(true)
+      expect(formula.includes(')')).toBe(true)
+    })
+  })
+
+  it('produces results within configured range across multiple runs', () => {
+    for (let i = 0; i < 5; i++) {
+      const gen = createGenerator({
+        number: 5,
+        multistep: [[1, 9], [1, 9], [1, 9], [1, 9], [10, 20]],
+        symbols: [[1]]
+      })
+      const formulas = gen.generate()
+      formulas.forEach(formula => {
+        const expr = formula
+          .replace(/×/g, '*')
+          .replace(/÷/g, '/')
+          .replace(/=$/, '')
+        const value = eval(expr)
+        expect(value).toBeGreaterThanOrEqual(10)
+        expect(value).toBeLessThanOrEqual(20)
+      })
+    }
+  })
 })
