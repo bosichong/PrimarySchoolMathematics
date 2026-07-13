@@ -9,7 +9,8 @@
     "preview:github": "vite preview --base=/PrimarySchoolMathematics/",
     "build": "vite build",
     "build:suiyan": "vite build --base=/demo/psm/",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
@@ -30,6 +31,7 @@
     "tailwindcss": "^3.3.1",
     "vite": "^3.2.3",
     "vite-plugin-html": "^3.2.0",
-    "vite-plugin-static-copy": "^0.15.0"
+    "vite-plugin-static-copy": "^0.15.0",
+    "vitest": "^4.1.10"
   }
 }
